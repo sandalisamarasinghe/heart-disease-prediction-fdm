@@ -1,6 +1,10 @@
-{% extends 'index.html' %}
-{% load static %}
-{% block body %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
 <form action="" method="post" enctype="multipart/form-data">
     <input type="file"  accept="image/gif, image/jpeg, image/png"  onchange="loadFile(event)" name="image" id="file">
     <div class="container" id="extract">
@@ -8,6 +12,11 @@
     </div>
 </form>
 <button id="form_zip">Final Check</button>
+
+</body>
+
+
+<script>
 
 <script>
     var loadFile = function(event) {
@@ -55,4 +64,4 @@
 <!--&lt;!&ndash;});&ndash;&gt;-->
 <!--&lt;!&ndash;}&ndash;&gt;-->
 <!--</script>-->
-{% endblock %}
+</html>

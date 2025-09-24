@@ -249,51 +249,60 @@
 		<span id="themeText">Dark Mode</span>
 	</button>
 
-	<!-- Bootstrap Navbar -->
-	<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
-		<div class="container">
-			<a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
-				<span class="me-2" style="display:inline-flex;width:36px;height:36px;border-radius:10px;align-items:center;justify-content:center;background:var(--primary-color);color:#fff;"><i class="fas fa-heartbeat"></i></span>
+	<!-- Modern Header -->
+	<header class="modern-header">
+		<div class="header-content">
+			<!-- Logo -->
+			<a href="{% url 'home' %}" class="logo">
+				<div class="logo-icon">
+					<i class="fas fa-heartbeat"></i>
+				</div>
 				<div>
-					<div class="fw-bold" style="line-height:1;">Heart Disease Prediction</div>
-					<small class="text-muted">AI-Powered Medical Diagnosis</small>
+					<div class="logo-text">Heart Disease Prediction</div>
+					<div class="logo-subtitle">AI-Powered Medical Diagnosis</div>
 				</div>
 			</a>
-			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="mainNavbar">
-				<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-					<li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'home' %}">Home</a></li>
-					<li class="nav-item"><a class="nav-link" href="/add_heartdetail/">Predict Disease</a></li>
-					<li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#datasetInfoModal">Dataset Info</a></li>
-					<li class="nav-item"><a class="nav-link" href="https://github.com/" target="_blank" rel="noopener">Documentation</a></li>
+
+			<!-- Navigation -->
+			<nav>
+				<ul class="nav-menu">
 					{% if request.user.is_staff %}
-						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle" href="#" id="adminNavDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-								<i class="fas fa-user-shield"></i> Admin
+						<!-- Admin Navigation -->
+						<li><a href="{% url 'admin_home' %}" class="nav-link active">Dashboard</a></li>
+						<li><a href="/view_doctor" class="nav-link">Doctors</a></li>
+						<li><a href="/view_patient" class="nav-link">Patients</a></li>
+						<li><a href="/view_feedback" class="nav-link">Feedback</a></li>
+						<li><a href="/view_search_pat" class="nav-link">Search Data</a></li>
+						<li><a href="{% url 'logout' %}" class="btn-modern btn-danger">Logout</a></li>
+						<li class="dropdown">
+							<a href="#" class="nav-link dropdown-toggle" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+								<i class="fas fa-user-circle"></i> {{request.user.username}}
 							</a>
-							<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="adminNavDropdown">
-								<li><a class="dropdown-item" href="{% url 'admin_home' %}">Dashboard</a></li>
-								<li><a class="dropdown-item" href="/view_doctor">Doctors</a></li>
-								<li><a class="dropdown-item" href="/view_patient">Patients</a></li>
-								<li><a class="dropdown-item" href="/view_feedback">Feedback</a></li>
-								<li><a class="dropdown-item" href="/view_search_pat">Search Data</a></li>
+							<ul class="dropdown-menu" aria-labelledby="adminDropdown">
+								<li><a class="dropdown-item" href="{% url 'change_password' %}">
+									<i class="fas fa-key"></i> Change Password
+								</a></li>
 								<li><hr class="dropdown-divider"></li>
-								<li><a class="dropdown-item text-secondary" href="{% url 'logout' %}">Logout</a></li>
+								<li><a class="dropdown-item" href="{% url 'logout' %}">
+									<i class="fas fa-sign-out-alt"></i> Sign Out
+								</a></li>
 							</ul>
 						</li>
 					{% else %}
+						<!-- Public Navigation -->
+						<li><a href="{% url 'home' %}" class="nav-link active">Home</a></li>
+						<li><a href="{% url 'about' %}" class="nav-link">About</a></li>
+						<li><a href="{% url 'contact' %}" class="nav-link">Contact</a></li>
 						{% if request.user.is_authenticated %}
-							<li class="nav-item"><a class="btn btn-sm btn-outline-danger ms-lg-3" href="{% url 'logout' %}">Logout</a></li>
+							<li><a href="{% url 'logout' %}" class="btn-modern btn-danger">Logout</a></li>
 						{% else %}
-							<li class="nav-item"><a class="btn btn-sm btn-primary ms-lg-3" href="{% url 'login_admin' %}">Admin Login</a></li>
+							<li><a href="{% url 'login_admin' %}" class="btn-modern btn-admin">Admin Login</a></li>
 						{% endif %}
 					{% endif %}
 				</ul>
-			</div>
+			</nav>
 		</div>
-	</nav>
+	</header>
 
 	<!-- Main Content -->
 	<main>
@@ -352,40 +361,6 @@
 		</div>
 		{% endblock %}
 	</main>
-
-	<!-- Dataset Info Modal -->
-	<div class="modal fade" id="datasetInfoModal" tabindex="-1" aria-labelledby="datasetInfoLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg modal-dialog-centered">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="datasetInfoLabel"><i class="fas fa-database me-2 text-primary"></i>Dataset Information</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				</div>
-				<div class="modal-body">
-					<div class="row g-3">
-						<div class="col-md-6">
-							<div class="card-modern">
-								<h6 class="mb-2 text-secondary">Structured Dataset</h6>
-								<p class="mb-2">File: <code>apps/ml/Machine_Learning/new_heart_dataset.csv</code></p>
-								<p class="mb-0">Features include age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal.</p>
-							</div>
-						</div>
-						<div class="col-md-6">
-							<div class="card-modern">
-								<h6 class="mb-2 text-secondary">Unstructured Dataset</h6>
-								<p class="mb-2">File: <code>data/heart.txt</code></p>
-								<p class="mb-0">Free-text patient records parsed to extract the same 13 features for prediction.</p>
-							</div>
-						</div>
-					</div>
-					<div class="alert alert-info mt-3"><i class="fas fa-link me-2"></i>Source: <a href="#" class="alert-link" target="_blank" rel="noopener">UCI/Kaggle (placeholder)</a></div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-				</div>
-			</div>
-		</div>
-	</div>
 
 	<!-- Modern Footer -->
 	<footer class="footer-modern">

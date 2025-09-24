@@ -1,0 +1,142 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block body %}
+<!-- About Section -->
+<section class="about-section py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <!-- HTML Generated Placeholder for About Image -->
+                <div class="about-placeholder" style="
+                    width: 100%;
+                    height: 400px;
+                    background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+                    border-radius: 20px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-size: 20px;
+                    font-weight: bold;
+                    text-align: center;
+                    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+                    position: relative;
+                    overflow: hidden;
+                ">
+                    <!-- Decorative Elements -->
+                    <div style="
+                        position: absolute;
+                        top: -50px;
+                        right: -50px;
+                        width: 200px;
+                        height: 200px;
+                        background: rgba(255,255,255,0.1);
+                        border-radius: 50%;
+                    "></div>
+                    <div style="
+                        position: absolute;
+                        bottom: -30px;
+                        left: -30px;
+                        width: 150px;
+                        height: 150px;
+                        background: rgba(255,255,255,0.1);
+                        border-radius: 50%;
+                    "></div>
+                    
+                    <div class="about-content">
+                        <div style="font-size: 64px; margin-bottom: 20px;">🏥</div>
+                        <div>Advanced Healthcare</div>
+                        <div>Technology</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="about-text">
+                    <h2 class="section-title">About Our Heart Disease Prediction System</h2>
+                    <p class="lead">
+                        We are dedicated to providing accurate heart disease prediction using cutting-edge machine learning technology to improve healthcare outcomes.
+                    </p>
+                    <p>
+                        Our system utilizes advanced algorithms and medical data analysis to provide reliable predictions for heart disease risk assessment. This helps healthcare professionals make informed decisions and provide better patient care.
+                    </p>
+                    
+                    <div class="features-list mt-4">
+                        <div class="feature-item">
+                            <div class="feature-icon">🤖</div>
+                            <div>
+                                <h5>Machine Learning</h5>
+                                <p>Advanced AI algorithms for accurate predictions</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">📊</div>
+                            <div>
+                                <h5>Data Analysis</h5>
+                                <p>Comprehensive medical data processing</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">👨‍⚕️</div>
+                            <div>
+                                <h5>Medical Expertise</h5>
+                                <p>Developed with medical professionals</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.about-section {
+    background: #f8f9fa;
+}
+
+.section-title {
+    color: #2c3e50;
+    margin-bottom: 30px;
+    font-weight: bold;
+}
+
+.about-text .lead {
+    color: #34495e;
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
+
+.features-list {
+    margin-top: 30px;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.feature-icon {
+    font-size: 32px;
+    margin-right: 15px;
+    min-width: 50px;
+}
+
+.feature-item h5 {
+    margin: 0 0 5px 0;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.feature-item p {
+    margin: 0;
+    color: #7f8c8d;
+    font-size: 0.9rem;
+}
+</style>
+{% endblock %}
