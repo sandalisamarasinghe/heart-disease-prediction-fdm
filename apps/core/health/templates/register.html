@@ -1,0 +1,175 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block body %}
+
+<!-- Modern Registration Section -->
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card-modern fade-in">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fas fa-user-plus text-primary mb-3"></i>
+                        Create Your Account
+                    </div>
+                    <div class="card-subtitle">Join our platform for heart disease prediction</div>
+                </div>
+
+                <!-- Success Message -->
+                {% if error == "create" %}
+                <div class="alert-modern alert-success">
+                    <i class="fas fa-check-circle"></i>
+                    Registration successful! Redirecting to login...
+                </div>
+                <script>
+                    setTimeout(function() {
+                        window.location="{% url 'login' %}";
+                    }, 2000);
+                </script>
+                {% endif %}
+
+                <!-- Registration Form -->
+                <form class="form-modern" action="" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-user text-primary"></i> First Name
+                                </label>
+                                <input type="text" class="form-input" name="fname" 
+                                       placeholder="Enter your first name" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-user text-primary"></i> Last Name
+                                </label>
+                                <input type="text" class="form-input" name="lname" 
+                                       placeholder="Enter your last name" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-at text-primary"></i> Username
+                                </label>
+                                <input type="text" class="form-input" name="uname" 
+                                       placeholder="Choose a username" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-lock text-primary"></i> Password
+                                </label>
+                                <input type="password" class="form-input" name="pwd" 
+                                       placeholder="Create a strong password" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-envelope text-primary"></i> Email
+                                </label>
+                                <input type="email" class="form-input" name="email" 
+                                       placeholder="Enter your email address" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-phone text-primary"></i> Contact
+                                </label>
+                                <input type="text" class="form-input" name="contact" 
+                                       placeholder="Enter your phone number" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-calendar text-primary"></i> Date of Birth
+                                </label>
+                                <input type="date" class="form-input" name="dob" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-image text-primary"></i> Profile Picture
+                                </label>
+                                <input type="file" class="form-input" name="image" 
+                                       accept="image/*" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-map-marker-alt text-primary"></i> City
+                                </label>
+                                <input type="text" class="form-input" name="add" 
+                                       placeholder="Enter your city" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-user-md text-primary"></i> User Type
+                                </label>
+                                <div class="d-flex gap-3 mt-2">
+                                    <label class="d-flex align-items-center">
+                                        <input type="radio" name="type" value="Patient" required class="me-2">
+                                        <i class="fas fa-user text-success me-1"></i> Patient
+                                    </label>
+                                    <label class="d-flex align-items-center">
+                                        <input type="radio" name="type" value="Doctor" required class="me-2">
+                                        <i class="fas fa-user-md text-primary me-1"></i> Doctor
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-modern btn-primary w-100 mt-4">
+                        <i class="fas fa-user-plus"></i> Create Account
+                    </button>
+                </form>
+
+                <div class="text-center mt-4">
+                    <p class="text-secondary">
+                        Already have an account? 
+                        <a href="{% url 'login' %}" class="text-primary fw-bold">
+                            Sign in here
+                        </a>
+                    </p>
+                </div>
+
+                <!-- Terms and Privacy -->
+                <div class="mt-4 p-3 bg-light rounded">
+                    <small class="text-muted">
+                        <i class="fas fa-shield-alt text-success"></i>
+                        By creating an account, you agree to our 
+                        <a href="#" class="text-primary">Terms of Service</a> and 
+                        <a href="#" class="text-primary">Privacy Policy</a>
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
