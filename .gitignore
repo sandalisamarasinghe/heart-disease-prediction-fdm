@@ -140,6 +140,11 @@ media/
 # Static files
 staticfiles/
 
+# ML models and datasets
+apps/ml/models/
+data/*.csv
+data/*.txt
+
 # IDE
 .vscode/
 .idea/
