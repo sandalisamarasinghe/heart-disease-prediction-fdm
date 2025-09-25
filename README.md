@@ -287,6 +287,24 @@ For technical support or questions about the text-based system:
 
 The system now provides **more accurate predictions** using **richer data sources** while maintaining **ease of use** and **professional appearance**.
 
+---
+
+## Module & Team
+
+- Module: Fundamentals of Data Mining (FDM)
+- Project Repository: https://github.com/sandalisamarasinghe/heart-disease-prediction-fdm.git
+
+### Team Members
+- Hirusha Thisayuru Ellawala — SLIIT ID: IT23426580 — Branch: IT23426580---Hirusha — GitHub: https://github.com/itzcheh1ru
+- Sandali Isidara Samarasinghe — SLIIT ID: IT23333802 — Branch: IT23333802-Sandali — GitHub: https://github.com/sandalisamarasinghe
+- Shehan Dissanayake — SLIIT ID: IT23426344 — Branch: IT23426344-Shehan — GitHub: https://github.com/ShehanUD
+- Ishini Neha Amararathne — SLIIT ID: IT23164512 — Branch: IT23164512-Ishini — GitHub: https://github.com/wichitawolf
+
+### How to Contribute (Team)
+- Create feature branches using your student-branch naming above
+- Open PRs to `main`; reviewers: any team member
+- Keep secrets in `.env` (use `config/env.example`)
+
 
 
 
