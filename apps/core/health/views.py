@@ -102,14 +102,15 @@ def Login_User(request):
 def Login_admin(request):
     error = ""
     if request.method == "POST":
-        u = request.POST['uname']
-        p = request.POST['pwd']
+        u = request.POST.get('uname', '')
+        p = request.POST.get('pwd', '')
         user = authenticate(username=u, password=p)
-        if user.is_staff:
+        if user is not None and user.is_staff:
             login(request, user)
-            error="pat"
+            error = "pat"
         else:
-            error="not"
+            error = "not"
+            messages.error(request, "Invalid admin username or password.")
     d = {'error': error}
     return render(request, 'admin_login.html', d)
 
