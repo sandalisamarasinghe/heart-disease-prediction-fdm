@@ -40,7 +40,7 @@ urlpatterns = [
     path('change_password/', Change_Password,name="change_password"),
     # path('prdict_heart_disease', prdict_heart_disease,name="prdict_heart_disease"),
     path('add_heartdetail/', add_heartdetail,name="add_heartdetail"),
-    path('guest_prediction/', guest_prediction,name="guest_prediction"),
+    # guest prediction disabled
     path('view_search_pat/', view_search_pat,name="view_search_pat"),
 
     path('view_doctor/', View_Doctor,name="view_doctor"),

@@ -69,35 +69,19 @@ def Gallery(request):
 
 def Login_User(request):
     error = ""
+    next_url = request.GET.get('next') or request.POST.get('next')
     if request.method == "POST":
         u = request.POST['uname']
         p = request.POST['pwd']
         user = authenticate(username=u, password=p)
-        sign = ""
         if user:
-            try:
-                sign = Patient.objects.get(user=user)
-            except:
-                pass
-            if sign:
-                login(request, user)
-                error = "pat1"
-            else:
-                pure=False
-                try:
-                    pure = Doctor.objects.get(status=1,user=user)
-                except:
-                    pass
-                if pure:
-                    login(request, user)
-                    error = "pat2"
-                else:
-                    # Allow any authenticated user to log in (no pending verification gate)
-                    login(request, user)
-                    error = "pat1"
+            login(request, user)
+            if next_url:
+                return redirect(next_url)
+            return redirect('patient_home')
         else:
-            error="not"
-    d = {'error': error}
+            error = "not"
+    d = {'error': error, 'next': next_url}
     return render(request, 'login.html', d)
 
 def Login_admin(request):
@@ -236,32 +220,40 @@ def add_doctor(request,pid=None):
 @login_required(login_url="login")
 def add_heartdetail(request):
     if request.method == "POST":
-        # Updated for 13 features: [age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal]
-        list_data = []
-        value_dict = eval(str(request.POST)[12:-1])
-        count = 0
-        for key,value in value_dict.items():
-            if count == 0:
-                count =1
-                continue
-            if key == "sex" and value[0] == "Male" or value[0] == 'male' or value[0]=='m' or value[0] == 'M':
-                list_data.append(0)
-                continue
-            elif key == "sex":
-                list_data.append(1)
-                continue
-            list_data.append(value[0])
+        # Build feature vector in a fixed order to match the model
+        try:
+            age = float(request.POST.get('age'))
+            sex = float(request.POST.get('sex'))  # 0=female,1=male (matches form)
+            cp = float(request.POST.get('cp'))
+            trestbps = float(request.POST.get('trestbps'))
+            chol = float(request.POST.get('chol'))
+            fbs = float(request.POST.get('fbs'))
+            restecg = float(request.POST.get('restecg'))
+            thalach = float(request.POST.get('thalach'))
+            exang = float(request.POST.get('exang'))
+            oldpeak = float(request.POST.get('oldpeak'))
+            slope = float(request.POST.get('slope')) if request.POST.get('slope') is not None else 2.0
+            ca = float(request.POST.get('ca')) if request.POST.get('ca') is not None else 0.0
+            thal = float(request.POST.get('thal')) if request.POST.get('thal') is not None else 2.0
+
+            list_data = [
+                age, sex, cp, trestbps, chol, fbs, restecg,
+                thalach, exang, oldpeak, slope, ca, thal
+            ]
+        except Exception:
+            # Fallback to empty vector, which will be padded below
+            list_data = []
 
         # Ensure we have 13 features by padding with defaults if needed
         while len(list_data) < 13:
-            if len(list_data) == 10:  # Add slope
-                list_data.append(2)  # Default slope value
-            elif len(list_data) == 11:  # Add ca (major vessels)
-                list_data.append(0)  # Default ca value
-            elif len(list_data) == 12:  # Add thal (thalassemia)
-                list_data.append(2)  # Default thal value
+            if len(list_data) == 10:
+                list_data.append(2.0)  # slope default
+            elif len(list_data) == 11:
+                list_data.append(0.0)  # ca default
+            elif len(list_data) == 12:
+                list_data.append(2.0)  # thal default
             else:
-                list_data.append(0)
+                list_data.append(0.0)
 
         # Expected format: [age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal]
         accuracy,pred = prdict_heart_disease(list_data)
@@ -437,31 +429,34 @@ def guest_prediction(request):
     """Guest prediction view - allows users to access prediction form without authentication"""
     if request.method == "POST":
         # Handle prediction form submission for guests
-        list_data = []
-        value_dict = eval(str(request.POST)[12:-1])
-        count = 0
-        for key,value in value_dict.items():
-            if count == 0:
-                count =1
-                continue
-            if key == "sex" and value[0] == "Male" or value[0] == 'male' or value[0]=='m' or value[0] == 'M':
-                list_data.append(0)
-                continue
-            elif key == "sex":
-                list_data.append(1)
-                continue
-            list_data.append(value[0])
+        # Build feature vector in fixed order
+        try:
+            age = float(request.POST.get('age'))
+            sex = float(request.POST.get('sex'))
+            cp = float(request.POST.get('cp'))
+            trestbps = float(request.POST.get('trestbps'))
+            chol = float(request.POST.get('chol'))
+            fbs = float(request.POST.get('fbs'))
+            restecg = float(request.POST.get('restecg'))
+            thalach = float(request.POST.get('thalach'))
+            exang = float(request.POST.get('exang'))
+            oldpeak = float(request.POST.get('oldpeak'))
+            slope = float(request.POST.get('slope')) if request.POST.get('slope') is not None else 2.0
+            ca = float(request.POST.get('ca')) if request.POST.get('ca') is not None else 0.0
+            thal = float(request.POST.get('thal')) if request.POST.get('thal') is not None else 2.0
+            list_data = [age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal]
+        except Exception:
+            list_data = []
 
-        # Ensure we have 13 features by padding with defaults if needed
         while len(list_data) < 13:
-            if len(list_data) == 10:  # Add slope
-                list_data.append(2)  # Default slope value
-            elif len(list_data) == 11:  # Add ca (major vessels)
-                list_data.append(0)  # Default ca value
-            elif len(list_data) == 12:  # Add thal (thalassemia)
-                list_data.append(2)  # Default thal value
+            if len(list_data) == 10:
+                list_data.append(2.0)
+            elif len(list_data) == 11:
+                list_data.append(0.0)
+            elif len(list_data) == 12:
+                list_data.append(2.0)
             else:
-                list_data.append(0)
+                list_data.append(0.0)
 
         # Make prediction using the ML model
         accuracy, pred = prdict_heart_disease(list_data)
