@@ -6,7 +6,7 @@
     --secondary-color: #E8F2F7;        /* Medium Blue-White - Less Bright */
     --accent-color: #D4E6F1;           /* Medium Blue - Better Contrast */
     --success-color: #5A9BC3;          /* Medium Blue */
-    --warning-color: #E67E22;          /* Medium Orange - More Visible */
+    --warning-color: var(--primary-color);          /* Use primary tone for warnings */
     --danger-color: #E74C3C;           /* Medium Red - Better Visibility */
     --text-primary: #2C3E50;           /* Dark Blue-Gray - Better Readability */
     --text-secondary: #34495E;         /* Medium Blue-Gray */
@@ -17,6 +17,9 @@
     --gradient-primary: linear-gradient(135deg, #E8F2F7 0%, #D4E6F1 100%);
     --gradient-secondary: linear-gradient(135deg, #F4F6F7 0%, #E8F2F7 100%);
     --gradient-success: linear-gradient(135deg, #E8F2F7 0%, #7FB3D3 100%);
+    --primary-hover: #4e8bff;
+    --secondary-hover: #5f6b77;
+    --info-hover: #0ea5b6;
 }
 
 /* ===== EYE-FRIENDLY BODY STYLES ===== */
@@ -54,8 +57,8 @@ html {
     --primary-hover: #4A7A9B;
     --secondary-color: #7FB3D3;        /* Medium Blue */
     --secondary-hover: #6BA1C1;
-    --accent-color: #E67E22;           /* Medium Orange - Better Visibility */
-    --accent-hover: #D35400;
+    --accent-color: #D4E6F1;           /* Soft blue accent */
+    --accent-hover: #BFD9EA;
     
     /* Background Colors - Balanced & Comfortable */
     --bg-primary: #ffffff;             /* Pure White */
@@ -83,7 +86,7 @@ html {
     
     /* Status Colors - Better Visibility */
     --success-color: #5A9BC3;          /* Medium Blue */
-    --warning-color: #E67E22;          /* Medium Orange */
+    --warning-color: var(--primary-color);          /* Align warning with primary */
     --danger-color: #E74C3C;           /* Medium Red */
     --info-color: #7FB3D3;             /* Medium Blue */
     
@@ -91,12 +94,12 @@ html {
     --gradient-primary: linear-gradient(135deg, #E8F2F7 0%, #D4E6F1 100%);
     --gradient-secondary: linear-gradient(135deg, #F4F6F7 0%, #E8F2F7 100%);
     --gradient-success: linear-gradient(135deg, #E8F2F7 0%, #7FB3D3 100%);
-    --gradient-warning: linear-gradient(135deg, #F4F6F7 0%, #E67E22 100%);
+    --gradient-warning: linear-gradient(135deg, #F4F6F7 0%, #7FB3D3 100%);
     
     /* Special Effects - Balanced & Visible */
     --glow-primary: 0 0 20px rgba(90, 155, 195, 0.25);
     --glow-secondary: 0 0 20px rgba(127, 179, 211, 0.25);
-    --glow-accent: 0 0 20px rgba(230, 126, 34, 0.25);
+    --glow-accent: 0 0 20px rgba(127, 179, 211, 0.25);
 }
 
 /* ===== DARK THEME ===== */
@@ -219,7 +222,7 @@ html {
 }
 
 [data-theme="dark"] .navbar-nav .nav-link:hover {
-    color: var(--primary-color) !important;
+    color: var(--primary-hover) !important;
     text-shadow: var(--glow-primary);
 }
 
@@ -286,9 +289,9 @@ html {
 }
 
 [data-theme="dark"] .btn-primary:hover {
-    background: var(--gradient-primary);
-    transform: translateY(-2px);
-    box-shadow: var(--glow-primary);
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 22px rgba(78,139,255,.35);
 }
 
 [data-theme="dark"] .btn-secondary {
@@ -298,9 +301,9 @@ html {
 }
 
 [data-theme="dark"] .btn-secondary:hover {
-    background: var(--gradient-secondary);
-    transform: translateY(-2px);
-    box-shadow: var(--glow-secondary);
+    background: var(--secondary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 22px rgba(95,107,119,.25);
 }
 
 /* Dark Tables */
@@ -430,7 +433,8 @@ html {
 
 [data-theme="dark"] .stat-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 15px 35px var(--shadow-dark);
+    box-shadow: 0 15px 35px var(--shadow-dark), 0 0 30px rgba(0, 212, 170, 0.1);
+    border-color: var(--primary-color);
 }
 
 [data-theme="dark"] .stat-number {
@@ -817,7 +821,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .nav-link:hover {
-    color: var(--primary-color);
+    color: var(--primary-hover);
     background: var(--accent-color);
     transform: translateY(-2px);
 }
@@ -922,7 +926,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .btn-secondary:hover {
-    background: var(--accent-color);
+    background: var(--secondary-hover);
     border-color: var(--primary-color);
     transform: translateY(-2px);
     box-shadow: 0 4px 15px var(--shadow-light);
@@ -1335,7 +1339,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .alert-info {
-    background: rgba(127, 179, 211, 0.12);
+    background: rgba(116, 185, 255, 0.12);
     color: var(--info-color);
     border-left: 4px solid var(--info-color);
     border-radius: 10px;
@@ -2992,9 +2996,9 @@ textarea:focus {
 }
 
 [data-theme="dark"] .btn-modern:hover {
-    background: var(--gradient-primary);
-    transform: translateY(-2px);
-    box-shadow: var(--glow-primary);
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 22px rgba(78,139,255,.35);
 }
 
 [data-theme="dark"] .btn-outline-primary {
@@ -3350,3 +3354,35 @@ textarea:focus {
     border-color: var(--border-color);
     color: var(--text-primary);
 }
+
+.logout-fixed{position:fixed;top:12px;right:12px;z-index:1050;display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;box-shadow:0 6px 20px rgba(220,53,69,.3);}
+.logout-fixed i{font-size:14px}
+@media (max-width: 576px){.logout-fixed{top:10px;right:10px;padding:8px 12px}}
+
+.logout-fixed.btn-danger{background-color:#ff6b6b;border-color:#ff6b6b;color:#ffffff}
+.logout-fixed.btn-danger:hover,.logout-fixed.btn-danger:focus{background-color:#ff4d4d;border-color:#ff4d4d;color:#ffffff}
+.logout-fixed{box-shadow:0 8px 22px rgba(255,107,107,.35)}
+
+.logout-soft{background-color:#ff6b6b;border-color:#ff6b6b;color:#ffffff}
+.logout-soft:hover,.logout-soft:focus{background-color:#ff4d4d;border-color:#ff4d4d;color:#ffffff}
+
+/* Global hover color unification */
+.navbar .nav-link{transition:color .2s ease, background-color .2s ease}
+.navbar .nav-link:hover,
+.navbar .nav-link:focus{color:var(--primary-hover)!important}
+
+a:hover{color:var(--primary-color)}
+
+.btn-modern:hover{filter:brightness(0.95)}
+
+/* Remove orange accents: map warning styles to theme primary/secondary */
+.text-warning{color:var(--primary-color)!important}
+.bg-warning{background-color:var(--primary-color)!important}
+.border-warning{border-color:var(--primary-color)!important}
+
+.btn-modern.btn-warning{background-color:var(--primary-color)!important;border-color:var(--primary-color)!important;color:#fff!important}
+.btn-modern.btn-warning:hover,.btn-modern.btn-warning:focus{background-color:var(--primary-hover)!important;border-color:var(--primary-hover)!important;box-shadow:0 8px 22px rgba(78,139,255,.35)}
+
+/* Card hover accent unify */
+.hover-card{transition:box-shadow .2s ease, transform .1s ease}
+.hover-card:hover{box-shadow:0 12px 28px rgba(78,139,255,.18);transform:translateY(-2px)}

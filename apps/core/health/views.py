@@ -50,7 +50,7 @@ def assign_status(request,pid):
 
 @login_required(login_url="login")
 def User_Home(request):
-    return render(request,'patient_home.html')
+    return render(request,'user_home.html')
 
 @login_required(login_url="login")
 def Doctor_Home(request):
@@ -92,8 +92,9 @@ def Login_User(request):
                     login(request, user)
                     error = "pat2"
                 else:
+                    # Allow any authenticated user to log in (no pending verification gate)
                     login(request, user)
-                    error="notmember"
+                    error = "pat1"
         else:
             error="not"
     d = {'error': error}

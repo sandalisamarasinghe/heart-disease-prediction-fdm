@@ -53,3 +53,9 @@ ROOT_URLCONF = 'config.health_desease.urls'
 
 # Update WSGI_APPLICATION to use correct path
 WSGI_APPLICATION = 'config.health_desease.wsgi.application'
+
+# CSRF trusted origins for local development
+CSRF_TRUSTED_ORIGINS = [
+    'http://127.0.0.1:8000',
+    'http://localhost:8000',
+]

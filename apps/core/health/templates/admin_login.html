@@ -1,101 +1,75 @@
 {% extends 'index.html' %}
 {% load static %}
 {% block body %}
-    {% if error == "pat" %}
-    <script>
-        alert('logged in successfully');
-        window.location=('{% url 'admin_home' %}');
-    </script>
-    {% endif %}
 
-    {% if error == "notmember" %}
-    <script>
-        alert('Your information is pending.plz Update Your Profile 1st.then continue this service');
-        window.location=('{% url 'service_home' %}');
-    </script>
-    {% endif %}
-    
-    {% if error == "pat2" %}
-    <script>
-        alert('logged in successfully');
-        window.location=('{% url 'admin_home' %}');
-    </script>
-    {% endif %}
-    
-    {% if error == "not" %}
-    <script>
-        alert('Username & Password are not Matching');
-    </script>
-    {% endif %}
-
-    <section class="admin-login-section py-5">
-        <div class="container py-xl-5 py-lg-3">
-            <div class="admin-login-card">
-                <div class="admin-login-header">
-                    <div class="admin-icon">
-                        <i class="fas fa-user-shield"></i>
+<!-- Match User Login layout/styles exactly -->
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card-modern fade-in">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fas fa-user-shield text-primary mb-3"></i>
+                        Admin Login
                     </div>
-                    <h2 class="admin-title">Admin Login</h2>
-                    <p class="admin-subtitle">Access the Heart Disease Prediction System Administration Panel</p>
+                    <div class="card-subtitle">Sign in to access the admin dashboard</div>
                 </div>
-                
-                <form class="admin-login-form" action="" method="post">
+
+                <!-- Alerts (mirroring user login) -->
+                {% if error == "pat" %}
+                <div class="alert-modern alert-success">
+                    <i class="fas fa-check-circle"></i>
+                    Login successful! Redirecting to admin dashboard...
+                </div>
+                <script>
+                    setTimeout(function(){ window.location="{% url 'admin_home' %}"; }, 1500);
+                </script>
+                {% endif %}
+
+                {% if error == "not" %}
+                <div class="alert-modern alert-danger">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Invalid username or password. Please try again.
+                </div>
+                {% endif %}
+
+                {% if not error %}
+                <div class="alert-modern alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    Enter your admin credentials to continue.
+                </div>
+                {% endif %}
+
+                <!-- Login Form (same classes as user login) -->
+                <form class="form-modern" action="" method="post">
                     {% csrf_token %}
                     <div class="form-group">
-                        <label class="form-label">Username</label>
-                        <div class="input-group">
-                            <span class="input-icon">
-                                <i class="fas fa-user"></i>
-                            </span>
-                            <input type="text" class="form-control" name="uname" placeholder="Enter Admin Username" required="">
-                        </div>
+                        <label class="form-label">
+                            <i class="fas fa-user text-primary"></i> Username
+                        </label>
+                        <input type="text" class="form-input" name="uname" placeholder="Enter your username" required>
                     </div>
+
                     <div class="form-group">
-                        <label class="form-label">Password</label>
-                        <div class="input-group">
-                            <span class="input-icon">
-                                <i class="fas fa-lock"></i>
-                            </span>
-                            <input type="password" class="form-control" name="pwd" placeholder="Enter Admin Password" required="">
-                        </div>
+                        <label class="form-label">
+                            <i class="fas fa-lock text-primary"></i> Password
+                        </label>
+                        <input type="password" class="form-input" name="pwd" placeholder="Enter your password" required>
                     </div>
-                    <button type="submit" class="btn-modern btn-admin w-100">Access Admin Panel</button>
+
+                    <button type="submit" class="btn-modern btn-primary w-100">
+                        <i class="fas fa-sign-in-alt"></i> Sign In
+                    </button>
                 </form>
-                
-                <div class="admin-login-footer">
-                    <a href="{% url 'home' %}" class="back-link">
+
+                <div class="text-center mt-4">
+                    <a href="{% url 'home' %}" class="text-primary fw-bold">
                         <i class="fas fa-arrow-left"></i> Back to Home
                     </a>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</div>
 
-    <style>
-    /* Additional centering styles */
-    .admin-login-section {
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        min-height: 80vh !important;
-    }
-    
-    .admin-login-card {
-        margin: 0 auto !important;
-        display: block !important;
-        max-width: 480px;
-        width: 100%;
-    }
-    
-    /* Ensure form elements are properly aligned */
-    .admin-login-form .form-control {
-        text-align: left;
-    }
-    
-    /* Center the submit button */
-    .admin-login-form button[type="submit"] {
-        margin: 0 auto;
-        display: block;
-    }
-    </style>
 {% endblock %}

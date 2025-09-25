@@ -11,7 +11,11 @@
 	
 	<!-- Modern Fonts -->
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+
+	<!-- Site Icon (Heart) -->
+	<link rel="icon" type="image/svg+xml" href="{% static 'images/heart-favicon.svg' %}">
+	<link rel="shortcut icon" href="{% static 'images/heart-favicon.svg' %}">
 	
 	<!-- Bootstrap CSS -->
 	<link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
@@ -263,34 +267,19 @@
 				<span class="navbar-toggler-icon"></span>
 			</button>
 			<div class="collapse navbar-collapse" id="mainNavbar">
-				<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 					<li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'home' %}">Home</a></li>
+					{% if request.user.is_authenticated %}
 					<li class="nav-item"><a class="nav-link" href="/add_heartdetail/">Predict Disease</a></li>
-					<li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#datasetInfoModal">Dataset Info</a></li>
-					<li class="nav-item"><a class="nav-link" href="https://github.com/" target="_blank" rel="noopener">Documentation</a></li>
-					{% if request.user.is_staff %}
-						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle" href="#" id="adminNavDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-								<i class="fas fa-user-shield"></i> Admin
-							</a>
-							<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="adminNavDropdown">
-								<li><a class="dropdown-item" href="{% url 'admin_home' %}">Dashboard</a></li>
-								<li><a class="dropdown-item" href="/view_doctor">Doctors</a></li>
-								<li><a class="dropdown-item" href="/view_patient">Patients</a></li>
-								<li><a class="dropdown-item" href="/view_feedback">Feedback</a></li>
-								<li><a class="dropdown-item" href="/view_search_pat">Search Data</a></li>
-								<li><hr class="dropdown-divider"></li>
-								<li><a class="dropdown-item text-secondary" href="{% url 'logout' %}">Logout</a></li>
-							</ul>
-						</li>
-					{% else %}
-						{% if request.user.is_authenticated %}
-							<li class="nav-item"><a class="btn btn-sm btn-outline-danger ms-lg-3" href="{% url 'logout' %}">Logout</a></li>
-						{% else %}
-							<li class="nav-item"><a class="btn btn-sm btn-primary ms-lg-3" href="{% url 'login_admin' %}">Admin Login</a></li>
-						{% endif %}
 					{% endif %}
 				</ul>
+				<div class="d-flex ms-auto">
+					{% if request.user.is_authenticated and request.resolver_match.url_name != 'login' and request.resolver_match.url_name != 'login_admin' and request.resolver_match.url_name != 'signup' %}
+						<a class="btn-modern btn-danger logout-soft" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+					{% elif not request.user.is_authenticated %}
+						<a class="btn-modern btn-primary" href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> User Login</a>
+					{% endif %}
+				</div>
 			</div>
 		</div>
 	</nav>
@@ -306,14 +295,17 @@
 					Advanced AI-powered medical diagnosis using machine learning algorithms to predict heart disease risk with high accuracy.
 				</p>
 				<div class="d-flex gap-3 justify-content-center flex-wrap">
-					<a href="{% url 'guest_prediction' %}" class="btn-modern btn-primary">
+					{% if request.user.is_authenticated %}
+					<a href="{% url 'add_heartdetail' %}" class="btn-modern btn-primary">
 						<i class="fas fa-heartbeat"></i> Get Started
 					</a>
+					{% else %}
+					<a href="{% url 'login' %}" class="btn-modern btn-primary">
+						<i class="fas fa-sign-in-alt"></i> Get Started
+					</a>
+					{% endif %}
 					<a href="{% url 'about' %}" class="btn-modern btn-secondary">
 						<i class="fas fa-info-circle"></i> Learn More
-					</a>
-					<a href="{% url 'login_admin' %}" class="btn-modern btn-admin">
-						<i class="fas fa-user-shield"></i> Admin Access
 					</a>
 				</div>
 			</div>
@@ -353,40 +345,6 @@
 		{% endblock %}
 	</main>
 
-	<!-- Dataset Info Modal -->
-	<div class="modal fade" id="datasetInfoModal" tabindex="-1" aria-labelledby="datasetInfoLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg modal-dialog-centered">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="datasetInfoLabel"><i class="fas fa-database me-2 text-primary"></i>Dataset Information</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				</div>
-				<div class="modal-body">
-					<div class="row g-3">
-						<div class="col-md-6">
-							<div class="card-modern">
-								<h6 class="mb-2 text-secondary">Structured Dataset</h6>
-								<p class="mb-2">File: <code>apps/ml/Machine_Learning/new_heart_dataset.csv</code></p>
-								<p class="mb-0">Features include age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal.</p>
-							</div>
-						</div>
-						<div class="col-md-6">
-							<div class="card-modern">
-								<h6 class="mb-2 text-secondary">Unstructured Dataset</h6>
-								<p class="mb-2">File: <code>data/heart.txt</code></p>
-								<p class="mb-0">Free-text patient records parsed to extract the same 13 features for prediction.</p>
-							</div>
-						</div>
-					</div>
-					<div class="alert alert-info mt-3"><i class="fas fa-link me-2"></i>Source: <a href="#" class="alert-link" target="_blank" rel="noopener">UCI/Kaggle (placeholder)</a></div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-				</div>
-			</div>
-		</div>
-	</div>
-
 	<!-- Modern Footer -->
 	<footer class="footer-modern">
 		<div class="footer-content">
@@ -415,9 +373,7 @@
 	</footer>
 
 	<!-- Scroll to Top Button -->
-	<a href="#top" class="btn-modern btn-primary" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">
-		<i class="fas fa-arrow-up"></i>
-	</a>
+	
 
 	<!-- Theme Toggle JavaScript -->
 	<script>
