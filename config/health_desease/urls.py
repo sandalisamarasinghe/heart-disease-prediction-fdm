@@ -40,6 +40,8 @@ urlpatterns = [
     path('change_password/', Change_Password,name="change_password"),
     # path('prdict_heart_disease', prdict_heart_disease,name="prdict_heart_disease"),
     path('add_heartdetail/', add_heartdetail,name="add_heartdetail"),
+    # Alias route so buttons can point to prediction_form
+    path('prediction_form/', add_heartdetail,name="prediction_form"),
     # guest prediction disabled
     path('view_search_pat/', view_search_pat,name="view_search_pat"),
 
