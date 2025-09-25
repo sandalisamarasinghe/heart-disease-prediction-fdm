@@ -305,6 +305,24 @@ The system now provides **more accurate predictions** using **richer data source
 - Open PRs to `main`; reviewers: any team member
 - Keep secrets in `.env` (use `config/env.example`)
 
+## Roles & Work Allocation
+
+- Hirusha Thisayuru Ellawala (Project Lead & Backend)
+  - Django app structure, URLs/views in `apps/core/health/`, admin and auth
+  - API endpoints, integration with ML module, release management
+
+- Sandali Isidara Samarasinghe (Frontend & UX)
+  - Templates in `apps/core/health/templates/`, forms, CSS, responsiveness
+  - Usability flows (login/register, prediction forms, results, feedback)
+
+- Shehan Dissanayake (Machine Learning Engineer)
+  - Text parsing in `apps/ml/text_processor.py`, model code in `apps/ml/heart_disease_model.py`
+  - Training and evaluation in `apps/ml/train_model.py`, saving/loading models
+
+- Ishini Neha Amararathne (QA, Docs & DevOps)
+  - Test cases, manual QA, dataset checks, README/docs updates
+  - `.env` usage (`config/env.example`), repo hygiene, issue tracking
+
 
 
 
