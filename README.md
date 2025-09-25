@@ -8,10 +8,6 @@
   <img alt="scikit-learn" src="https://img.shields.io/badge/scikit--learn-1.x-orange.svg">
 </p>
 
-<!-- Banner (replace assets/banner.png with your image) -->
-<p align="center">
-  <img src="assets/banner.png" alt="Heart Disease Prediction System Banner" width="800"/>
-</p>
 
 ## 🚀 **System Overview**
 
