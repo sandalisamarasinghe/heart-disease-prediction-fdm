@@ -468,11 +468,11 @@ def guest_prediction(request):
             pred_result = "<span style='color:red'>You are Unhealthy, Need to Checkup.</span>"
         
         # Render results page for guests
-        return render(request, 'guest_prediction_result.html', {
+        return render(request, 'prediction_result.html', {
             'prediction': pred_result,
             'accuracy': accuracy,
             'is_guest': True
         })
     
     # Render the prediction form for guests
-    return render(request, 'guest_prediction_form.html')
+    return render(request, 'prediction_form.html')
