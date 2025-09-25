@@ -1,5 +1,18 @@
 # 🫀 Text-Based Heart Disease Prediction System
 
+<!-- Badges -->
+<p align="left">
+  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-green.svg"></a>
+  <img alt="Python" src="https://img.shields.io/badge/Python-3.12+-blue.svg">
+  <img alt="Django" src="https://img.shields.io/badge/Django-3.2-success.svg">
+  <img alt="scikit-learn" src="https://img.shields.io/badge/scikit--learn-1.x-orange.svg">
+</p>
+
+<!-- Banner (replace assets/banner.png with your image) -->
+<p align="center">
+  <img src="assets/banner.png" alt="Heart Disease Prediction System Banner" width="800"/>
+</p>
+
 ## 🚀 **System Overview**
 
 This enhanced Heart Disease Prediction System now uses **unstructured text data** instead of structured CSV files. The system processes natural language patient records and extracts 13 key medical features to provide accurate heart disease predictions using advanced machine learning algorithms.
