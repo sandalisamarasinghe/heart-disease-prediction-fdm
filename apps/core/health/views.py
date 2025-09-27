@@ -124,15 +124,15 @@ def prdict_heart_disease(list_data):
         if sex == 1:  # Male
             score += 1
         
-        # Chest pain (0=no pain, 1-3=increasing pain)
-        if cp == 0:  # No chest pain
-            score += 0
-        elif cp == 1:  # Typical angina
+        # Chest pain (0=typical angina, 1=atypical angina, 2=non-anginal, 3=asymptomatic)
+        if cp == 0:  # Typical angina (most serious)
             score += 3
-        elif cp == 2:  # Atypical angina
+        elif cp == 1:  # Atypical angina
             score += 2
-        else:  # Non-anginal pain
+        elif cp == 2:  # Non-anginal pain
             score += 1
+        else:  # Asymptomatic (no pain)
+            score += 0
         
         # Blood pressure
         if trestbps > 160:
@@ -182,6 +182,7 @@ def prdict_heart_disease(list_data):
             prediction = 0  # Low risk (healthy)
             confidence = min(95.0, 70.0 + (6 - score) * 3)  # Higher confidence for lower scores
         
+        print(f"DEBUG: Risk score: {score}, Prediction: {prediction}, Confidence: {confidence}")
         return confidence, [prediction]
         
     except Exception as e:
@@ -303,37 +304,90 @@ def guest_prediction(request):
     """Guest prediction view - allows users to access prediction form without authentication"""
     if request.method == "POST":
         # Handle prediction form submission for guests
-        # Build feature vector in fixed order
+        # Build feature vector in fixed order with proper data conversion
         try:
+            # Age - direct conversion
             age = float(request.POST.get('age'))
-            sex = float(request.POST.get('sex'))
+            
+            # Gender - convert string to numeric
+            sex_str = request.POST.get('sex')
+            if sex_str == 'Male':
+                sex = 1.0
+            elif sex_str == 'Female':
+                sex = 0.0
+            else:
+                sex = 0.0  # default to female
+            
+            # Chest Pain Type - direct conversion
             cp = float(request.POST.get('cp'))
+            
+            # Resting Blood Pressure - direct conversion
             trestbps = float(request.POST.get('trestbps'))
+            
+            # Cholesterol - direct conversion
             chol = float(request.POST.get('chol'))
-            fbs = float(request.POST.get('fbs'))
+            
+            # Fasting Blood Sugar - convert string to numeric
+            fbs_str = request.POST.get('fbs')
+            if fbs_str == 'Yes':
+                fbs = 1.0
+            elif fbs_str == 'No':
+                fbs = 0.0
+            else:
+                fbs = 0.0  # default to normal
+            
+            # ECG Results - direct conversion
             restecg = float(request.POST.get('restecg'))
+            
+            # Max Heart Rate - direct conversion
             thalach = float(request.POST.get('thalach'))
-            exang = float(request.POST.get('exang'))
+            
+            # Exercise Angina - convert string to numeric
+            exang_str = request.POST.get('exang')
+            if exang_str == 'Yes':
+                exang = 1.0
+            elif exang_str == 'No':
+                exang = 0.0
+            else:
+                exang = 0.0  # default to no
+            
+            # ST Depression - direct conversion
             oldpeak = float(request.POST.get('oldpeak'))
+            
+            # ST Slope - direct conversion
             slope = float(request.POST.get('slope')) if request.POST.get('slope') is not None else 2.0
+            
+            # Major Vessels - direct conversion
             ca = float(request.POST.get('ca')) if request.POST.get('ca') is not None else 0.0
+            
+            # Thalassemia - direct conversion
             thal = float(request.POST.get('thal')) if request.POST.get('thal') is not None else 2.0
+            
             list_data = [age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal]
-        except Exception:
+            
+            print(f"DEBUG: Converted data: {list_data}")  # Debug output
+            
+        except Exception as e:
+            print(f"DEBUG: Error in data conversion: {e}")  # Debug output
             list_data = []
 
+        # Ensure we have 13 features by padding with defaults if needed
         while len(list_data) < 13:
             if len(list_data) == 10:
-                list_data.append(2.0)
+                list_data.append(2.0)  # slope default
             elif len(list_data) == 11:
-                list_data.append(0.0)
+                list_data.append(0.0)  # ca default
             elif len(list_data) == 12:
-                list_data.append(2.0)
+                list_data.append(2.0)  # thal default
             else:
                 list_data.append(0.0)
 
-        # Make prediction using the ML model
+        print(f"DEBUG: Final data for prediction: {list_data}")  # Debug output
+
+        # Make prediction using the rule-based model
         accuracy, pred = prdict_heart_disease(list_data)
+        
+        print(f"DEBUG: Prediction result: {pred}, Accuracy: {accuracy}")  # Debug output
         
         # For guest users, we don't save to database, just show results
         if pred[0] == 0:
