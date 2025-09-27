@@ -23,6 +23,10 @@
                                         <label for="age" class="form-label">Age *</label>
                                         <input type="number" class="form-control" id="age" name="age" required min="18" max="100" placeholder="18 - 100" data-bs-toggle="tooltip" title="Age of the patient in years">
                                         <div class="invalid-feedback">Please enter a valid age between 18-100.</div>
+                                        <div class="input-description">
+                                            <i class="fas fa-info-circle text-info me-1"></i>
+                                            <strong>What is this?</strong> Your age in years. Heart disease risk increases with age, especially after 50 years old.
+                                        </div>
                                     </div>
                                     
                                     <!-- Gender -->
@@ -34,6 +38,10 @@
                                             <option value="Female">Female</option>
                                         </select>
                                         <div class="invalid-feedback">Please select your gender.</div>
+                                        <div class="input-description">
+                                            <i class="fas fa-info-circle text-info me-1"></i>
+                                            <strong>What is this?</strong> Your biological sex. Males generally have higher risk of heart disease than females.
+                                        </div>
                                     </div>
                                 </div>
 
@@ -49,6 +57,16 @@
                                             <option value="3">Asymptomatic</option>
                                         </select>
                                         <div class="invalid-feedback">Please select chest pain type.</div>
+                                        <div class="input-description">
+                                            <i class="fas fa-info-circle text-info me-1"></i>
+                                            <strong>What is this?</strong> Type of chest pain you experience:
+                                            <ul class="description-list">
+                                                <li><strong>Typical Angina:</strong> Chest pain caused by reduced blood flow to heart</li>
+                                                <li><strong>Atypical Angina:</strong> Chest pain with different characteristics</li>
+                                                <li><strong>Non-anginal Pain:</strong> Chest pain not related to heart</li>
+                                                <li><strong>Asymptomatic:</strong> No chest pain symptoms</li>
+                                            </ul>
+                                        </div>
                                     </div>
                                     
                                     <!-- Resting Blood Pressure -->
@@ -56,6 +74,11 @@
                                         <label for="trestbps" class="form-label">Resting BP (mmHg) *</label>
                                         <input type="number" class="form-control" id="trestbps" name="trestbps" required min="90" max="200" placeholder="90 - 200" data-bs-toggle="tooltip" title="Resting blood pressure in mmHg">
                                         <div class="invalid-feedback">Please enter valid blood pressure (90-200 mmHg).</div>
+                                        <div class="input-description">
+                                            <i class="fas fa-info-circle text-info me-1"></i>
+                                            <strong>What is this?</strong> Your blood pressure when you are at rest (not exercising). 
+                                            Normal: <120 mmHg, High: >140 mmHg. This measures the force of blood against artery walls.
+                                        </div>
                                     </div>
                                 </div>
 
@@ -65,6 +88,11 @@
                                         <label for="chol" class="form-label">Cholesterol (mg/dl) *</label>
                                         <input type="number" class="form-control" id="chol" name="chol" required min="100" max="600" placeholder="100 - 600" data-bs-toggle="tooltip" title="Serum cholesterol in mg/dl">
                                         <div class="invalid-feedback">Please enter valid cholesterol level (100-600 mg/dl).</div>
+                                        <div class="input-description">
+                                            <i class="fas fa-info-circle text-info me-1"></i>
+                                            <strong>What is this?</strong> Total cholesterol level in your blood. 
+                                            Normal: <200 mg/dl, High: >240 mg/dl. High cholesterol can clog arteries and increase heart disease risk.
+                                        </div>
                                     </div>
                                     
                                     <!-- Fasting Blood Sugar -->
@@ -76,6 +104,11 @@
                                             <option value="Yes">High (≥ 120 mg/dl)</option>
                                         </select>
                                         <div class="invalid-feedback">Please select blood sugar status.</div>
+                                        <div class="input-description">
+                                            <i class="fas fa-info-circle text-info me-1"></i>
+                                            <strong>What is this?</strong> Your blood sugar level after 8+ hours of fasting (not eating). 
+                                            Normal: <100 mg/dl, High: >120 mg/dl. High blood sugar can damage blood vessels.
+                                        </div>
                                     </div>
                                 </div>
 
@@ -90,6 +123,15 @@
                                             <option value="2">Left Ventricular Hypertrophy</option>
                                         </select>
                                         <div class="invalid-feedback">Please select ECG result.</div>
+                                        <div class="input-description">
+                                            <i class="fas fa-info-circle text-info me-1"></i>
+                                            <strong>What is this?</strong> ECG (Electrocardiogram) shows your heart's electrical activity:
+                                            <ul class="description-list">
+                                                <li><strong>Normal:</strong> Heart rhythm is regular and healthy</li>
+                                                <li><strong>ST-T Wave Abnormality:</strong> Unusual electrical patterns in heart</li>
+                                                <li><strong>Left Ventricular Hypertrophy:</strong> Heart muscle is thickened</li>
+                                            </ul>
+                                        </div>
                                     </div>
                                     
                                     <!-- Max Heart Rate -->
@@ -97,6 +139,11 @@
                                         <label for="thalach" class="form-label">Max Heart Rate *</label>
                                         <input type="number" class="form-control" id="thalach" name="thalach" required min="60" max="202" placeholder="60 - 202" data-bs-toggle="tooltip" title="Maximum heart rate achieved during exercise">
                                         <div class="invalid-feedback">Please enter valid heart rate (60-202 bpm).</div>
+                                        <div class="input-description">
+                                            <i class="fas fa-info-circle text-info me-1"></i>
+                                            <strong>What is this?</strong> The highest number of heartbeats per minute you reached during a stress test or exercise. 
+                                            Normal range: 100-180 bpm depending on age and fitness level.
+                                        </div>
                                     </div>
                                 </div>
 
@@ -110,6 +157,11 @@
                                             <option value="Yes">Yes</option>
                                         </select>
                                         <div class="invalid-feedback">Please select exercise angina status.</div>
+                                        <div class="input-description">
+                                            <i class="fas fa-info-circle text-info me-1"></i>
+                                            <strong>What is this?</strong> Do you experience chest pain, pressure, or discomfort during physical activity or exercise? 
+                                            This is a warning sign that your heart may not be getting enough blood flow during exertion.
+                                        </div>
                                     </div>
                                     
                                     <!-- ST Depression -->
@@ -117,6 +169,11 @@
                                         <label for="oldpeak" class="form-label">ST Depression *</label>
                                         <input type="number" class="form-control" id="oldpeak" name="oldpeak" required step="0.1" min="-2.6" max="6.2" placeholder="-2.6 to 6.2" data-bs-toggle="tooltip" title="ST depression induced by exercise relative to rest">
                                         <div class="invalid-feedback">Please enter valid ST depression (-2.6 to 6.2).</div>
+                                        <div class="input-description">
+                                            <i class="fas fa-info-circle text-info me-1"></i>
+                                            <strong>What is this?</strong> A measurement from your ECG during exercise. It shows how much the heart's electrical pattern changes during physical activity compared to rest. 
+                                            Higher values may indicate heart problems.
+                                        </div>
                                     </div>
                                 </div>
 
@@ -131,6 +188,15 @@
                                             <option value="2">Downsloping</option>
                                         </select>
                                         <div class="invalid-feedback">Please select ST slope.</div>
+                                        <div class="input-description">
+                                            <i class="fas fa-info-circle text-info me-1"></i>
+                                            <strong>What is this?</strong> The direction of the ST segment on your ECG during peak exercise:
+                                            <ul class="description-list">
+                                                <li><strong>Upsloping:</strong> ST segment goes upward (usually normal)</li>
+                                                <li><strong>Flat:</strong> ST segment is horizontal (may indicate problems)</li>
+                                                <li><strong>Downsloping:</strong> ST segment goes downward (may indicate heart disease)</li>
+                                            </ul>
+                                        </div>
                                     </div>
                                     
                                     <!-- Major Vessels -->
@@ -145,6 +211,11 @@
                                             <option value="4">4</option>
                                         </select>
                                         <div class="invalid-feedback">Please select major vessel count.</div>
+                                        <div class="input-description">
+                                            <i class="fas fa-info-circle text-info me-1"></i>
+                                            <strong>What is this?</strong> Number of major blood vessels (arteries) that have significant narrowing or blockage. 
+                                            This is determined by a special X-ray test called fluoroscopy. More blocked vessels = higher heart disease risk.
+                                        </div>
                                     </div>
                                 </div>
 
@@ -159,6 +230,15 @@
                                             <option value="2">Reversible Defect</option>
                                         </select>
                                         <div class="invalid-feedback">Please select thalassemia type.</div>
+                                        <div class="input-description">
+                                            <i class="fas fa-info-circle text-info me-1"></i>
+                                            <strong>What is this?</strong> Thalassemia is a genetic blood disorder that affects hemoglobin production:
+                                            <ul class="description-list">
+                                                <li><strong>Normal:</strong> No thalassemia present</li>
+                                                <li><strong>Fixed Defect:</strong> Permanent blood flow problem in heart muscle</li>
+                                                <li><strong>Reversible Defect:</strong> Temporary blood flow problem that can improve</li>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -201,4 +281,130 @@
         });
     });
     </script>
+
+    <style>
+    /* Custom styles for input descriptions */
+    .input-description {
+        background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+        border: 1px solid #bbdefb;
+        border-radius: 8px;
+        padding: 12px;
+        margin-top: 8px;
+        font-size: 0.9em;
+        color: #424242;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .input-description:hover {
+        background: linear-gradient(135deg, #e1f5fe 0%, #fce4ec 100%);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        transform: translateY(-1px);
+    }
+
+    .input-description strong {
+        color: #1976d2;
+        font-weight: 600;
+    }
+
+    .input-description i {
+        color: #1976d2;
+    }
+
+    .description-list {
+        margin: 8px 0 0 0;
+        padding-left: 20px;
+    }
+
+    .description-list li {
+        margin-bottom: 4px;
+        color: #555;
+        font-size: 0.85em;
+        line-height: 1.4;
+    }
+
+    .description-list li strong {
+        color: #1565c0;
+        font-weight: 600;
+    }
+
+    /* Animation for descriptions */
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .input-description {
+        animation: slideInUp 0.5s ease-out;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .input-description {
+            padding: 10px;
+            font-size: 0.85em;
+        }
+        
+        .description-list {
+            padding-left: 15px;
+        }
+        
+        .description-list li {
+            font-size: 0.8em;
+        }
+    }
+
+    /* Focus effect for form controls */
+    .form-control:focus + .input-description,
+    .form-select:focus + .input-description {
+        border-color: #1976d2;
+        box-shadow: 0 0 0 0.2rem rgba(25, 118, 210, 0.25);
+    }
+
+    /* Enhanced form styling */
+    .form-label {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 8px;
+    }
+
+    .form-control, .form-select {
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 12px;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: #1976d2;
+        box-shadow: 0 0 0 0.2rem rgba(25, 118, 210, 0.25);
+    }
+
+    /* Card enhancements */
+    .card-modern {
+        border-radius: 15px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        border: none;
+        overflow: hidden;
+    }
+
+    .card-header {
+        background: linear-gradient(135deg, #1976d2 0%, #42a5f5 100%);
+        color: white;
+        border: none;
+        padding: 25px;
+    }
+
+    .card-title {
+        margin: 0;
+        font-size: 1.8em;
+        font-weight: 700;
+    }
+    </style>
 {% endblock %}
