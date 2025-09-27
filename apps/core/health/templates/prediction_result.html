@@ -179,9 +179,9 @@
                         <div class="download-content">
                             <h6 class="download-option-title">PDF Health Report</h6>
                             <p class="download-option-desc">Complete health assessment with personalized recommendations</p>
-                            <button class="download-btn pdf-btn" onclick="downloadHealthReport('pdf')">
+                            <a href="/download/pdf/?prediction={{ prediction|urlencode }}&accuracy={{ accuracy }}" class="download-btn pdf-btn" target="_blank">
                                 <i class="fas fa-download me-2"></i>Download PDF
-                            </button>
+                            </a>
                         </div>
                     </div>
                                     
@@ -192,9 +192,9 @@
                                         <div class="download-content">
                                             <h6 class="download-option-title">Text Summary</h6>
                                             <p class="download-option-desc">Simple text format for easy sharing with your doctor</p>
-                                            <button class="download-btn text-btn" onclick="downloadHealthReport('txt')">
+                                            <a href="/download/txt/?prediction={{ prediction|urlencode }}&accuracy={{ accuracy }}" class="download-btn text-btn" target="_blank">
                                                 <i class="fas fa-download me-2"></i>Download Text
-                                            </button>
+                                            </a>
                                         </div>
                                     </div>
                                     
@@ -205,9 +205,9 @@
                                         <div class="download-content">
                                             <h6 class="download-option-title">Health Dashboard</h6>
                                             <p class="download-option-desc">Visual health metrics and progress tracking guide</p>
-                                            <button class="download-btn dashboard-btn" onclick="downloadHealthReport('dashboard')">
+                                            <a href="/download/dashboard/?prediction={{ prediction|urlencode }}&accuracy={{ accuracy }}" class="download-btn dashboard-btn" target="_blank">
                                                 <i class="fas fa-download me-2"></i>Download Dashboard
-                                            </button>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
@@ -870,33 +870,50 @@ document.addEventListener('DOMContentLoaded',function(){
   }
 });
 
-// Simple Test Download Function
+// Ultra Simple Test Download Function
 function testDownload() {
     console.log('Test download function called');
     
     try {
+        // Method 1: Try simple blob download
         const content = 'This is a test download file. If you can see this, the download functionality is working!';
-        const filename = 'test_download.txt';
-        
-        // Create blob
         const blob = new Blob([content], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
+        const url = window.URL.createObjectURL(blob);
         
-        // Create and trigger download
         const link = document.createElement('a');
         link.href = url;
-        link.download = filename;
+        link.download = 'test_download.txt';
         link.style.display = 'none';
         document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
         
-        alert('Test download completed! Check your downloads folder.');
+        // Force click
+        link.click();
+        
+        // Clean up
+        setTimeout(() => {
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+        }, 100);
+        
+        alert('Test download attempted! Check your downloads folder.');
         
     } catch (error) {
         console.error('Error in test download:', error);
-        alert('Test download failed: ' + error.message);
+        
+        // Method 2: Try opening in new window
+        try {
+            const newWindow = window.open('', '_blank');
+            if (newWindow) {
+                newWindow.document.write('This is a test download file. If you can see this, the download functionality is working!');
+                newWindow.document.close();
+                alert('Content opened in new window. You can save it manually.');
+            } else {
+                alert('Popup blocked. Please allow popups for this site.');
+            }
+        } catch (windowError) {
+            console.error('Window method failed:', windowError);
+            alert('Both download methods failed. Please check browser settings.');
+        }
     }
 }
 

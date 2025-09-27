@@ -49,20 +49,19 @@ class HeartDiseaseModel:
         # Create model directory if it doesn't exist
         os.makedirs(model_save_path, exist_ok=True)
         
-        # Simplified model configurations for faster training
+        # Improved model configurations for better accuracy
         self.model_configs = {
             'random_forest': {
-                'model': RandomForestClassifier(random_state=42, n_estimators=100),
-                'params': {
-                    'max_depth': [10, 20],
-                    'min_samples_split': [2, 5]
-                }
+                'model': RandomForestClassifier(random_state=42, n_estimators=200, max_depth=15, min_samples_split=5),
+                'params': {}
             },
             'logistic_regression': {
-                'model': LogisticRegression(random_state=42, max_iter=500),
-                'params': {
-                    'C': [0.1, 1.0, 10.0]
-                }
+                'model': LogisticRegression(random_state=42, max_iter=1000, C=1.0),
+                'params': {}
+            },
+            'gradient_boosting': {
+                'model': GradientBoostingClassifier(random_state=42, n_estimators=100, max_depth=6),
+                'params': {}
             }
         }
     
@@ -77,10 +76,10 @@ class HeartDiseaseModel:
             # Process the text file
             df = self.text_processor.process_text_file()
             
-            # Sample data for faster training (use 2000 records max)
-            if len(df) > 2000:
-                df = df.sample(n=2000, random_state=42)
-                logger.info(f"Sampled {len(df)} records for faster training")
+            # Sample data for faster training (use 5000 records max for better accuracy)
+            if len(df) > 5000:
+                df = df.sample(n=5000, random_state=42)
+                logger.info(f"Sampled {len(df)} records for training")
             
             # Separate features and target
             X = df.drop('target', axis=1)

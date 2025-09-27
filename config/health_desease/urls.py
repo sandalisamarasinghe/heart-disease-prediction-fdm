@@ -49,5 +49,7 @@ urlpatterns = [
     path('delete_searched/<int:pid>/', delete_searched, name="delete_searched"),
     path('delete_feedback/<int:pid>/', delete_feedback, name="delete_feedback"),
     path('predict_desease/<str:pred>/<str:accuracy>/', predict_desease, name="predict_desease"),
+    # Download URLs
+    path('download/<str:format_type>/', download_report, name="download_report"),
 
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
