@@ -5,13 +5,30 @@
     <main class="main-content">
         <div class="container mt-5">
             <div class="row justify-content-center">
-                <div class="col-lg-8">
+                <div class="col-lg-10">
+                    <!-- Hero Section -->
+                    <div class="hero-section text-center mb-5">
+                        <h1 class="hero-title">
+                            <i class="fas fa-heartbeat text-primary me-3"></i>
+                            Heart Disease Prediction
+                        </h1>
+                        <p class="hero-subtitle">
+                            Get your AI-powered heart health assessment in minutes
+                        </p>
+                        <div class="hero-description">
+                            <p class="hero-text">
+                                Fill out the form below with your health information to receive an instant prediction about your heart disease risk.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Form Card -->
                     <div class="card-modern">
                         <div class="card-header text-center">
-                            <h2 class="card-title text-primary">
-                                <i class="fas fa-heartbeat me-2"></i>Heart Disease Prediction
+                            <h2 class="card-title">
+                                <i class="fas fa-clipboard-list me-2"></i>Health Information Form
                             </h2>
-                            
+                            <p class="card-subtitle">Please provide accurate information for the best prediction</p>
                         </div>
                             
                             <form method="POST" class="needs-validation" novalidate>
@@ -283,6 +300,101 @@
     </script>
 
     <style>
+    /* Hero Section */
+    .hero-section {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 4rem 2rem;
+        border-radius: 25px;
+        margin-bottom: 3rem;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        opacity: 0.3;
+    }
+
+    .hero-title {
+        font-size: 3.5rem;
+        font-weight: 800;
+        margin-bottom: 1.5rem;
+        text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+        position: relative;
+        z-index: 1;
+        letter-spacing: -0.02em;
+    }
+
+    .hero-subtitle {
+        font-size: 1.4rem;
+        opacity: 0.95;
+        margin-bottom: 1.5rem;
+        font-weight: 500;
+        position: relative;
+        z-index: 1;
+    }
+
+    .hero-description {
+        position: relative;
+        z-index: 1;
+    }
+
+    .hero-text {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        margin: 0;
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.6;
+    }
+
+    .hero-title i {
+        color: #ff6b6b;
+        filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+        animation: heartbeat 2s ease-in-out infinite;
+    }
+
+    @keyframes heartbeat {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+    }
+
+    /* Card Enhancements */
+    .card-modern {
+        border-radius: 25px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+        border: none;
+        overflow: hidden;
+        background: white;
+    }
+
+    .card-header {
+        background: linear-gradient(135deg, #1976d2 0%, #42a5f5 100%);
+        color: white;
+        border: none;
+        padding: 2.5rem;
+    }
+
+    .card-title {
+        margin: 0;
+        font-size: 1.8rem;
+        font-weight: 700;
+    }
+
+    .card-subtitle {
+        margin: 0.8rem 0 0 0;
+        opacity: 0.9;
+        font-size: 1.1rem;
+    }
+
     /* Custom styles for input descriptions */
     .input-description {
         background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
@@ -346,6 +458,23 @@
 
     /* Responsive adjustments */
     @media (max-width: 768px) {
+        .hero-section {
+            padding: 3rem 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .hero-title {
+            font-size: 2.5rem;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.2rem;
+        }
+        
+        .hero-text {
+            font-size: 1rem;
+        }
+        
         .input-description {
             padding: 10px;
             font-size: 0.85em;
@@ -357,6 +486,28 @@
         
         .description-list li {
             font-size: 0.8em;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .hero-section {
+            padding: 2rem 1rem;
+        }
+        
+        .hero-title {
+            font-size: 2rem;
+        }
+        
+        .hero-subtitle {
+            font-size: 1rem;
+        }
+        
+        .hero-text {
+            font-size: 0.9rem;
+        }
+        
+        .card-header {
+            padding: 2rem 1.5rem;
         }
     }
 
