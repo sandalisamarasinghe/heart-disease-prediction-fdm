@@ -157,19 +157,33 @@
                                     <p class="download-subtitle">Get a personalized health report with detailed recommendations</p>
                                 </div>
                                 
-                                <div class="download-options">
-                                    <div class="download-option">
-                                        <div class="download-icon">
-                                            <i class="fas fa-file-pdf"></i>
-                                        </div>
-                                        <div class="download-content">
-                                            <h6 class="download-option-title">PDF Health Report</h6>
-                                            <p class="download-option-desc">Complete health assessment with personalized recommendations</p>
-                                            <button class="download-btn pdf-btn" onclick="downloadHealthReport('pdf')">
-                                                <i class="fas fa-download me-2"></i>Download PDF
-                                            </button>
-                                        </div>
-                                    </div>
+                <div class="download-options">
+                    <!-- Test Button -->
+                    <div class="download-option" style="background: #ff6b6b; margin-bottom: 20px;">
+                        <div class="download-icon">
+                            <i class="fas fa-bug"></i>
+                        </div>
+                        <div class="download-content">
+                            <h6 class="download-option-title">Test Download</h6>
+                            <p class="download-option-desc">Simple test to verify download functionality</p>
+                            <button class="download-btn" onclick="testDownload()" style="background: #ff6b6b;">
+                                <i class="fas fa-download me-2"></i>Test Download
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="download-option">
+                        <div class="download-icon">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <div class="download-content">
+                            <h6 class="download-option-title">PDF Health Report</h6>
+                            <p class="download-option-desc">Complete health assessment with personalized recommendations</p>
+                            <button class="download-btn pdf-btn" onclick="downloadHealthReport('pdf')">
+                                <i class="fas fa-download me-2"></i>Download PDF
+                            </button>
+                        </div>
+                    </div>
                                     
                                     <div class="download-option">
                                         <div class="download-icon">
@@ -856,45 +870,102 @@ document.addEventListener('DOMContentLoaded',function(){
   }
 });
 
+// Test Download Function
+function testDownload() {
+    console.log('Test download function called');
+    
+    try {
+        const content = 'This is a test download file. If you can see this, the download functionality is working!';
+        const filename = 'test_download.txt';
+        const mimeType = 'text/plain';
+        
+        console.log('Creating test blob...');
+        const blob = new Blob([content], { type: mimeType });
+        const url = window.URL.createObjectURL(blob);
+        
+        console.log('Creating download link...');
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        a.style.display = 'none';
+        
+        console.log('Adding to DOM and clicking...');
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+        
+        console.log('Test download completed');
+        alert('Test download completed! Check your downloads folder.');
+        
+    } catch (error) {
+        console.error('Error in test download:', error);
+        alert('Test download failed: ' + error.message);
+    }
+}
+
 // Download Health Report Function
 function downloadHealthReport(format) {
-    const prediction = '{{ prediction|safe }}';
-    const accuracy = '{{ accuracy|default:0 }}';
-    const isHealthy = prediction.includes('healthy') || prediction.includes('Healthy');
-    const currentDate = new Date().toLocaleDateString();
-    const currentTime = new Date().toLocaleTimeString();
+    console.log('Download function called with format:', format);
     
-    let content = '';
-    let filename = '';
-    let mimeType = '';
-    
-    if (format === 'pdf') {
-        content = generateAttractivePDFContent(prediction, accuracy, isHealthy, currentDate, currentTime);
-        filename = `Heart_Health_Report_${currentDate.replace(/\//g, '-')}.html`;
-        mimeType = 'text/html';
-    } else if (format === 'txt') {
-        content = generateAttractiveTextContent(prediction, accuracy, isHealthy, currentDate, currentTime);
-        filename = `Heart_Health_Summary_${currentDate.replace(/\//g, '-')}.txt`;
-        mimeType = 'text/plain';
-    } else if (format === 'dashboard') {
-        content = generateAttractiveDashboardContent(prediction, accuracy, isHealthy, currentDate, currentTime);
-        filename = `Health_Dashboard_${currentDate.replace(/\//g, '-')}.html`;
-        mimeType = 'text/html';
+    try {
+        const prediction = '{{ prediction|safe }}';
+        const accuracy = '{{ accuracy|default:0 }}';
+        const isHealthy = prediction.includes('healthy') || prediction.includes('Healthy');
+        const currentDate = new Date().toLocaleDateString();
+        const currentTime = new Date().toLocaleTimeString();
+        
+        console.log('Prediction:', prediction);
+        console.log('Accuracy:', accuracy);
+        console.log('Is Healthy:', isHealthy);
+        console.log('Date:', currentDate);
+        console.log('Time:', currentTime);
+        
+        let content = '';
+        let filename = '';
+        let mimeType = '';
+        
+        if (format === 'pdf') {
+            console.log('Generating PDF content...');
+            content = generateAttractivePDFContent(prediction, accuracy, isHealthy, currentDate, currentTime);
+            filename = `Heart_Health_Report_${currentDate.replace(/\//g, '-')}.html`;
+            mimeType = 'text/html';
+        } else if (format === 'txt') {
+            console.log('Generating Text content...');
+            content = generateAttractiveTextContent(prediction, accuracy, isHealthy, currentDate, currentTime);
+            filename = `Heart_Health_Summary_${currentDate.replace(/\//g, '-')}.txt`;
+            mimeType = 'text/plain';
+        } else if (format === 'dashboard') {
+            console.log('Generating Dashboard content...');
+            content = generateAttractiveDashboardContent(prediction, accuracy, isHealthy, currentDate, currentTime);
+            filename = `Health_Dashboard_${currentDate.replace(/\//g, '-')}.html`;
+            mimeType = 'text/html';
+        }
+        
+        console.log('Content length:', content.length);
+        console.log('Filename:', filename);
+        console.log('MIME type:', mimeType);
+        
+        // Create and download file
+        const blob = new Blob([content], { type: mimeType });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+        
+        console.log('Download completed successfully');
+        
+        // Show success message
+        showDownloadSuccess(format);
+        
+    } catch (error) {
+        console.error('Error in download function:', error);
+        alert('Error generating download: ' + error.message);
     }
-    
-    // Create and download file
-    const blob = new Blob([content], { type: mimeType });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    window.URL.revokeObjectURL(url);
-    
-    // Show success message
-    showDownloadSuccess(format);
 }
 
 function generateAttractivePDFContent(prediction, accuracy, isHealthy, date, time) {
