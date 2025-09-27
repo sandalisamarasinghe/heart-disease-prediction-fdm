@@ -289,11 +289,6 @@
 					<li class="nav-item"><a class="nav-link" href="/add_heartdetail/">Predict Disease</a></li>
 					{% endif %}
 				</ul>
-				<div class="d-flex ms-auto">
-					{% if not request.user.is_authenticated %}
-						<a class="btn-modern btn-primary" href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> User Login</a>
-					{% endif %}
-				</div>
 			</div>
 		</div>
 	</nav>
