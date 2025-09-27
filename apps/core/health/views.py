@@ -42,7 +42,7 @@ def Login_User(request):
             login(request, user)
             if next_url:
                 return redirect(next_url)
-            return redirect('patient_home')
+            return redirect('user_home')
         else:
             error = "not"
     d = {'error': error, 'next': next_url}
