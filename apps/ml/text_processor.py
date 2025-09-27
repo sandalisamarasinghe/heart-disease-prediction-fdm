@@ -50,7 +50,11 @@ class HeartDiseaseTextProcessor:
             # Try to parse as CSV first
             try:
                 df = pd.read_csv(self.text_file_path)
-                if 'target' not in df.columns:
+                # Check if this looks like our text format (has Patient Age column)
+                if 'Patient Age: 63' in df.columns or any('Patient Age:' in str(col) for col in df.columns):
+                    # This is our text format, parse it properly
+                    return self._parse_text_format(content)
+                elif 'target' not in df.columns:
                     # Add target column if missing
                     df['target'] = np.random.randint(0, 2, len(df))
                 return df
