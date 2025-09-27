@@ -49,46 +49,19 @@ class HeartDiseaseModel:
         # Create model directory if it doesn't exist
         os.makedirs(model_save_path, exist_ok=True)
         
-        # Model configurations
+        # Simplified model configurations for faster training
         self.model_configs = {
-            'gradient_boosting': {
-                'model': GradientBoostingClassifier(random_state=42),
-                'params': {
-                    'n_estimators': [100, 200, 300],
-                    'learning_rate': [0.1, 0.5, 1.0],
-                    'max_depth': [3, 5, 7]
-                }
-            },
             'random_forest': {
-                'model': RandomForestClassifier(random_state=42),
+                'model': RandomForestClassifier(random_state=42, n_estimators=100),
                 'params': {
-                    'n_estimators': [100, 200, 300],
-                    'max_depth': [10, 20, None],
-                    'min_samples_split': [2, 5, 10]
+                    'max_depth': [10, 20],
+                    'min_samples_split': [2, 5]
                 }
             },
             'logistic_regression': {
-                'model': LogisticRegression(random_state=42, max_iter=1000),
+                'model': LogisticRegression(random_state=42, max_iter=500),
                 'params': {
-                    'C': [0.1, 1.0, 10.0],
-                    'penalty': ['l1', 'l2'],
-                    'solver': ['liblinear', 'saga']
-                }
-            },
-            'svm': {
-                'model': SVC(random_state=42, probability=True),
-                'params': {
-                    'C': [0.1, 1.0, 10.0],
-                    'kernel': ['rbf', 'linear'],
-                    'gamma': ['scale', 'auto']
-                }
-            },
-            'neural_network': {
-                'model': MLPClassifier(random_state=42, max_iter=1000),
-                'params': {
-                    'hidden_layer_sizes': [(100,), (100, 50), (100, 50, 25)],
-                    'activation': ['relu', 'tanh'],
-                    'alpha': [0.0001, 0.001, 0.01]
+                    'C': [0.1, 1.0, 10.0]
                 }
             }
         }
@@ -103,6 +76,11 @@ class HeartDiseaseModel:
         try:
             # Process the text file
             df = self.text_processor.process_text_file()
+            
+            # Sample data for faster training (use 2000 records max)
+            if len(df) > 2000:
+                df = df.sample(n=2000, random_state=42)
+                logger.info(f"Sampled {len(df)} records for faster training")
             
             # Separate features and target
             X = df.drop('target', axis=1)
@@ -143,38 +121,27 @@ class HeartDiseaseModel:
             
             accuracies = {}
             
-            # Train each model
+            # Train each model (simplified for speed)
             for name, config in self.model_configs.items():
                 logger.info(f"Training {name}...")
                 
                 try:
-                    # Grid search for hyperparameter tuning
-                    grid_search = GridSearchCV(
-                        config['model'], 
-                        config['params'], 
-                        cv=5, 
-                        scoring='accuracy',
-                        n_jobs=-1
-                    )
-                    
-                    grid_search.fit(X_train_scaled, y_train)
-                    
-                    # Get best model
-                    best_model = grid_search.best_estimator_
-                    self.models[name] = best_model
+                    # Simple training without grid search for speed
+                    model = config['model']
+                    model.fit(X_train_scaled, y_train)
+                    self.models[name] = model
                     
                     # Evaluate
-                    y_pred = best_model.predict(X_test_scaled)
+                    y_pred = model.predict(X_test_scaled)
                     accuracy = accuracy_score(y_test, y_pred)
                     accuracies[name] = accuracy
                     
-                    logger.info(f"{name} - Best params: {grid_search.best_params_}")
                     logger.info(f"{name} - Accuracy: {accuracy:.4f}")
                     
                     # Update best model if this one is better
                     if accuracy > self.best_accuracy:
                         self.best_accuracy = accuracy
-                        self.best_model = best_model
+                        self.best_model = model
                         
                 except Exception as e:
                     logger.error(f"Error training {name}: {str(e)}")
