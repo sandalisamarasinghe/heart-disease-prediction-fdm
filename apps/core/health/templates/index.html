@@ -253,6 +253,15 @@
 		<span id="themeText">Dark Mode</span>
 	</button>
 
+	<!-- Logout Button - Top Right Corner -->
+	{% if request.user.is_authenticated and request.resolver_match.url_name != 'login' and request.resolver_match.url_name != 'login_admin' and request.resolver_match.url_name != 'signup' %}
+	<div class="logout-top-right">
+		<a class="btn-modern btn-danger logout-soft" href="{% url 'logout' %}" title="Logout">
+			<i class="fas fa-sign-out-alt"></i> Logout
+		</a>
+	</div>
+	{% endif %}
+
 	<!-- Bootstrap Navbar -->
 	<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
 		<div class="container">
@@ -274,9 +283,7 @@
 					{% endif %}
 				</ul>
 				<div class="d-flex ms-auto">
-					{% if request.user.is_authenticated and request.resolver_match.url_name != 'login' and request.resolver_match.url_name != 'login_admin' and request.resolver_match.url_name != 'signup' %}
-						<a class="btn-modern btn-danger logout-soft" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
-					{% elif not request.user.is_authenticated %}
+					{% if not request.user.is_authenticated %}
 						<a class="btn-modern btn-primary" href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> User Login</a>
 					{% endif %}
 				</div>
@@ -461,7 +468,32 @@
 				}, 3000);
 			}
 		});
+	</script>
+	
+	<style>
+		/* Logout button positioning */
+		.logout-top-right {
+			position: fixed;
+			top: 20px;
+			right: 20px;
+			z-index: 1000;
+		}
 		
+		.logout-top-right .btn-modern {
+			padding: 8px 16px;
+			font-size: 14px;
+			border-radius: 25px;
+			box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+			transition: all 0.3s ease;
+		}
+		
+		.logout-top-right .btn-modern:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+		}
+	</style>
+	
+	<script>
 		// Responsive handling
 		$(document).ready(function() {
 			// Handle window resize
