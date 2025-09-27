@@ -904,6 +904,47 @@ function testDownload() {
     }
 }
 
+// Alternative Download Function (simpler method)
+function alternativeDownload(content, filename, mimeType) {
+    console.log('Using alternative download method');
+    
+    try {
+        // Method 1: Direct blob download
+        const blob = new Blob([content], { type: mimeType });
+        const url = URL.createObjectURL(blob);
+        
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        link.style.display = 'none';
+        
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        URL.revokeObjectURL(url);
+        
+        return true;
+    } catch (error) {
+        console.error('Alternative download failed:', error);
+        
+        // Method 2: Open in new window
+        try {
+            const newWindow = window.open('', '_blank');
+            if (newWindow) {
+                newWindow.document.write(content);
+                newWindow.document.close();
+                newWindow.document.title = filename;
+                return true;
+            }
+        } catch (windowError) {
+            console.error('Window method failed:', windowError);
+        }
+        
+        return false;
+    }
+}
+
 // Download Health Report Function
 function downloadHealthReport(format) {
     console.log('Download function called with format:', format);
@@ -946,18 +987,46 @@ function downloadHealthReport(format) {
         console.log('Filename:', filename);
         console.log('MIME type:', mimeType);
         
-        // Create and download file
-        const blob = new Blob([content], { type: mimeType });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = filename;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
+        // Try alternative download method first
+        console.log('Attempting alternative download method...');
+        const success = alternativeDownload(content, filename, mimeType);
         
-        console.log('Download completed successfully');
+        if (success) {
+            console.log('Alternative download method succeeded');
+        } else {
+            console.log('Alternative download failed, trying original method...');
+            
+            // Original method as fallback
+            console.log('Creating blob...');
+            const blob = new Blob([content], { type: mimeType });
+            console.log('Blob created, size:', blob.size);
+            
+            console.log('Creating object URL...');
+            const url = window.URL.createObjectURL(blob);
+            console.log('Object URL created:', url);
+            
+            console.log('Creating download link...');
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.style.display = 'none';
+            a.target = '_blank';
+            
+            console.log('Adding link to DOM...');
+            document.body.appendChild(a);
+            
+            console.log('Triggering download...');
+            a.click();
+            
+            console.log('Cleaning up...');
+            setTimeout(() => {
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+                console.log('Cleanup completed');
+            }, 100);
+        }
+        
+        console.log('Download process completed');
         
         // Show success message
         showDownloadSuccess(format);
