@@ -37,33 +37,33 @@
                                 
                                 <div class="result-content">
                                     <div class="result-display text-center mb-4">
-                                        {{ prediction|safe }}
-                                    </div>
+                                    {{ prediction|safe }}
+                                </div>
                                     
                                     <div class="risk-indicator text-center mb-4">
-                                        {% with pred_text=prediction|lower %}
+                                    {% with pred_text=prediction|lower %}
                                             {% if "unhealthy" in pred_text or "high" in pred_text %}
                                                 <div class="risk-badge high-risk">
                                                     <i class="fas fa-exclamation-triangle me-2"></i>
                                                     <span>High Risk - Consult Doctor</span>
                                                 </div>
-                                            {% else %}
+                                        {% else %}
                                                 <div class="risk-badge low-risk">
                                                     <i class="fas fa-check-circle me-2"></i>
                                                     <span>Low Risk - Keep Healthy</span>
                                                 </div>
-                                            {% endif %}
-                                        {% endwith %}
-                                    </div>
+                                        {% endif %}
+                                    {% endwith %}
+                                </div>
                                     
                                     <div class="accuracy-display text-center">
                                         <div class="accuracy-card">
                                             <i class="fas fa-chart-line me-2"></i>
                                             <span class="accuracy-label">Model Confidence:</span>
                                             <span class="accuracy-value">{{ accuracy|floatformat:1 }}%</span>
-                                        </div>
-                                    </div>
                                 </div>
+                            </div>
+                        </div>
                             </div>
                         </div>
                         <!-- Chart Section -->
@@ -85,12 +85,12 @@
                             <div class="recommendations-card">
                                 <div class="recommendations-header">
                                     <h4 class="recommendations-title">
-                                        <i class="fas fa-lightbulb me-2"></i>Health Recommendations
-                                    </h4>
+                                <i class="fas fa-lightbulb me-2"></i>Health Recommendations
+                            </h4>
                                     <p class="recommendations-subtitle">Personalized advice based on your results</p>
                                 </div>
                                 
-                                {% if "healthy" in prediction|lower %}
+                            {% if "healthy" in prediction|lower %}
                                 <div class="recommendation-item success-recommendation">
                                     <div class="recommendation-icon">
                                         <i class="fas fa-check-circle"></i>
@@ -116,8 +116,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                {% else %}
+                            </div>
+                            {% else %}
                                 <div class="recommendation-item warning-recommendation">
                                     <div class="recommendation-icon">
                                         <i class="fas fa-exclamation-triangle"></i>
@@ -143,9 +143,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                {% endif %}
                             </div>
+                            {% endif %}
+                        </div>
                         </div>
                         <!-- Download Health Report Section -->
                         <div class="download-section mb-5">
@@ -258,8 +258,8 @@
                                 <a href="{% url 'home' %}" class="action-btn secondary-btn">
                                     <i class="fas fa-home me-2"></i>
                                     <span>Back to Home</span>
-                                </a>
-                            </div>
+                            </a>
+                        </div>
                         </div>
                         
                         <!-- Disclaimer -->
@@ -870,32 +870,28 @@ document.addEventListener('DOMContentLoaded',function(){
   }
 });
 
-// Test Download Function
+// Simple Test Download Function
 function testDownload() {
     console.log('Test download function called');
     
     try {
         const content = 'This is a test download file. If you can see this, the download functionality is working!';
         const filename = 'test_download.txt';
-        const mimeType = 'text/plain';
         
-        console.log('Creating test blob...');
-        const blob = new Blob([content], { type: mimeType });
-        const url = window.URL.createObjectURL(blob);
+        // Create blob
+        const blob = new Blob([content], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
         
-        console.log('Creating download link...');
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = filename;
-        a.style.display = 'none';
+        // Create and trigger download
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        link.style.display = 'none';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
         
-        console.log('Adding to DOM and clicking...');
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-        
-        console.log('Test download completed');
         alert('Test download completed! Check your downloads folder.');
         
     } catch (error) {
@@ -945,7 +941,7 @@ function alternativeDownload(content, filename, mimeType) {
     }
 }
 
-// Download Health Report Function
+// Simple Download Health Report Function
 function downloadHealthReport(format) {
     console.log('Download function called with format:', format);
     
@@ -959,82 +955,151 @@ function downloadHealthReport(format) {
         console.log('Prediction:', prediction);
         console.log('Accuracy:', accuracy);
         console.log('Is Healthy:', isHealthy);
-        console.log('Date:', currentDate);
-        console.log('Time:', currentTime);
         
         let content = '';
         let filename = '';
         let mimeType = '';
         
         if (format === 'pdf') {
-            console.log('Generating PDF content...');
-            content = generateAttractivePDFContent(prediction, accuracy, isHealthy, currentDate, currentTime);
+            content = generateSimplePDFContent(prediction, accuracy, isHealthy, currentDate, currentTime);
             filename = `Heart_Health_Report_${currentDate.replace(/\//g, '-')}.html`;
             mimeType = 'text/html';
         } else if (format === 'txt') {
-            console.log('Generating Text content...');
-            content = generateAttractiveTextContent(prediction, accuracy, isHealthy, currentDate, currentTime);
+            content = generateSimpleTextContent(prediction, accuracy, isHealthy, currentDate, currentTime);
             filename = `Heart_Health_Summary_${currentDate.replace(/\//g, '-')}.txt`;
             mimeType = 'text/plain';
         } else if (format === 'dashboard') {
-            console.log('Generating Dashboard content...');
-            content = generateAttractiveDashboardContent(prediction, accuracy, isHealthy, currentDate, currentTime);
+            content = generateSimpleDashboardContent(prediction, accuracy, isHealthy, currentDate, currentTime);
             filename = `Health_Dashboard_${currentDate.replace(/\//g, '-')}.html`;
             mimeType = 'text/html';
         }
         
         console.log('Content length:', content.length);
         console.log('Filename:', filename);
-        console.log('MIME type:', mimeType);
         
-        // Try alternative download method first
-        console.log('Attempting alternative download method...');
-        const success = alternativeDownload(content, filename, mimeType);
+        // Simple download method
+        const blob = new Blob([content], { type: mimeType });
+        const url = URL.createObjectURL(blob);
         
-        if (success) {
-            console.log('Alternative download method succeeded');
-        } else {
-            console.log('Alternative download failed, trying original method...');
-            
-            // Original method as fallback
-            console.log('Creating blob...');
-            const blob = new Blob([content], { type: mimeType });
-            console.log('Blob created, size:', blob.size);
-            
-            console.log('Creating object URL...');
-            const url = window.URL.createObjectURL(blob);
-            console.log('Object URL created:', url);
-            
-            console.log('Creating download link...');
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            a.style.display = 'none';
-            a.target = '_blank';
-            
-            console.log('Adding link to DOM...');
-            document.body.appendChild(a);
-            
-            console.log('Triggering download...');
-            a.click();
-            
-            console.log('Cleaning up...');
-            setTimeout(() => {
-                document.body.removeChild(a);
-                window.URL.revokeObjectURL(url);
-                console.log('Cleanup completed');
-            }, 100);
-        }
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        link.style.display = 'none';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
         
-        console.log('Download process completed');
-        
-        // Show success message
-        showDownloadSuccess(format);
+        console.log('Download completed successfully');
+        alert('Download completed! Check your downloads folder.');
         
     } catch (error) {
         console.error('Error in download function:', error);
         alert('Error generating download: ' + error.message);
     }
+}
+
+// Simple Content Generation Functions
+function generateSimplePDFContent(prediction, accuracy, isHealthy, date, time) {
+    return `<!DOCTYPE html>
+<html>
+<head>
+    <title>Heart Health Report - ${date}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .header { background: #1976d2; color: white; padding: 20px; text-align: center; }
+        .content { padding: 20px; }
+        .result { background: ${isHealthy ? '#d4edda' : '#f8d7da'}; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        .section { margin: 20px 0; }
+        h2 { color: #1976d2; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏥 Heart Health Report</h1>
+        <p>Generated on ${date} at ${time}</p>
+    </div>
+    <div class="content">
+        <div class="result">
+            <h2>Prediction Result</h2>
+            <p><strong>${prediction.replace(/<[^>]*>/g, '')}</strong></p>
+            <p>Confidence: ${accuracy}%</p>
+        </div>
+        <div class="section">
+            <h2>Recommendations</h2>
+            <p>${isHealthy ? 'Continue maintaining your healthy lifestyle with regular exercise and balanced diet.' : 'Please consult with a healthcare professional immediately for proper evaluation and treatment.'}</p>
+        </div>
+        <div class="section">
+            <h2>Important Notice</h2>
+            <p>This report is generated by an AI system and should not replace professional medical advice. Always consult with qualified healthcare professionals.</p>
+        </div>
+    </div>
+</body>
+</html>`;
+}
+
+function generateSimpleTextContent(prediction, accuracy, isHealthy, date, time) {
+    return `HEART HEALTH SUMMARY
+===================
+
+Date: ${date}
+Time: ${time}
+Confidence: ${accuracy}%
+
+PREDICTION RESULT:
+${prediction.replace(/<[^>]*>/g, '')}
+
+RECOMMENDATIONS:
+${isHealthy ? 'Continue maintaining your healthy lifestyle with regular exercise and balanced diet.' : 'Please consult with a healthcare professional immediately for proper evaluation and treatment.'}
+
+IMPORTANT NOTICE:
+This report is generated by an AI system and should not replace professional medical advice. Always consult with qualified healthcare professionals.
+
+Generated by Heart Disease Prediction System
+${date}`;
+}
+
+function generateSimpleDashboardContent(prediction, accuracy, isHealthy, date, time) {
+    return `<!DOCTYPE html>
+<html>
+<head>
+    <title>Health Dashboard - ${date}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; }
+        .header { background: #6f42c1; color: white; padding: 20px; text-align: center; border-radius: 10px; }
+        .metric { background: #f8f9fa; padding: 15px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #6f42c1; }
+        .status { background: ${isHealthy ? '#d4edda' : '#f8d7da'}; padding: 15px; margin: 10px 0; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📈 Health Dashboard</h1>
+            <p>Generated on ${date} at ${time}</p>
+        </div>
+        <div class="status">
+            <h2>Current Status</h2>
+            <p><strong>${prediction.replace(/<[^>]*>/g, '')}</strong></p>
+            <p>Confidence: ${accuracy}%</p>
+        </div>
+        <div class="metric">
+            <h3>Health Metrics</h3>
+            <p>Target Blood Pressure: <120/80 mmHg</p>
+            <p>Target Cholesterol: <200 mg/dL</p>
+            <p>Target Exercise: 150 min/week</p>
+        </div>
+        <div class="metric">
+            <h3>Goals</h3>
+            <p>${isHealthy ? 'Maintain current healthy lifestyle' : 'Improve cardiovascular health through lifestyle changes'}</p>
+        </div>
+        <div class="metric">
+            <h3>Next Steps</h3>
+            <p>${isHealthy ? 'Continue regular health monitoring' : 'Schedule consultation with healthcare provider'}</p>
+        </div>
+    </div>
+</body>
+</html>`;
 }
 
 function generateAttractivePDFContent(prediction, accuracy, isHealthy, date, time) {
