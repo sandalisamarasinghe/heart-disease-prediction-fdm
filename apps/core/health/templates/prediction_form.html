@@ -11,16 +11,8 @@
                             <h2 class="card-title text-primary">
                                 <i class="fas fa-heartbeat me-2"></i>Heart Disease Prediction
                             </h2>
-                            <p class="card-subtitle text-muted">
-                                Get your heart disease risk assessment instantly - No account required!
-                            </p>
+                            
                         </div>
-                        <div class="card-body">
-                            <div class="alert alert-info">
-                                <i class="fas fa-info-circle me-2"></i>
-                                <strong>Guest Mode:</strong> You can use this prediction tool without creating an account. 
-                                For saving your results and tracking history, please <a href="{% url 'signup' %}" class="alert-link">create a free account</a>.
-                            </div>
                             
                             <form method="POST" class="needs-validation" novalidate>
                                 {% csrf_token %}
@@ -174,9 +166,6 @@
                                     <button type="submit" class="btn-modern btn-primary btn-lg me-3">
                                         <i class="fas fa-brain me-2"></i>Get AI Prediction
                                     </button>
-                                    <a href="{% url 'signup' %}" class="btn-modern btn-secondary">
-                                        <i class="fas fa-user-plus me-2"></i>Create Account
-                                    </a>
                                 </div>
                             </form>
                         </div>

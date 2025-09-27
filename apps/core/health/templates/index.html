@@ -299,8 +299,8 @@
                     <a href="{% url 'prediction_form' %}" class="btn-modern btn-primary">
 						<i class="fas fa-heartbeat"></i> Get Started
 					</a>
-					{% else %}
-					<a href="{% url 'login' %}" class="btn-modern btn-primary">
+                    {% else %}
+                    <a href="{% url 'login' %}?next={% url 'prediction_form' %}" class="btn-modern btn-primary">
 						<i class="fas fa-sign-in-alt"></i> Get Started
 					</a>
 					{% endif %}
