@@ -55,12 +55,130 @@ class HeartDiseaseTextProcessor:
                     df['target'] = np.random.randint(0, 2, len(df))
                 return df
             except:
-                # If CSV parsing fails, create sample data
-                return self._create_sample_data()
+                # If CSV parsing fails, try to parse the text format
+                return self._parse_text_format(content)
                 
         except Exception as e:
             print(f"Error processing text file: {e}")
             return self._create_sample_data()
+    
+    def _parse_text_format(self, content: str) -> pd.DataFrame:
+        """
+        Parse the text format from heart.txt file.
+        
+        Args:
+            content (str): File content
+            
+        Returns:
+            pd.DataFrame: Parsed data
+        """
+        try:
+            lines = content.strip().split('\n')
+            data = []
+            
+            for line in lines:
+                if line.strip() and 'Patient Age:' in line:
+                    # Parse each line
+                    record = self._parse_patient_line(line)
+                    if record:
+                        data.append(record)
+            
+            if not data:
+                return self._create_sample_data()
+            
+            # Convert to DataFrame
+            df = pd.DataFrame(data)
+            
+            # Ensure we have the right columns
+            expected_columns = self.feature_names + ['target']
+            for col in expected_columns:
+                if col not in df.columns:
+                    if col == 'target':
+                        df[col] = np.random.randint(0, 2, len(df))
+                    else:
+                        df[col] = 0
+            
+            return df[expected_columns]
+            
+        except Exception as e:
+            print(f"Error parsing text format: {e}")
+            return self._create_sample_data()
+    
+    def _parse_patient_line(self, line: str) -> dict:
+        """
+        Parse a single patient line from the text file.
+        
+        Args:
+            line (str): Patient data line
+            
+        Returns:
+            dict: Parsed patient data
+        """
+        try:
+            # Extract values using string parsing
+            record = {}
+            
+            # Age
+            age_match = line.split('Patient Age: ')[1].split(',')[0]
+            record['age'] = int(age_match)
+            
+            # Gender (0=Female, 1=Male)
+            gender_match = line.split('Gender: ')[1].split(',')[0]
+            record['sex'] = 1 if gender_match.strip() == 'Male' else 0
+            
+            # Chest Pain Type
+            cp_match = line.split('Chest Pain Type: ')[1].split(',')[0]
+            record['cp'] = int(cp_match)
+            
+            # Resting BP
+            bp_match = line.split('Resting BP: ')[1].split(' mmHg')[0]
+            record['trestbps'] = int(bp_match)
+            
+            # Cholesterol
+            chol_match = line.split('Cholesterol: ')[1].split(' mg/dl')[0]
+            record['chol'] = int(chol_match)
+            
+            # Fasting Blood Sugar (0=No, 1=Yes)
+            fbs_match = line.split('Fasting Blood Sugar: ')[1].split(',')[0]
+            record['fbs'] = 1 if fbs_match.strip() == 'Yes' else 0
+            
+            # ECG Result
+            ecg_match = line.split('ECG Result: ')[1].split(',')[0]
+            record['restecg'] = int(ecg_match)
+            
+            # Max Heart Rate
+            hr_match = line.split('Max Heart Rate: ')[1].split(',')[0]
+            record['thalach'] = int(hr_match)
+            
+            # Exercise Angina (0=No, 1=Yes)
+            exang_match = line.split('Exercise Angina: ')[1].split(',')[0]
+            record['exang'] = 1 if exang_match.strip() == 'Yes' else 0
+            
+            # ST Depression
+            st_match = line.split('ST Depression: ')[1].split(',')[0]
+            record['oldpeak'] = float(st_match)
+            
+            # ST Slope
+            slope_match = line.split('ST Slope: ')[1].split(',')[0]
+            record['slope'] = int(slope_match)
+            
+            # Major Vessels
+            vessels_match = line.split('Major Vessels: ')[1].split(',')[0]
+            record['ca'] = int(vessels_match)
+            
+            # Thalassemia
+            thal_match = line.split('Thalassemia: ')[1].split(',')[0]
+            record['thal'] = int(thal_match)
+            
+            # Disease Status (0=Negative, 1=Positive)
+            disease_match = line.split('Disease Status: ')[1].split(',')[0]
+            record['target'] = 1 if disease_match.strip() == 'Positive' else 0
+            
+            return record
+            
+        except Exception as e:
+            print(f"Error parsing patient line: {e}")
+            return None
     
     def _create_sample_data(self) -> pd.DataFrame:
         """
