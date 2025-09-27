@@ -147,6 +147,89 @@
                                 {% endif %}
                             </div>
                         </div>
+                        <!-- Download Health Report Section -->
+                        <div class="download-section mb-5">
+                            <div class="download-card">
+                                <div class="download-header">
+                                    <h4 class="download-title">
+                                        <i class="fas fa-download me-2"></i>Download Your Health Report
+                                    </h4>
+                                    <p class="download-subtitle">Get a personalized health report with detailed recommendations</p>
+                                </div>
+                                
+                                <div class="download-options">
+                                    <div class="download-option">
+                                        <div class="download-icon">
+                                            <i class="fas fa-file-pdf"></i>
+                                        </div>
+                                        <div class="download-content">
+                                            <h6 class="download-option-title">PDF Health Report</h6>
+                                            <p class="download-option-desc">Complete health assessment with personalized recommendations</p>
+                                            <button class="download-btn pdf-btn" onclick="downloadHealthReport('pdf')">
+                                                <i class="fas fa-download me-2"></i>Download PDF
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="download-option">
+                                        <div class="download-icon">
+                                            <i class="fas fa-file-alt"></i>
+                                        </div>
+                                        <div class="download-content">
+                                            <h6 class="download-option-title">Text Summary</h6>
+                                            <p class="download-option-desc">Simple text format for easy sharing with your doctor</p>
+                                            <button class="download-btn text-btn" onclick="downloadHealthReport('txt')">
+                                                <i class="fas fa-download me-2"></i>Download Text
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="download-option">
+                                        <div class="download-icon">
+                                            <i class="fas fa-chart-line"></i>
+                                        </div>
+                                        <div class="download-content">
+                                            <h6 class="download-option-title">Health Dashboard</h6>
+                                            <p class="download-option-desc">Visual health metrics and progress tracking guide</p>
+                                            <button class="download-btn dashboard-btn" onclick="downloadHealthReport('dashboard')">
+                                                <i class="fas fa-download me-2"></i>Download Dashboard
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="download-features">
+                                    <h6 class="features-title">What's Included in Your Report:</h6>
+                                    <div class="features-grid">
+                                        <div class="feature-item">
+                                            <i class="fas fa-check-circle text-success me-2"></i>
+                                            <span>Detailed risk assessment</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <i class="fas fa-check-circle text-success me-2"></i>
+                                            <span>Personalized recommendations</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <i class="fas fa-check-circle text-success me-2"></i>
+                                            <span>Lifestyle modification tips</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <i class="fas fa-check-circle text-success me-2"></i>
+                                            <span>Medical consultation guidance</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <i class="fas fa-check-circle text-success me-2"></i>
+                                            <span>Follow-up schedule suggestions</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <i class="fas fa-check-circle text-success me-2"></i>
+                                            <span>Emergency contact information</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Action Buttons -->
                         <div class="action-buttons-section">
                             <div class="action-buttons-container">
@@ -484,6 +567,150 @@
     color: white;
 }
 
+/* Download Section */
+.download-section {
+    margin: 3rem 0;
+}
+
+.download-card {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border: 1px solid #dee2e6;
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.download-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.download-title {
+    color: #1976d2;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.download-subtitle {
+    color: #666;
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.download-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.download-option {
+    background: white;
+    border: 2px solid #e9ecef;
+    border-radius: 15px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.download-option:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border-color: #1976d2;
+}
+
+.download-icon {
+    font-size: 2.5rem;
+    margin-right: 1rem;
+    flex-shrink: 0;
+    color: #1976d2;
+}
+
+.download-content {
+    flex: 1;
+}
+
+.download-option-title {
+    color: #2c3e50;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.download-option-desc {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    line-height: 1.4;
+}
+
+.download-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.download-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.pdf-btn {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    color: white;
+}
+
+.text-btn {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+}
+
+.dashboard-btn {
+    background: linear-gradient(135deg, #6f42c1 0%, #5a32a3 100%);
+    color: white;
+}
+
+.download-features {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    border: 1px solid #e9ecef;
+}
+
+.features-title {
+    color: #2c3e50;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 0.8rem;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    color: #555;
+    font-size: 0.9rem;
+    padding: 0.5rem 0;
+}
+
+.feature-item i {
+    font-size: 1rem;
+}
+
 /* Disclaimer Section */
 .disclaimer-section {
     margin-top: 2rem;
@@ -582,6 +809,24 @@
         margin-right: 0;
         margin-bottom: 1rem;
     }
+    
+    .download-options {
+        grid-template-columns: 1fr;
+    }
+    
+    .download-option {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .download-icon {
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+    
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 @media (max-width: 576px) {
@@ -610,5 +855,393 @@ document.addEventListener('DOMContentLoaded',function(){
     new Chart(ctx,{type:'doughnut',data:{labels:['Predicted class confidence','Other'],datasets:[{data:data,backgroundColor:['#5A9BC3','#E8F2F7'],borderWidth:0}]},options:{plugins:{legend:{position:'bottom'}},cutout:'65%'}});
   }
 });
+
+// Download Health Report Function
+function downloadHealthReport(format) {
+    const prediction = '{{ prediction|safe }}';
+    const accuracy = '{{ accuracy|default:0 }}';
+    const isHealthy = prediction.includes('healthy') || prediction.includes('Healthy');
+    const currentDate = new Date().toLocaleDateString();
+    const currentTime = new Date().toLocaleTimeString();
+    
+    let content = '';
+    let filename = '';
+    let mimeType = '';
+    
+    if (format === 'pdf') {
+        content = generatePDFContent(prediction, accuracy, isHealthy, currentDate, currentTime);
+        filename = `Heart_Health_Report_${currentDate.replace(/\//g, '-')}.txt`;
+        mimeType = 'text/plain';
+    } else if (format === 'txt') {
+        content = generateTextContent(prediction, accuracy, isHealthy, currentDate, currentTime);
+        filename = `Heart_Health_Summary_${currentDate.replace(/\//g, '-')}.txt`;
+        mimeType = 'text/plain';
+    } else if (format === 'dashboard') {
+        content = generateDashboardContent(prediction, accuracy, isHealthy, currentDate, currentTime);
+        filename = `Health_Dashboard_${currentDate.replace(/\//g, '-')}.txt`;
+        mimeType = 'text/plain';
+    }
+    
+    // Create and download file
+    const blob = new Blob([content], { type: mimeType });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+    
+    // Show success message
+    showDownloadSuccess(format);
+}
+
+function generatePDFContent(prediction, accuracy, isHealthy, date, time) {
+    return `
+HEART DISEASE PREDICTION REPORT
+================================
+
+Report Generated: ${date} at ${time}
+Model Confidence: ${accuracy}%
+
+PREDICTION RESULT
+================
+${prediction.replace(/<[^>]*>/g, '')}
+
+${isHealthy ? 'HEALTHY LIFESTYLE RECOMMENDATIONS' : 'URGENT HEALTH ACTIONS REQUIRED'}
+${'='.repeat(isHealthy ? 40 : 35)}
+
+${isHealthy ? getHealthyRecommendations() : getUnhealthyRecommendations()}
+
+DETAILED HEALTH GUIDANCE
+========================
+
+${isHealthy ? getHealthyDetailedGuidance() : getUnhealthyDetailedGuidance()}
+
+EMERGENCY CONTACTS
+==================
+- Emergency Services: 911 (US) / 999 (UK) / 112 (EU)
+- National Heart Helpline: 1-800-HEART-1
+- Your Local Hospital: [Contact your nearest hospital]
+
+FOLLOW-UP SCHEDULE
+==================
+${isHealthy ? getHealthyFollowUp() : getUnhealthyFollowUp()}
+
+IMPORTANT DISCLAIMER
+====================
+This report is generated by an AI system and should not replace 
+professional medical advice. Always consult with qualified healthcare 
+professionals for medical decisions and treatment.
+
+Report generated by Heart Disease Prediction System
+For more information, visit: http://127.0.0.1:8000
+    `.trim();
+}
+
+function generateTextContent(prediction, accuracy, isHealthy, date, time) {
+    return `
+HEART HEALTH SUMMARY
+===================
+
+Date: ${date}
+Time: ${time}
+Confidence: ${accuracy}%
+
+Result: ${prediction.replace(/<[^>]*>/g, '')}
+
+${isHealthy ? 'Keep Up the Good Work!' : 'Action Required'}
+
+${isHealthy ? getHealthyRecommendations() : getUnhealthyRecommendations()}
+
+Next Steps:
+${isHealthy ? getHealthyFollowUp() : getUnhealthyFollowUp()}
+
+Share this report with your doctor for professional evaluation.
+    `.trim();
+}
+
+function generateDashboardContent(prediction, accuracy, isHealthy, date, time) {
+    return `
+HEALTH DASHBOARD
+===============
+
+Generated: ${date} ${time}
+Confidence Level: ${accuracy}%
+
+CURRENT STATUS
+==============
+${prediction.replace(/<[^>]*>/g, '')}
+
+HEALTH METRICS TRACKING
+=======================
+${isHealthy ? getHealthyMetrics() : getUnhealthyMetrics()}
+
+GOAL SETTING
+============
+${isHealthy ? getHealthyGoals() : getUnhealthyGoals()}
+
+PROGRESS TRACKING
+=================
+${isHealthy ? getHealthyProgress() : getUnhealthyProgress()}
+
+MONTHLY CHECKLIST
+=================
+${isHealthy ? getHealthyChecklist() : getUnhealthyChecklist()}
+
+This dashboard helps you track your heart health journey.
+    `.trim();
+}
+
+function getHealthyRecommendations() {
+    return `
+✓ Continue maintaining your healthy lifestyle
+✓ Regular exercise (30 minutes daily)
+✓ Balanced diet with fruits and vegetables
+✓ Annual health checkups
+✓ Monitor blood pressure and cholesterol
+✓ Get adequate sleep (7-8 hours)
+✓ Manage stress effectively
+✓ Avoid smoking and excessive alcohol
+    `.trim();
+}
+
+function getUnhealthyRecommendations() {
+    return `
+⚠️ Schedule immediate consultation with cardiologist
+⚠️ Start heart-healthy diet immediately
+⚠️ Begin supervised exercise program
+⚠️ Monitor blood pressure daily
+⚠️ Take prescribed medications as directed
+⚠️ Quit smoking if applicable
+⚠️ Reduce alcohol consumption
+⚠️ Emergency plan for chest pain symptoms
+    `.trim();
+}
+
+function getHealthyDetailedGuidance() {
+    return `
+NUTRITION GUIDANCE:
+- Eat 5-7 servings of fruits and vegetables daily
+- Choose whole grains over refined grains
+- Include lean proteins (fish, poultry, beans)
+- Limit saturated fats and trans fats
+- Reduce sodium intake to <2,300mg daily
+
+EXERCISE RECOMMENDATIONS:
+- 150 minutes moderate aerobic activity weekly
+- 75 minutes vigorous activity weekly
+- Strength training 2-3 times per week
+- Include flexibility and balance exercises
+
+STRESS MANAGEMENT:
+- Practice meditation or deep breathing
+- Maintain work-life balance
+- Get adequate sleep
+- Engage in hobbies and social activities
+    `.trim();
+}
+
+function getUnhealthyDetailedGuidance() {
+    return `
+IMMEDIATE ACTIONS REQUIRED:
+- Contact your doctor within 24-48 hours
+- If experiencing chest pain, call emergency services
+- Start heart-healthy diet immediately
+- Begin light exercise only with doctor approval
+
+DIETARY CHANGES:
+- Reduce sodium to <1,500mg daily
+- Increase fiber intake (25-35g daily)
+- Limit saturated fat to <7% of calories
+- Avoid processed foods and sugary drinks
+- Increase omega-3 fatty acids
+
+MEDICATION COMPLIANCE:
+- Take all prescribed medications as directed
+- Never stop medications without doctor approval
+- Keep a medication schedule
+- Report any side effects immediately
+
+SYMPTOM MONITORING:
+- Track chest pain, shortness of breath, fatigue
+- Monitor blood pressure and heart rate
+- Keep a symptom diary
+- Know when to seek emergency care
+    `.trim();
+}
+
+function getHealthyFollowUp() {
+    return `
+- Annual physical examination
+- Blood pressure check every 6 months
+- Cholesterol test annually
+- Continue current healthy lifestyle
+- Regular dental checkups (gum health affects heart)
+- Eye exams (diabetes screening)
+    `.trim();
+}
+
+function getUnhealthyFollowUp() {
+    return `
+- Cardiologist appointment within 1 week
+- Follow-up every 3-6 months
+- Blood pressure monitoring weekly
+- Cholesterol test in 3 months
+- Stress test as recommended
+- Medication review monthly
+- Emergency plan in place
+    `.trim();
+}
+
+function getHealthyMetrics() {
+    return `
+Target Blood Pressure: <120/80 mmHg
+Target Cholesterol: <200 mg/dL
+Target BMI: 18.5-24.9
+Target Waist Circumference: <35" (women), <40" (men)
+Target Exercise: 150 min/week moderate activity
+Target Sleep: 7-8 hours nightly
+    `.trim();
+}
+
+function getUnhealthyMetrics() {
+    return `
+Current Priority: Blood Pressure <140/90 mmHg
+Target Cholesterol: <200 mg/dL (or as prescribed)
+Weight Management: Gradual 5-10% weight loss
+Exercise: Start with 10-15 min daily, increase gradually
+Blood Sugar: Monitor if diabetic
+Medication Adherence: 100% compliance
+    `.trim();
+}
+
+function getHealthyGoals() {
+    return `
+- Maintain current healthy lifestyle
+- Continue regular exercise routine
+- Keep up balanced nutrition
+- Annual health screenings
+- Stress management techniques
+- Regular sleep schedule
+    `.trim();
+}
+
+function getUnhealthyGoals() {
+    return `
+- Lower blood pressure to target range
+- Reduce cholesterol levels
+- Achieve healthy weight
+- Increase physical activity gradually
+- Improve diet quality
+- Quit smoking (if applicable)
+- Manage stress effectively
+    `.trim();
+}
+
+function getHealthyProgress() {
+    return `
+Monthly Tracking:
+□ Blood pressure check
+□ Weight monitoring
+□ Exercise log review
+□ Sleep quality assessment
+□ Stress level evaluation
+□ Nutrition review
+    `.trim();
+}
+
+function getUnhealthyProgress() {
+    return `
+Weekly Tracking:
+□ Blood pressure readings
+□ Weight measurement
+□ Medication compliance
+□ Exercise minutes
+□ Symptom monitoring
+□ Doctor appointment scheduling
+    `.trim();
+}
+
+function getHealthyChecklist() {
+    return `
+□ 30 minutes of exercise
+□ 5+ servings fruits/vegetables
+□ Adequate water intake
+□ 7-8 hours sleep
+□ Stress management practice
+□ Regular meal times
+□ Social connection
+□ Hobby time
+    `.trim();
+}
+
+function getUnhealthyChecklist() {
+    return `
+□ Take all prescribed medications
+□ Monitor blood pressure
+□ Follow heart-healthy diet
+□ Light exercise (as approved)
+□ Track symptoms
+□ Avoid smoking/alcohol
+□ Manage stress
+□ Contact doctor if needed
+    `.trim();
+}
+
+function showDownloadSuccess(format) {
+    const formatNames = {
+        'pdf': 'PDF Health Report',
+        'txt': 'Text Summary',
+        'dashboard': 'Health Dashboard'
+    };
+    
+    // Create success notification
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        font-weight: 600;
+        animation: slideInRight 0.3s ease-out;
+    `;
+    
+    notification.innerHTML = `
+        <i class="fas fa-check-circle me-2"></i>
+        ${formatNames[format]} downloaded successfully!
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Remove notification after 3 seconds
+    setTimeout(() => {
+        notification.style.animation = 'slideOutRight 0.3s ease-in';
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 300);
+    }, 3000);
+}
+
+// Add CSS for animations
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideInRight {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+    
+    @keyframes slideOutRight {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(100%); opacity: 0; }
+    }
+`;
+document.head.appendChild(style);
 </script>
 {% endblock %}
