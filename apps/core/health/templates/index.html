@@ -265,7 +265,10 @@
 						<small class="text-muted">AI-Powered Medical Diagnosis</small>
 					</div>
 				</a>
-				<a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'home' %}" style="margin-left: 1rem;">Home</a>
+				<a class="nav-link home-btn {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'home' %}" style="margin-left: 1rem;">
+					<i class="fas fa-home me-2"></i>
+					<span>Home</span>
+				</a>
 			</div>
 			
 			<!-- Navigation Links -->
@@ -275,12 +278,14 @@
 			<!-- Login/Logout Button -->
 			<div class="d-flex">
 				{% if request.user.is_authenticated and request.resolver_match.url_name != 'login' and request.resolver_match.url_name != 'login_admin' and request.resolver_match.url_name != 'signup' %}
-				<a class="btn btn-danger btn-sm" href="{% url 'logout' %}" title="Logout">
-					<i class="fas fa-sign-out-alt"></i> Logout
+				<a class="nav-link logout-btn" href="{% url 'logout' %}" title="Logout">
+					<i class="fas fa-sign-out-alt me-2"></i>
+					<span>Logout</span>
 				</a>
 				{% else %}
-				<a class="btn btn-primary btn-sm" href="{% url 'login' %}" title="Login">
-					<i class="fas fa-sign-in-alt"></i> Login
+				<a class="nav-link login-btn" href="{% url 'login' %}" title="Login">
+					<i class="fas fa-sign-in-alt me-2"></i>
+					<span>Login</span>
 				</a>
 				{% endif %}
 			</div>
@@ -483,6 +488,151 @@
 		
 		.navbar-nav .nav-link {
 			padding: 0.5rem 1rem;
+		}
+		
+		/* Enhanced Home Button Styling */
+		.home-btn {
+			background: linear-gradient(135deg, #5A9BC3 0%, #4a90e2 100%);
+			color: white !important;
+			border-radius: 25px;
+			padding: 0.5rem 1.25rem !important;
+			font-weight: 600;
+			text-decoration: none;
+			transition: all 0.3s ease;
+			box-shadow: 0 2px 8px rgba(90, 155, 195, 0.3);
+			border: 2px solid transparent;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			min-width: 100px;
+		}
+		
+		.home-btn:hover {
+			background: linear-gradient(135deg, #4a90e2 0%, #3d7bd6 100%);
+			color: white !important;
+			transform: translateY(-2px);
+			box-shadow: 0 4px 15px rgba(90, 155, 195, 0.4);
+			border-color: #5A9BC3;
+		}
+		
+		.home-btn.active {
+			background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+			box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+		}
+		
+		.home-btn.active:hover {
+			background: linear-gradient(135deg, #20c997 0%, #17a2b8 100%);
+			box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
+		}
+		
+		.home-btn i {
+			font-size: 0.9rem;
+		}
+		
+		.home-btn span {
+			font-size: 0.95rem;
+			font-weight: 600;
+		}
+		
+		/* Login Button Styling */
+		.login-btn {
+			background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+			color: white !important;
+			border-radius: 25px;
+			padding: 0.5rem 1.25rem !important;
+			font-weight: 600;
+			text-decoration: none;
+			transition: all 0.3s ease;
+			box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+			border: 2px solid transparent;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			min-width: 100px;
+		}
+		
+		.login-btn:hover {
+			background: linear-gradient(135deg, #20c997 0%, #17a2b8 100%);
+			color: white !important;
+			transform: translateY(-2px);
+			box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
+			border-color: #28a745;
+		}
+		
+		.login-btn i {
+			font-size: 0.9rem;
+		}
+		
+		.login-btn span {
+			font-size: 0.95rem;
+			font-weight: 600;
+		}
+		
+		/* Logout Button Styling */
+		.logout-btn {
+			background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+			color: white !important;
+			border-radius: 25px;
+			padding: 0.5rem 1.25rem !important;
+			font-weight: 600;
+			text-decoration: none;
+			transition: all 0.3s ease;
+			box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+			border: 2px solid transparent;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			min-width: 100px;
+		}
+		
+		.logout-btn:hover {
+			background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
+			color: white !important;
+			transform: translateY(-2px);
+			box-shadow: 0 4px 15px rgba(220, 53, 69, 0.4);
+			border-color: #dc3545;
+		}
+		
+		.logout-btn i {
+			font-size: 0.9rem;
+		}
+		
+		.logout-btn span {
+			font-size: 0.95rem;
+			font-weight: 600;
+		}
+		
+		/* Mobile responsive adjustments */
+		@media (max-width: 768px) {
+			.home-btn, .login-btn, .logout-btn {
+				padding: 0.4rem 1rem !important;
+				min-width: 80px;
+				font-size: 0.9rem;
+			}
+			
+			.home-btn i, .login-btn i, .logout-btn i {
+				font-size: 0.8rem;
+			}
+			
+			.home-btn span, .login-btn span, .logout-btn span {
+				font-size: 0.85rem;
+			}
+		}
+		
+		@media (max-width: 480px) {
+			.home-btn, .login-btn, .logout-btn {
+				padding: 0.35rem 0.8rem !important;
+				min-width: 70px;
+			}
+			
+			.home-btn span, .login-btn span, .logout-btn span {
+				display: none;
+			}
+			
+			.home-btn i, .login-btn i, .logout-btn i {
+				font-size: 1rem;
+				margin: 0 !important;
+			}
 		}
 	</style>
 	

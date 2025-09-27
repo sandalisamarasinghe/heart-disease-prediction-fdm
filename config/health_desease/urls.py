@@ -40,6 +40,7 @@ urlpatterns = [
     path('prediction_form/', guest_prediction,name="prediction_form"),
     # guest prediction disabled
     path('view_search_pat/', view_search_pat,name="view_search_pat"),
+    path('api/latest_predictions/', get_latest_predictions,name="get_latest_predictions"),
 
     path('view_feedback/', View_Feedback,name="view_feedback"),
     path('edit_profile/', Edit_My_deatail,name="edit_profile"),

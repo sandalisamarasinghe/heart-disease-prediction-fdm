@@ -66,17 +66,43 @@
                         </div>
                             </div>
                         </div>
-                        <!-- Chart Section -->
-                        <div class="chart-section mb-5">
-                            <div class="chart-card">
-                                <div class="chart-header">
-                                    <h4 class="chart-title">
-                                        <i class="fas fa-chart-pie me-2"></i>Prediction Confidence
+                        <!-- Confidence Bar Section -->
+                        <div class="confidence-section mb-4">
+                            <div class="confidence-card">
+                                <div class="confidence-header text-center mb-3">
+                                    <h4 class="confidence-title">
+                                        <i class="fas fa-chart-line me-2"></i>Prediction Confidence
                                     </h4>
-                                    <p class="chart-subtitle">Visual representation of model confidence</p>
+                                    <p class="confidence-subtitle">Model confidence level: {{ accuracy|default:0 }}%</p>
                                 </div>
-                                <div class="chart-container">
-                                    <canvas id="guestProbabilityChart" height="200" aria-label="Prediction probability chart" role="img"></canvas>
+                                
+                                <!-- Progress Bar Container -->
+                                <div class="progress-container">
+                                    <div class="progress-bar-wrapper">
+                                        <div class="progress-bar-bg">
+                                            <div class="progress-bar-fill" style="width: {{ accuracy|default:0 }}%;">
+                                                <span class="progress-percentage">{{ accuracy|default:0 }}%</span>
+                                            </div>
+                                        </div>
+                                        <div class="progress-scale">
+                                            <span>0%</span>
+                                            <span>25%</span>
+                                            <span>50%</span>
+                                            <span>75%</span>
+                                            <span>100%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Chart.js Canvas (Hidden by default, shown if JS works) -->
+                                <div class="chart-container" style="position: relative; height: 200px; width: 100%; display: none;">
+                                    <canvas id="guestProbabilityChart" aria-label="Prediction probability chart" role="img"></canvas>
+                                </div>
+                                
+                                <!-- Fallback Chart (Hidden by default) -->
+                                <div id="fallbackChart" style="display: none; text-align: center; padding: 15px; background: #f8f9fa; border-radius: 8px; margin-top: 15px;">
+                                    <h6>Alternative Chart View</h6>
+                                    <p style="margin: 0; font-size: 12px; color: #6c757d;">Interactive chart will appear here if JavaScript is enabled.</p>
                                 </div>
                             </div>
                         </div>
@@ -85,67 +111,193 @@
                             <div class="recommendations-card">
                                 <div class="recommendations-header">
                                     <h4 class="recommendations-title">
-                                <i class="fas fa-lightbulb me-2"></i>Health Recommendations
-                            </h4>
+                                        <i class="fas fa-lightbulb me-2"></i>Health Recommendations
+                                    </h4>
                                     <p class="recommendations-subtitle">Personalized advice based on your results</p>
                                 </div>
                                 
-                            {% if "healthy" in prediction|lower %}
-                                <div class="recommendation-item success-recommendation">
-                                    <div class="recommendation-icon">
-                                        <i class="fas fa-check-circle"></i>
-                                    </div>
-                                    <div class="recommendation-content">
-                                        <h5 class="recommendation-title">Great News! You're on the Right Track</h5>
-                                        <div class="recommendation-list">
-                                            <div class="recommendation-point">
-                                                <i class="fas fa-heart me-2"></i>
-                                                <span>Continue maintaining your healthy lifestyle</span>
-                                            </div>
-                                            <div class="recommendation-point">
-                                                <i class="fas fa-running me-2"></i>
-                                                <span>Keep up regular exercise and balanced diet</span>
-                                            </div>
-                                            <div class="recommendation-point">
-                                                <i class="fas fa-calendar-check me-2"></i>
-                                                <span>Schedule annual health checkups</span>
-                                            </div>
-                                            <div class="recommendation-point">
-                                                <i class="fas fa-chart-line me-2"></i>
-                                                <span>Monitor blood pressure and cholesterol regularly</span>
+                                {% if "healthy" in prediction|lower %}
+                                    <!-- Healthy Recommendations -->
+                                    <div class="recommendation-item success-recommendation">
+                                        <div class="recommendation-icon">
+                                            <i class="fas fa-check-circle"></i>
+                                        </div>
+                                        <div class="recommendation-content">
+                                            <h5 class="recommendation-title">🎉 Excellent! You're Maintaining Good Heart Health</h5>
+                                            <p class="recommendation-description">Your current lifestyle choices are supporting your cardiovascular health. Keep up the great work!</p>
+                                            
+                                            <div class="recommendation-categories">
+                                                <div class="category-section">
+                                                    <h6 class="category-title"><i class="fas fa-heart me-2"></i>Lifestyle Maintenance</h6>
+                                                    <div class="recommendation-list">
+                                                        <div class="recommendation-point">
+                                                            <i class="fas fa-running me-2"></i>
+                                                            <span>Continue 30+ minutes of daily exercise</span>
+                                                        </div>
+                                                        <div class="recommendation-point">
+                                                            <i class="fas fa-apple-alt me-2"></i>
+                                                            <span>Maintain balanced diet with fruits and vegetables</span>
+                                                        </div>
+                                                        <div class="recommendation-point">
+                                                            <i class="fas fa-bed me-2"></i>
+                                                            <span>Get 7-8 hours of quality sleep nightly</span>
+                                                        </div>
+                                                        <div class="recommendation-point">
+                                                            <i class="fas fa-ban me-2"></i>
+                                                            <span>Avoid smoking and limit alcohol consumption</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="category-section">
+                                                    <h6 class="category-title"><i class="fas fa-chart-line me-2"></i>Health Monitoring</h6>
+                                                    <div class="recommendation-list">
+                                                        <div class="recommendation-point">
+                                                            <i class="fas fa-calendar-check me-2"></i>
+                                                            <span>Annual comprehensive health checkup</span>
+                                                        </div>
+                                                        <div class="recommendation-point">
+                                                            <i class="fas fa-heartbeat me-2"></i>
+                                                            <span>Monitor blood pressure every 6 months</span>
+                                                        </div>
+                                                        <div class="recommendation-point">
+                                                            <i class="fas fa-vial me-2"></i>
+                                                            <span>Cholesterol test annually</span>
+                                                        </div>
+                                                        <div class="recommendation-point">
+                                                            <i class="fas fa-weight me-2"></i>
+                                                            <span>Maintain healthy weight (BMI 18.5-24.9)</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="category-section">
+                                                    <h6 class="category-title"><i class="fas fa-shield-alt me-2"></i>Prevention Focus</h6>
+                                                    <div class="recommendation-list">
+                                                        <div class="recommendation-point">
+                                                            <i class="fas fa-om me-2"></i>
+                                                            <span>Practice stress management techniques</span>
+                                                        </div>
+                                                        <div class="recommendation-point">
+                                                            <i class="fas fa-users me-2"></i>
+                                                            <span>Stay socially connected and engaged</span>
+                                                        </div>
+                                                        <div class="recommendation-point">
+                                                            <i class="fas fa-tooth me-2"></i>
+                                                            <span>Maintain good oral hygiene (affects heart health)</span>
+                                                        </div>
+                                                        <div class="recommendation-point">
+                                                            <i class="fas fa-sun me-2"></i>
+                                                            <span>Get adequate vitamin D through sunlight or supplements</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                            </div>
-                            {% else %}
-                                <div class="recommendation-item warning-recommendation">
-                                    <div class="recommendation-icon">
-                                        <i class="fas fa-exclamation-triangle"></i>
-                                    </div>
-                                    <div class="recommendation-content">
-                                        <h5 class="recommendation-title">Important: Take Action Now</h5>
-                                        <div class="recommendation-list">
-                                            <div class="recommendation-point">
-                                                <i class="fas fa-user-md me-2"></i>
-                                                <span>Schedule a consultation with your healthcare provider</span>
-                                            </div>
-                                            <div class="recommendation-point">
-                                                <i class="fas fa-apple-alt me-2"></i>
-                                                <span>Consider lifestyle modifications (diet, exercise)</span>
-                                            </div>
-                                            <div class="recommendation-point">
-                                                <i class="fas fa-eye me-2"></i>
-                                                <span>Monitor symptoms and report any changes</span>
-                                            </div>
-                                            <div class="recommendation-point">
-                                                <i class="fas fa-calendar-alt me-2"></i>
-                                                <span>Schedule regular follow-up appointments</span>
+                                {% else %}
+                                    <!-- Unhealthy Recommendations -->
+                                    <div class="recommendation-item warning-recommendation">
+                                        <div class="recommendation-icon">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                        </div>
+                                        <div class="recommendation-content">
+                                            <h5 class="recommendation-title">⚠️ Action Required: Prioritize Your Heart Health</h5>
+                                            <p class="recommendation-description">Your results indicate potential heart health concerns. Immediate action and lifestyle changes are recommended.</p>
+                                            
+                                            <div class="recommendation-categories">
+                                                <div class="category-section urgent">
+                                                    <h6 class="category-title"><i class="fas fa-user-md me-2"></i>Immediate Medical Actions</h6>
+                                                    <div class="recommendation-list">
+                                                        <div class="recommendation-point urgent">
+                                                            <i class="fas fa-phone me-2"></i>
+                                                            <span>Schedule cardiologist appointment within 1 week</span>
+                                                        </div>
+                                                        <div class="recommendation-point urgent">
+                                                            <i class="fas fa-stethoscope me-2"></i>
+                                                            <span>Get comprehensive heart health evaluation</span>
+                                                        </div>
+                                                        <div class="recommendation-point urgent">
+                                                            <i class="fas fa-pills me-2"></i>
+                                                            <span>Discuss medication options with your doctor</span>
+                                                        </div>
+                                                        <div class="recommendation-point urgent">
+                                                            <i class="fas fa-ambulance me-2"></i>
+                                                            <span>Know emergency signs: chest pain, shortness of breath</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="category-section">
+                                                    <h6 class="category-title"><i class="fas fa-heart me-2"></i>Lifestyle Changes</h6>
+                                                    <div class="recommendation-list">
+                                                        <div class="recommendation-point">
+                                                            <i class="fas fa-utensils me-2"></i>
+                                                            <span>Start heart-healthy diet (DASH or Mediterranean)</span>
+                                                        </div>
+                                                        <div class="recommendation-point">
+                                                            <i class="fas fa-running me-2"></i>
+                                                            <span>Begin light exercise (10-15 min daily, increase gradually)</span>
+                                                        </div>
+                                                        <div class="recommendation-point">
+                                                            <i class="fas fa-ban me-2"></i>
+                                                            <span>Quit smoking immediately if applicable</span>
+                                                        </div>
+                                                        <div class="recommendation-point">
+                                                            <i class="fas fa-wine-glass-alt me-2"></i>
+                                                            <span>Limit alcohol to 1 drink/day (women) or 2 drinks/day (men)</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="category-section">
+                                                    <h6 class="category-title"><i class="fas fa-chart-line me-2"></i>Monitoring & Tracking</h6>
+                                                    <div class="recommendation-list">
+                                                        <div class="recommendation-point">
+                                                            <i class="fas fa-heartbeat me-2"></i>
+                                                            <span>Monitor blood pressure daily</span>
+                                                        </div>
+                                                        <div class="recommendation-point">
+                                                            <i class="fas fa-weight me-2"></i>
+                                                            <span>Track weight weekly, aim for 5-10% weight loss</span>
+                                                        </div>
+                                                        <div class="recommendation-point">
+                                                            <i class="fas fa-calendar-alt me-2"></i>
+                                                            <span>Follow-up appointments every 3-6 months</span>
+                                                        </div>
+                                                        <div class="recommendation-point">
+                                                            <i class="fas fa-clipboard-list me-2"></i>
+                                                            <span>Keep a health journal of symptoms and medications</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="category-section">
+                                                    <h6 class="category-title"><i class="fas fa-shield-alt me-2"></i>Risk Reduction</h6>
+                                                    <div class="recommendation-list">
+                                                        <div class="recommendation-point">
+                                                            <i class="fas fa-om me-2"></i>
+                                                            <span>Practice stress reduction (meditation, yoga)</span>
+                                                        </div>
+                                                        <div class="recommendation-point">
+                                                            <i class="fas fa-bed me-2"></i>
+                                                            <span>Improve sleep quality and duration</span>
+                                                        </div>
+                                                        <div class="recommendation-point">
+                                                            <i class="fas fa-seedling me-2"></i>
+                                                            <span>Increase fiber intake (25-35g daily)</span>
+                                                        </div>
+                                                        <div class="recommendation-point">
+                                                            <i class="fas fa-fish me-2"></i>
+                                                            <span>Include omega-3 fatty acids (fish, flaxseed)</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                {% endif %}
                             </div>
-                            {% endif %}
-                        </div>
                         </div>
                         <!-- Download Health Report Section -->
                         <div class="download-section mb-5">
@@ -158,20 +310,6 @@
                                 </div>
                                 
                 <div class="download-options">
-                    <!-- Test Button -->
-                    <div class="download-option" style="background: #ff6b6b; margin-bottom: 20px;">
-                        <div class="download-icon">
-                            <i class="fas fa-bug"></i>
-                        </div>
-                        <div class="download-content">
-                            <h6 class="download-option-title">Test Download</h6>
-                            <p class="download-option-desc">Simple test to verify download functionality</p>
-                            <button class="download-btn" onclick="testDownload()" style="background: #ff6b6b;">
-                                <i class="fas fa-download me-2"></i>Test Download
-                            </button>
-                        </div>
-                    </div>
-                    
                     <div class="download-option">
                         <div class="download-icon">
                             <i class="fas fa-file-pdf"></i>
@@ -858,64 +996,337 @@
         padding: 1.5rem;
     }
 }
+
+/* Confidence Bar Styles */
+.confidence-section {
+    margin-bottom: 2rem;
+}
+
+.confidence-card {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border: 1px solid #e9ecef;
+}
+
+.confidence-header {
+    margin-bottom: 1.5rem;
+}
+
+.confidence-title {
+    color: #2c3e50;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.confidence-subtitle {
+    color: #6c757d;
+    font-size: 1rem;
+    margin: 0;
+    font-weight: 500;
+}
+
+.progress-container {
+    margin: 1rem 0;
+}
+
+.progress-bar-wrapper {
+    position: relative;
+}
+
+.progress-bar-bg {
+    width: 100%;
+    height: 50px;
+    background: #e9ecef;
+    border-radius: 25px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+    border: 2px solid #dee2e6;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #5A9BC3 0%, #4a90e2 50%, #3d7bd6 100%);
+    border-radius: 25px;
+    position: relative;
+    transition: width 1.5s ease-in-out;
+    box-shadow: 0 2px 8px rgba(90, 155, 195, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 15px;
+}
+
+.progress-percentage {
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    z-index: 2;
+}
+
+.progress-scale {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-size: 12px;
+    color: #6c757d;
+    font-weight: 500;
+    padding: 0 5px;
+}
+
+.progress-scale span {
+    position: relative;
+}
+
+.progress-scale span::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    height: 6px;
+    background: #dee2e6;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .confidence-card {
+        padding: 1rem;
+    }
+    
+    .confidence-title {
+        font-size: 1.2rem;
+    }
+    
+    .progress-bar-bg {
+        height: 40px;
+    }
+    
+    .progress-percentage {
+        font-size: 14px;
+    }
+    
+    .progress-scale {
+        font-size: 11px;
+    }
+}
+
+/* Enhanced Recommendation Styles */
+.recommendation-categories {
+    margin-top: 1.5rem;
+}
+
+.category-section {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border-left: 4px solid #5A9BC3;
+}
+
+.category-section.urgent {
+    background: #fff3cd;
+    border-left-color: #ffc107;
+    border: 1px solid #ffeaa7;
+}
+
+.category-title {
+    color: #2c3e50;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.category-section.urgent .category-title {
+    color: #856404;
+}
+
+.recommendation-description {
+    color: #6c757d;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+    font-style: italic;
+}
+
+.recommendation-list {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.recommendation-point {
+    display: flex;
+    align-items: flex-start;
+    padding: 0.75rem;
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.recommendation-point:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-color: #5A9BC3;
+}
+
+.recommendation-point.urgent {
+    background: #fff8e1;
+    border-color: #ffc107;
+}
+
+.recommendation-point.urgent:hover {
+    border-color: #ff9800;
+    box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
+}
+
+.recommendation-point i {
+    color: #5A9BC3;
+    margin-top: 0.2rem;
+    flex-shrink: 0;
+}
+
+.recommendation-point.urgent i {
+    color: #ff9800;
+}
+
+.recommendation-point span {
+    color: #2c3e50;
+    font-weight: 500;
+    line-height: 1.5;
+    margin-left: 0.75rem;
+}
+
+.recommendation-point.urgent span {
+    color: #856404;
+    font-weight: 600;
+}
+
+/* Responsive adjustments for recommendations */
+@media (max-width: 768px) {
+    .category-section {
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .category-title {
+        font-size: 1rem;
+    }
+    
+    .recommendation-point {
+        padding: 0.5rem;
+    }
+    
+    .recommendation-point span {
+        font-size: 0.9rem;
+    }
+}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded',function(){
-  var ctx=document.getElementById('guestProbabilityChart');
-  if(ctx&&window.Chart){
-    var acc=Number('{{ accuracy|default:0 }}');
-    var data=[Math.max(0,Math.min(100,acc)),Math.max(0,100-Math.max(0,Math.min(100,acc)) )];
-    new Chart(ctx,{type:'doughnut',data:{labels:['Predicted class confidence','Other'],datasets:[{data:data,backgroundColor:['#5A9BC3','#E8F2F7'],borderWidth:0}]},options:{plugins:{legend:{position:'bottom'}},cutout:'65%'}});
-  }
+// Debug Chart.js loading
+window.addEventListener('load', function() {
+    console.log('Page loaded, Chart.js available:', typeof Chart !== 'undefined');
+    if (typeof Chart === 'undefined') {
+        console.error('Chart.js failed to load!');
+    }
 });
-
-// Ultra Simple Test Download Function
-function testDownload() {
-    console.log('Test download function called');
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Chart initialization started');
+    var ctx = document.getElementById('guestProbabilityChart');
+    console.log('Canvas element:', ctx);
+    console.log('Chart.js available:', typeof Chart !== 'undefined');
     
-    try {
-        // Method 1: Try simple blob download
-        const content = 'This is a test download file. If you can see this, the download functionality is working!';
-        const blob = new Blob([content], { type: 'text/plain' });
-        const url = window.URL.createObjectURL(blob);
-        
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'test_download.txt';
-        link.style.display = 'none';
-        document.body.appendChild(link);
-        
-        // Force click
-        link.click();
-        
-        // Clean up
-        setTimeout(() => {
-            document.body.removeChild(link);
-            window.URL.revokeObjectURL(url);
-        }, 100);
-        
-        alert('Test download attempted! Check your downloads folder.');
-        
-    } catch (error) {
-        console.error('Error in test download:', error);
-        
-        // Method 2: Try opening in new window
-        try {
-            const newWindow = window.open('', '_blank');
-            if (newWindow) {
-                newWindow.document.write('This is a test download file. If you can see this, the download functionality is working!');
-                newWindow.document.close();
-                alert('Content opened in new window. You can save it manually.');
-            } else {
-                alert('Popup blocked. Please allow popups for this site.');
+    // Set timeout to show fallback if Chart.js doesn't load
+    var chartTimeout = setTimeout(function() {
+        if (typeof Chart === 'undefined') {
+            console.log('Chart.js timeout - showing fallback');
+            var fallbackChart = document.getElementById('fallbackChart');
+            if (fallbackChart) {
+                fallbackChart.style.display = 'block';
             }
-        } catch (windowError) {
-            console.error('Window method failed:', windowError);
-            alert('Both download methods failed. Please check browser settings.');
+        }
+    }, 3000);
+    
+    if (ctx && typeof Chart !== 'undefined') {
+        var acc = Number('{{ accuracy|default:0 }}');
+        console.log('Accuracy value:', acc);
+        
+        var data = [
+            Math.max(0, Math.min(100, acc)), 
+            Math.max(0, 100 - Math.max(0, Math.min(100, acc)))
+        ];
+        console.log('Chart data:', data);
+        
+        try {
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Predicted Confidence', 'Remaining'],
+                    datasets: [{
+                        data: data,
+                        backgroundColor: ['#5A9BC3', '#E8F2F7'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                usePointStyle: true
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': ' + context.parsed + '%';
+                                }
+                            }
+                        }
+                    },
+                    cutout: '65%'
+                }
+            });
+            console.log('Chart created successfully');
+            clearTimeout(chartTimeout); // Clear timeout since chart was created successfully
+            
+            // Show the chart container
+            var chartContainer = document.querySelector('.chart-container');
+            if (chartContainer) {
+                chartContainer.style.display = 'block';
+            }
+        } catch (error) {
+            console.error('Error creating chart:', error);
+            // Show fallback on error
+            var fallbackChart = document.getElementById('fallbackChart');
+            if (fallbackChart) {
+                fallbackChart.style.display = 'block';
+            }
+        }
+    } else {
+        console.error('Chart.js not loaded or canvas not found');
+        // Show fallback chart
+        var fallbackChart = document.getElementById('fallbackChart');
+        if (fallbackChart) {
+            fallbackChart.style.display = 'block';
+            console.log('Showing fallback chart');
         }
     }
-}
+});
+
 
 // Alternative Download Function (simpler method)
 function alternativeDownload(content, filename, mimeType) {
