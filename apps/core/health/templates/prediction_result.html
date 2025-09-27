@@ -1,104 +1,184 @@
 {% extends 'index.html' %}
 {% load static %}
 {% block body %}
-<!-- Header removed; using base navbar -->
 <!-- Main Content -->
 <main class="main-content">
     <div class="container mt-5">
         <div class="row justify-content-center">
-            <div class="col-lg-8">
+            <div class="col-lg-10">
+                <!-- Hero Section -->
+                <div class="hero-section text-center mb-4">
+                    <h1 class="hero-title">
+                        <i class="fas fa-chart-line text-primary me-3"></i>
+                        Heart Disease Prediction Results
+                    </h1>
+                    <p class="hero-subtitle">
+                        Your AI-powered heart health assessment is ready
+                    </p>
+                </div>
+
+                <!-- Main Results Card -->
                 <div class="card-modern">
                     <div class="card-header text-center">
-                        <h2 class="card-title text-primary">
-                            <i class="fas fa-chart-line me-2"></i>Prediction Results
+                        <h2 class="card-title">
+                            <i class="fas fa-heartbeat me-2"></i>Prediction Results
                         </h2>
-                        <p class="card-subtitle text-muted">Your heart disease risk assessment</p>
+                        <p class="card-subtitle">Your heart disease risk assessment</p>
                     </div>
                     <div class="card-body">
-                        <div class="alert alert-info">
-                            <i class="fas fa-info-circle me-2"></i>
-                            <strong>Guest Mode:</strong> This is a one-time prediction. 
-                            <a href="{% url 'signup' %}" class="alert-link">Create a free account</a> to save results and track your health over time.
-                        </div>
                         <!-- Prediction Result -->
-                        <div class="text-center mb-4">
-                            <div class="prediction-result p-4 rounded">
-                                <h3 class="mb-3">AI Prediction Result</h3>
-                                <div class="result-display mb-3">
-                                    {{ prediction|safe }}
+                        <div class="prediction-section mb-5">
+                            <div class="prediction-result-card">
+                                <div class="result-header text-center mb-4">
+                                    <h3 class="result-title">
+                                        <i class="fas fa-brain me-2"></i>AI Prediction Result
+                                    </h3>
                                 </div>
-                                <div class="mb-3">
-                                    {% with pred_text=prediction|lower %}
-                                        {% if "high" in pred_text %}
-                                            <span class="badge bg-danger" style="font-size:1rem; padding:.6rem 1rem; border-radius:9999px;">High Risk</span>
-                                        {% elif "medium" in pred_text %}
-                                            <span class="badge bg-warning" style="font-size:1rem; padding:.6rem 1rem; border-radius:9999px;">Medium Risk</span>
-                                        {% else %}
-                                            <span class="badge bg-success" style="font-size:1rem; padding:.6rem 1rem; border-radius:9999px;">Low Risk</span>
-                                        {% endif %}
-                                    {% endwith %}
-                                </div>
-                                <div class="accuracy-info">
-                                    <span class="badge bg-info fs-6">Model Accuracy: {{ accuracy|floatformat:2 }}%</span>
+                                
+                                <div class="result-content">
+                                    <div class="result-display text-center mb-4">
+                                        {{ prediction|safe }}
+                                    </div>
+                                    
+                                    <div class="risk-indicator text-center mb-4">
+                                        {% with pred_text=prediction|lower %}
+                                            {% if "unhealthy" in pred_text or "high" in pred_text %}
+                                                <div class="risk-badge high-risk">
+                                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                                    <span>High Risk - Consult Doctor</span>
+                                                </div>
+                                            {% else %}
+                                                <div class="risk-badge low-risk">
+                                                    <i class="fas fa-check-circle me-2"></i>
+                                                    <span>Low Risk - Keep Healthy</span>
+                                                </div>
+                                            {% endif %}
+                                        {% endwith %}
+                                    </div>
+                                    
+                                    <div class="accuracy-display text-center">
+                                        <div class="accuracy-card">
+                                            <i class="fas fa-chart-line me-2"></i>
+                                            <span class="accuracy-label">Model Confidence:</span>
+                                            <span class="accuracy-value">{{ accuracy|floatformat:1 }}%</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <!-- Chart Placeholder -->
-                        <div class="mb-4">
-                            <div class="card-modern" style="padding:1rem;">
-                                <h6 class="mb-3 text-secondary"><i class="fas fa-chart-pie me-2"></i>Probability Distribution</h6>
-                                <canvas id="guestProbabilityChart" height="140" aria-label="Prediction probability chart" role="img"></canvas>
+                        <!-- Chart Section -->
+                        <div class="chart-section mb-5">
+                            <div class="chart-card">
+                                <div class="chart-header">
+                                    <h4 class="chart-title">
+                                        <i class="fas fa-chart-pie me-2"></i>Prediction Confidence
+                                    </h4>
+                                    <p class="chart-subtitle">Visual representation of model confidence</p>
+                                </div>
+                                <div class="chart-container">
+                                    <canvas id="guestProbabilityChart" height="200" aria-label="Prediction probability chart" role="img"></canvas>
+                                </div>
                             </div>
                         </div>
                         <!-- Health Recommendations -->
-                        <div class="health-recommendations mt-4">
-                            <h4 class="text-primary mb-3">
-                                <i class="fas fa-lightbulb me-2"></i>Health Recommendations
-                            </h4>
-                            {% if "healthy" in prediction|lower %}
-                            <div class="alert alert-success">
-                                <h5><i class="fas fa-check-circle me-2"></i>Great News!</h5>
-                                <ul class="mb-0">
-                                    <li>Continue maintaining your healthy lifestyle</li>
-                                    <li>Regular exercise and balanced diet</li>
-                                    <li>Annual health checkups</li>
-                                    <li>Monitor blood pressure and cholesterol regularly</li>
-                                </ul>
+                        <div class="recommendations-section mb-5">
+                            <div class="recommendations-card">
+                                <div class="recommendations-header">
+                                    <h4 class="recommendations-title">
+                                        <i class="fas fa-lightbulb me-2"></i>Health Recommendations
+                                    </h4>
+                                    <p class="recommendations-subtitle">Personalized advice based on your results</p>
+                                </div>
+                                
+                                {% if "healthy" in prediction|lower %}
+                                <div class="recommendation-item success-recommendation">
+                                    <div class="recommendation-icon">
+                                        <i class="fas fa-check-circle"></i>
+                                    </div>
+                                    <div class="recommendation-content">
+                                        <h5 class="recommendation-title">Great News! You're on the Right Track</h5>
+                                        <div class="recommendation-list">
+                                            <div class="recommendation-point">
+                                                <i class="fas fa-heart me-2"></i>
+                                                <span>Continue maintaining your healthy lifestyle</span>
+                                            </div>
+                                            <div class="recommendation-point">
+                                                <i class="fas fa-running me-2"></i>
+                                                <span>Keep up regular exercise and balanced diet</span>
+                                            </div>
+                                            <div class="recommendation-point">
+                                                <i class="fas fa-calendar-check me-2"></i>
+                                                <span>Schedule annual health checkups</span>
+                                            </div>
+                                            <div class="recommendation-point">
+                                                <i class="fas fa-chart-line me-2"></i>
+                                                <span>Monitor blood pressure and cholesterol regularly</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% else %}
+                                <div class="recommendation-item warning-recommendation">
+                                    <div class="recommendation-icon">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                    </div>
+                                    <div class="recommendation-content">
+                                        <h5 class="recommendation-title">Important: Take Action Now</h5>
+                                        <div class="recommendation-list">
+                                            <div class="recommendation-point">
+                                                <i class="fas fa-user-md me-2"></i>
+                                                <span>Schedule a consultation with your healthcare provider</span>
+                                            </div>
+                                            <div class="recommendation-point">
+                                                <i class="fas fa-apple-alt me-2"></i>
+                                                <span>Consider lifestyle modifications (diet, exercise)</span>
+                                            </div>
+                                            <div class="recommendation-point">
+                                                <i class="fas fa-eye me-2"></i>
+                                                <span>Monitor symptoms and report any changes</span>
+                                            </div>
+                                            <div class="recommendation-point">
+                                                <i class="fas fa-calendar-alt me-2"></i>
+                                                <span>Schedule regular follow-up appointments</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
                             </div>
-                            {% else %}
-                            <div class="alert alert-warning">
-                                <h5><i class="fas fa-exclamation-triangle me-2"></i>Precautionary Measures</h5>
-                                <ul class="mb-0">
-                                    <li>Schedule a consultation with your healthcare provider</li>
-                                    <li>Consider lifestyle modifications (diet, exercise)</li>
-                                    <li>Monitor symptoms and report any changes</li>
-                                    <li>Regular follow-up appointments</li>
-                                </ul>
-                            </div>
-                            {% endif %}
                         </div>
                         <!-- Action Buttons -->
-                        <div class="text-center mt-5">
-                            <a href="{% url 'add_heartdetail' %}" class="btn-modern btn-primary me-3">
-                                <i class="fas fa-redo me-2"></i>New Prediction
-                            </a>
-                            <a href="{% url 'add_heartdetail' %}" class="btn-modern btn-success me-3">
-                                <i class="fas fa-undo me-2"></i>Try Again
-                            </a>
-                            <a href="{% url 'signup' %}" class="btn-modern btn-success me-3">
-                                <i class="fas fa-user-plus me-2"></i>Create Account
-                            </a>
-                            <a href="{% url 'home' %}" class="btn-modern btn-secondary">
-                                <i class="fas fa-home me-2"></i>Back to Home
-                            </a>
+                        <div class="action-buttons-section">
+                            <div class="action-buttons-container">
+                                <a href="{% url 'add_heartdetail' %}" class="action-btn primary-btn">
+                                    <i class="fas fa-redo me-2"></i>
+                                    <span>New Prediction</span>
+                                </a>
+                                <a href="{% url 'add_heartdetail' %}" class="action-btn success-btn">
+                                    <i class="fas fa-undo me-2"></i>
+                                    <span>Try Again</span>
+                                </a>
+                                <a href="{% url 'home' %}" class="action-btn secondary-btn">
+                                    <i class="fas fa-home me-2"></i>
+                                    <span>Back to Home</span>
+                                </a>
+                            </div>
                         </div>
+                        
                         <!-- Disclaimer -->
-                        <div class="mt-4 p-3 bg-light rounded">
-                            <small class="text-muted">
-                                <i class="fas fa-exclamation-triangle me-1"></i>
-                                <strong>Disclaimer:</strong> This prediction is based on machine learning algorithms and should not replace professional medical advice. 
-                                Always consult with qualified healthcare professionals for medical decisions.
-                            </small>
+                        <div class="disclaimer-section">
+                            <div class="disclaimer-card">
+                                <div class="disclaimer-icon">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                                <div class="disclaimer-content">
+                                    <h6 class="disclaimer-title">Important Medical Disclaimer</h6>
+                                    <p class="disclaimer-text">
+                                        This prediction is based on machine learning algorithms and should not replace professional medical advice. 
+                                        Always consult with qualified healthcare professionals for medical decisions and treatment.
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -107,9 +187,418 @@
     </div>
 </main>
 <style>
-.prediction-result{background:linear-gradient(135deg,#f8f9fa 0%,#e9ecef 100%);border:2px solid #dee2e6}
-.result-display{font-size:1.5rem;font-weight:600}
-.accuracy-info .badge{font-size:1rem;padding:.5rem 1rem}
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 3rem 2rem;
+    border-radius: 20px;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.hero-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hero-subtitle {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    margin: 0;
+}
+
+/* Card Enhancements */
+.card-modern {
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    border: none;
+    overflow: hidden;
+    background: white;
+}
+
+.card-header {
+    background: linear-gradient(135deg, #1976d2 0%, #42a5f5 100%);
+    color: white;
+    border: none;
+    padding: 2rem;
+}
+
+.card-title {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.card-subtitle {
+    margin: 0.5rem 0 0 0;
+    opacity: 0.9;
+    font-size: 1.1rem;
+}
+
+/* Prediction Result Card */
+.prediction-result-card {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border: 2px solid #dee2e6;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.prediction-result-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.result-title {
+    color: #1976d2;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.result-display {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+}
+
+/* Risk Badges */
+.risk-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.risk-badge:hover {
+    transform: scale(1.05);
+}
+
+.high-risk {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+    color: white;
+}
+
+.low-risk {
+    background: linear-gradient(135deg, #51cf66 0%, #40c057 100%);
+    color: white;
+}
+
+/* Accuracy Display */
+.accuracy-card {
+    background: linear-gradient(135deg, #74c0fc 0%, #339af0 100%);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 15px;
+    display: inline-flex;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.accuracy-label {
+    margin-right: 0.5rem;
+    font-weight: 500;
+}
+
+.accuracy-value {
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+/* Chart Section */
+.chart-card {
+    background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+    border: 1px solid #bbdefb;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.chart-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.chart-title {
+    color: #1976d2;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.chart-subtitle {
+    color: #666;
+    margin: 0;
+}
+
+.chart-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+}
+
+/* Recommendations Section */
+.recommendations-card {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border: 1px solid #dee2e6;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.recommendations-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.recommendations-title {
+    color: #1976d2;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.recommendations-subtitle {
+    color: #666;
+    margin: 0;
+}
+
+.recommendation-item {
+    display: flex;
+    align-items: flex-start;
+    padding: 1.5rem;
+    border-radius: 15px;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+.recommendation-item:hover {
+    transform: translateX(10px);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+.success-recommendation {
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    border-left: 5px solid #28a745;
+}
+
+.warning-recommendation {
+    background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+    border-left: 5px solid #ffc107;
+}
+
+.recommendation-icon {
+    font-size: 2rem;
+    margin-right: 1rem;
+    flex-shrink: 0;
+}
+
+.success-recommendation .recommendation-icon {
+    color: #28a745;
+}
+
+.warning-recommendation .recommendation-icon {
+    color: #ffc107;
+}
+
+.recommendation-content {
+    flex: 1;
+}
+
+.recommendation-title {
+    color: #2c3e50;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.recommendation-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.recommendation-point {
+    display: flex;
+    align-items: center;
+    color: #555;
+    font-size: 0.95rem;
+}
+
+.recommendation-point i {
+    color: #1976d2;
+    width: 20px;
+    flex-shrink: 0;
+}
+
+/* Action Buttons */
+.action-buttons-section {
+    margin: 3rem 0;
+}
+
+.action-buttons-container {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.action-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    border: none;
+    cursor: pointer;
+}
+
+.action-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    text-decoration: none;
+}
+
+.primary-btn {
+    background: linear-gradient(135deg, #1976d2 0%, #42a5f5 100%);
+    color: white;
+}
+
+.success-btn {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+}
+
+.secondary-btn {
+    background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+    color: white;
+}
+
+/* Disclaimer Section */
+.disclaimer-section {
+    margin-top: 2rem;
+}
+
+.disclaimer-card {
+    background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+    border: 1px solid #ffc107;
+    border-radius: 15px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.disclaimer-icon {
+    color: #ffc107;
+    font-size: 1.5rem;
+    margin-right: 1rem;
+    flex-shrink: 0;
+}
+
+.disclaimer-content {
+    flex: 1;
+}
+
+.disclaimer-title {
+    color: #856404;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.disclaimer-text {
+    color: #856404;
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.prediction-result-card,
+.chart-card,
+.recommendations-card,
+.disclaimer-card {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+    
+    .action-buttons-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .action-btn {
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+    }
+    
+    .recommendation-item {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .recommendation-icon {
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+    
+    .disclaimer-card {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .disclaimer-icon {
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero-section {
+        padding: 2rem 1rem;
+    }
+    
+    .card-header {
+        padding: 1.5rem;
+    }
+    
+    .prediction-result-card,
+    .chart-card,
+    .recommendations-card {
+        padding: 1.5rem;
+    }
+}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script>
