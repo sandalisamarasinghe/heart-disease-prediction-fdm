@@ -43,6 +43,9 @@ class HeartDiseaseModel:
         # Initialize models
         self.models = {}
         self.scaler = StandardScaler()
+        # Outlier bounds learned on training data (persisted with model)
+        self.outlier_lower_bounds = None
+        self.outlier_upper_bounds = None
         self.best_model = None
         self.best_accuracy = 0.0
         
@@ -52,11 +55,17 @@ class HeartDiseaseModel:
         # Improved model configurations for better accuracy
         self.model_configs = {
             'random_forest': {
-                'model': RandomForestClassifier(random_state=42, n_estimators=200, max_depth=15, min_samples_split=5),
+                'model': RandomForestClassifier(
+                    random_state=42,
+                    n_estimators=200,
+                    max_depth=15,
+                    min_samples_split=5,
+                    class_weight='balanced_subsample'
+                ),
                 'params': {}
             },
             'logistic_regression': {
-                'model': LogisticRegression(random_state=42, max_iter=1000, C=1.0),
+                'model': LogisticRegression(random_state=42, max_iter=1000, C=1.0, class_weight='balanced'),
                 'params': {}
             },
             'gradient_boosting': {
@@ -114,9 +123,16 @@ class HeartDiseaseModel:
                 X, y, test_size=test_size, random_state=random_state, stratify=y
             )
             
-            # Scale features
-            X_train_scaled = self.scaler.fit_transform(X_train)
-            X_test_scaled = self.scaler.transform(X_test)
+            # Compute IQR-based outlier bounds on training data and persist
+            self.outlier_lower_bounds, self.outlier_upper_bounds = self._compute_outlier_bounds(X_train)
+            
+            # Apply outlier capping using training bounds to both train and test
+            X_train_capped = self._apply_outlier_capping(X_train, self.outlier_lower_bounds, self.outlier_upper_bounds)
+            X_test_capped = self._apply_outlier_capping(X_test, self.outlier_lower_bounds, self.outlier_upper_bounds)
+            
+            # Scale features on capped data
+            X_train_scaled = self.scaler.fit_transform(X_train_capped)
+            X_test_scaled = self.scaler.transform(X_test_capped)
             
             accuracies = {}
             
@@ -157,6 +173,36 @@ class HeartDiseaseModel:
         except Exception as e:
             logger.error(f"Error in training: {str(e)}")
             raise
+
+    def _compute_outlier_bounds(self, X_train: pd.DataFrame) -> Tuple[pd.Series, pd.Series]:
+        """
+        Compute IQR-based lower/upper bounds for outlier capping on numeric features.
+        """
+        try:
+            Q1 = X_train.quantile(0.25)
+            Q3 = X_train.quantile(0.75)
+            IQR = Q3 - Q1
+            lower = Q1 - 1.5 * IQR
+            upper = Q3 + 1.5 * IQR
+            return lower, upper
+        except Exception as e:
+            logger.error(f"Error computing outlier bounds: {str(e)}")
+            # Fallback: no capping
+            zeros = X_train.iloc[0:1].drop(X_train.iloc[0:1].index).reindex(columns=X_train.columns).fillna(0)
+            return zeros.squeeze(), zeros.squeeze()
+
+    def _apply_outlier_capping(self, X: pd.DataFrame, lower: pd.Series, upper: pd.Series) -> pd.DataFrame:
+        """
+        Apply clipping to the provided DataFrame using precomputed bounds.
+        """
+        try:
+            # Align indexes to avoid broadcasting issues
+            lower_aligned = lower.reindex(X.columns)
+            upper_aligned = upper.reindex(X.columns)
+            return X.clip(lower=lower_aligned, upper=upper_aligned, axis=1)
+        except Exception as e:
+            logger.error(f"Error applying outlier capping: {str(e)}")
+            return X
     
     def _create_ensemble_model(self, X_train: np.ndarray, y_train: np.ndarray):
         """
@@ -200,12 +246,19 @@ class HeartDiseaseModel:
             if self.best_model is not None:
                 model_path = os.path.join(self.model_save_path, 'best_heart_disease_model.pkl')
                 scaler_path = os.path.join(self.model_save_path, 'scaler.pkl')
+                bounds_path = os.path.join(self.model_save_path, 'outlier_bounds.pkl')
                 
                 joblib.dump(self.best_model, model_path)
                 joblib.dump(self.scaler, scaler_path)
+                # Save outlier bounds for use at inference
+                joblib.dump({
+                    'lower': self.outlier_lower_bounds,
+                    'upper': self.outlier_upper_bounds
+                }, bounds_path)
                 
                 logger.info(f"Best model saved to {model_path}")
                 logger.info(f"Scaler saved to {scaler_path}")
+                logger.info(f"Outlier bounds saved to {bounds_path}")
                 
         except Exception as e:
             logger.error(f"Error saving model: {str(e)}")
@@ -220,10 +273,15 @@ class HeartDiseaseModel:
         try:
             model_path = os.path.join(self.model_save_path, 'best_heart_disease_model.pkl')
             scaler_path = os.path.join(self.model_save_path, 'scaler.pkl')
+            bounds_path = os.path.join(self.model_save_path, 'outlier_bounds.pkl')
             
             if os.path.exists(model_path) and os.path.exists(scaler_path):
                 self.best_model = joblib.load(model_path)
                 self.scaler = joblib.load(scaler_path)
+                if os.path.exists(bounds_path):
+                    saved_bounds = joblib.load(bounds_path)
+                    self.outlier_lower_bounds = saved_bounds.get('lower')
+                    self.outlier_upper_bounds = saved_bounds.get('upper')
                 logger.info("Loaded saved model successfully")
                 return True
             else:
@@ -251,8 +309,14 @@ class HeartDiseaseModel:
             # Preprocess input
             input_array = self.text_processor.preprocess_for_prediction(input_data)
             
+            # Convert to DataFrame for capping using stored bounds
+            feature_names = self.text_processor.get_feature_names()
+            input_df = pd.DataFrame(input_array, columns=feature_names)
+            if self.outlier_lower_bounds is not None and self.outlier_upper_bounds is not None:
+                input_df = self._apply_outlier_capping(input_df, self.outlier_lower_bounds, self.outlier_upper_bounds)
+            
             # Scale input
-            input_scaled = self.scaler.transform(input_array)
+            input_scaled = self.scaler.transform(input_df.values)
             
             # Make prediction
             prediction = self.best_model.predict(input_scaled)[0]

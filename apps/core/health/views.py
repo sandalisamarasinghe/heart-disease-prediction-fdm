@@ -193,10 +193,17 @@ def prdict_heart_disease(list_data):
 
 def add_heartdetail(request):
     if request.method == "POST":
+        # Validate all required fields are present and non-empty
+        required_fields = ['age','sex','cp','trestbps','chol','fbs','restecg','thalach','exang','oldpeak','slope','ca','thal']
+        missing = [f for f in required_fields if request.POST.get(f) in (None, '')]
+        if missing:
+            messages.error(request, f"Please fill all required fields: {', '.join(missing)}")
+            return render(request, 'add_heartdetail.html', { 'form_data': request.POST })
+
         # Build feature vector in a fixed order to match the model
         try:
             age = float(request.POST.get('age'))
-            sex = float(request.POST.get('sex'))  # 0=female,1=male (matches form)
+            sex = float(request.POST.get('sex'))
             cp = float(request.POST.get('cp'))
             trestbps = float(request.POST.get('trestbps'))
             chol = float(request.POST.get('chol'))
@@ -205,31 +212,20 @@ def add_heartdetail(request):
             thalach = float(request.POST.get('thalach'))
             exang = float(request.POST.get('exang'))
             oldpeak = float(request.POST.get('oldpeak'))
-            slope = float(request.POST.get('slope')) if request.POST.get('slope') is not None else 2.0
-            ca = float(request.POST.get('ca')) if request.POST.get('ca') is not None else 0.0
-            thal = float(request.POST.get('thal')) if request.POST.get('thal') is not None else 2.0
+            slope = float(request.POST.get('slope'))
+            ca = float(request.POST.get('ca'))
+            thal = float(request.POST.get('thal'))
 
             list_data = [
                 age, sex, cp, trestbps, chol, fbs, restecg,
                 thalach, exang, oldpeak, slope, ca, thal
             ]
         except Exception:
-            # Fallback to empty vector, which will be padded below
-            list_data = []
+            messages.error(request, "Please enter valid numeric values for all fields.")
+            return render(request, 'add_heartdetail.html', { 'form_data': request.POST })
 
-        # Ensure we have 13 features by padding with defaults if needed
-        while len(list_data) < 13:
-            if len(list_data) == 10:
-                list_data.append(2.0)  # slope default
-            elif len(list_data) == 11:
-                list_data.append(0.0)  # ca default
-            elif len(list_data) == 12:
-                list_data.append(2.0)  # thal default
-            else:
-                list_data.append(0.0)
-
-        # Expected format: [age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal]
-        accuracy,pred = prdict_heart_disease(list_data)
+        # Predict only when all inputs are valid
+        accuracy, pred = prdict_heart_disease(list_data)
         Search_Data.objects.create(prediction_accuracy=accuracy, result=pred[0], values_list=list_data)
         rem = int(pred[0])
         if pred[0] == 0:
@@ -369,6 +365,13 @@ def guest_prediction(request):
     """Guest prediction view - allows users to access prediction form without authentication"""
     if request.method == "POST":
         # Handle prediction form submission for guests
+        # Validate required inputs exist
+        required_fields = ['age','sex','cp','trestbps','chol','fbs','restecg','thalach','exang','oldpeak','slope','ca','thal']
+        missing = [f for f in required_fields if request.POST.get(f) in (None, '')]
+        if missing:
+            messages.error(request, f"Please fill all required fields: {', '.join(missing)}")
+            return render(request, 'prediction_form.html', { 'form_data': request.POST, 'is_guest': True })
+
         # Build feature vector in fixed order with proper data conversion
         try:
             # Age - direct conversion
@@ -420,32 +423,22 @@ def guest_prediction(request):
             oldpeak = float(request.POST.get('oldpeak'))
             
             # ST Slope - direct conversion
-            slope = float(request.POST.get('slope')) if request.POST.get('slope') is not None else 2.0
+            slope = float(request.POST.get('slope'))
             
             # Major Vessels - direct conversion
-            ca = float(request.POST.get('ca')) if request.POST.get('ca') is not None else 0.0
+            ca = float(request.POST.get('ca'))
             
             # Thalassemia - direct conversion
-            thal = float(request.POST.get('thal')) if request.POST.get('thal') is not None else 2.0
+            thal = float(request.POST.get('thal'))
             
             list_data = [age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal]
             
             print(f"DEBUG: Converted data: {list_data}")  # Debug output
             
         except Exception as e:
-            print(f"DEBUG: Error in data conversion: {e}")  # Debug output
-            list_data = []
-
-        # Ensure we have 13 features by padding with defaults if needed
-        while len(list_data) < 13:
-            if len(list_data) == 10:
-                list_data.append(2.0)  # slope default
-            elif len(list_data) == 11:
-                list_data.append(0.0)  # ca default
-            elif len(list_data) == 12:
-                list_data.append(2.0)  # thal default
-            else:
-                list_data.append(0.0)
+            print(f"DEBUG: Error in data conversion: {e}")
+            messages.error(request, "Please enter valid numeric values for all fields.")
+            return render(request, 'prediction_form.html', { 'form_data': request.POST, 'is_guest': True })
 
         print(f"DEBUG: Final data for prediction: {list_data}")  # Debug output
 
