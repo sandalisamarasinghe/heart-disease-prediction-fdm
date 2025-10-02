@@ -1,0 +1,111 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block body %}
+
+<!-- Modern Login Section -->
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card-modern fade-in">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fas fa-sign-in-alt text-primary mb-3"></i>
+                        Welcome Back
+                    </div>
+                    <div class="card-subtitle">Sign in to your account to continue</div>
+                </div>
+
+                <!-- Alert Messages -->
+                {% if error == "pat1" %}
+                <div class="alert-modern alert-success">
+                    <i class="fas fa-check-circle"></i>
+                    Login successful! Redirecting to patient dashboard...
+                </div>
+                <script>
+                    setTimeout(function() {
+                        window.location="{% url 'patient_home' %}";
+                    }, 2000);
+                </script>
+                {% endif %}
+
+                {# Pending verification message removed since all valid users can log in #}
+
+                {% if error == "pat2" %}
+                <div class="alert-modern alert-success">
+                    <i class="fas fa-check-circle"></i>
+                    Login successful! Redirecting to doctor dashboard...
+                </div>
+                <script>
+                    setTimeout(function() {
+                        window.location="{% url 'doctor_home' %}";
+                    }, 2000);
+                </script>
+                {% endif %}
+
+                {% if error == "not" %}
+                <div class="alert-modern alert-danger">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Invalid username or password. Please try again.
+                </div>
+                {% endif %}
+
+                {% if not error %}
+                <div class="alert-modern alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    Enter your credentials to access your user dashboard.
+                </div>
+                {% endif %}
+
+                <!-- Login Form -->
+                <form class="form-modern" action="" method="post">
+                    {% csrf_token %}
+                    
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-user text-primary"></i> Username
+                        </label>
+                        <input type="text" class="form-input" name="uname" 
+                               placeholder="Enter your username" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-lock text-primary"></i> Password
+                        </label>
+                        <input type="password" class="form-input" name="pwd" 
+                               placeholder="Enter your password" required>
+                    </div>
+
+                    <button type="submit" class="btn-modern btn-primary w-100">
+                        <i class="fas fa-sign-in-alt"></i> Sign In
+                    </button>
+                </form>
+
+                <div class="text-center mt-3">
+                    <p class="text-secondary">Don’t have an account?
+                        <a href="{% url 'signup' %}" class="text-primary fw-bold">Create one</a>
+                    </p>
+                </div>
+
+                <div class="text-center mt-4">
+                    <p class="text-secondary">
+                        Access restricted to Admin only. 
+                        <a href="{% url 'login_admin' %}" class="text-primary fw-bold">
+                            Go to Admin Login
+                        </a>
+                    </p>
+                </div>
+
+                <!-- Additional Info -->
+                <div class="mt-4 p-3 bg-light rounded">
+                    <small class="text-muted">
+                        <i class="fas fa-shield-alt text-success"></i>
+                        Your data is encrypted and secure. We never share your personal information.
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

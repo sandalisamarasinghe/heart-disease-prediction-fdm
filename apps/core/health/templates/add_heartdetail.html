@@ -1,0 +1,561 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block title %}Add Heart Details - Heart Disease Prediction{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- Hero Section -->
+            <div class="hero-section text-center mb-4">
+                <h1 class="hero-title">
+                    <i class="fas fa-heartbeat text-danger me-3"></i>
+                    Heart Disease Prediction
+                </h1>
+                <p class="hero-subtitle">
+                    Enter your heart health parameters to get an AI-powered prediction
+                </p>
+            </div>
+
+            <!-- Main Form Card -->
+            <div class="card-modern">
+                <div class="card-body">
+                    <form method="post" class="form-modern">
+                        {% csrf_token %}
+                        
+                        <!-- Personal Information Section -->
+                        <div class="form-section mb-4">
+                            <h3 class="section-title">
+                                <i class="fas fa-user text-primary me-2"></i>
+                                Personal Information
+                            </h3>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="age" class="form-label">
+                                        <i class="fas fa-birthday-cake me-2"></i>Age
+                                    </label>
+                                    <input type="number" class="form-control" id="age" name="age" 
+                                           min="18" max="100" required 
+                                           placeholder="Enter your age (18-100)">
+                                    <div class="form-text">
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        The age of the patient
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="sex" class="form-label">
+                                        <i class="fas fa-venus-mars me-2"></i>Gender
+                                    </label>
+                                    <select class="form-select" id="sex" name="sex" required>
+                                        <option value="">Select gender</option>
+                                        <option value="0">Female</option>
+                                        <option value="1">Male</option>
+                                    </select>
+                                    <div class="form-text">
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        Gender of the patient (0: female, 1: male)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cardiovascular Symptoms Section -->
+                        <div class="form-section mb-4">
+                            <h3 class="section-title">
+                                <i class="fas fa-heart text-danger me-2"></i>
+                                Cardiovascular Symptoms
+                            </h3>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="cp" class="form-label">
+                                        <i class="fas fa-stethoscope me-2"></i>Chest Pain Type
+                                    </label>
+                                    <select class="form-select" id="cp" name="cp" required>
+                                        <option value="">Select chest pain type</option>
+                                        <option value="0">Typical angina</option>
+                                        <option value="1">Atypical angina</option>
+                                        <option value="2">Non-anginal pain</option>
+                                        <option value="3">Asymptomatic</option>
+                                    </select>
+                                    <div class="form-text">
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        Type of chest pain
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="exang" class="form-label">
+                                        <i class="fas fa-running me-2"></i>Exercise Angina
+                                    </label>
+                                    <select class="form-select" id="exang" name="exang" required>
+                                        <option value="">Select option</option>
+                                        <option value="0">No</option>
+                                        <option value="1">Yes</option>
+                                    </select>
+                                    <div class="form-text">
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        Exercise induced angina
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Laboratory Values Section -->
+                        <div class="form-section mb-4">
+                            <h3 class="section-title">
+                                <i class="fas fa-flask text-warning me-2"></i>
+                                Laboratory Values
+                            </h3>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="trestbps" class="form-label">
+                                        <i class="fas fa-tachometer-alt me-2"></i>Resting Blood Pressure
+                                    </label>
+                                    <input type="number" class="form-control" id="trestbps" name="trestbps" 
+                                           min="90" max="200" required 
+                                           placeholder="mmHg (90-200)">
+                                    <div class="form-text">
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        Resting blood pressure in mmHg
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="chol" class="form-label">
+                                        <i class="fas fa-tint me-2"></i>Serum Cholesterol
+                                    </label>
+                                    <input type="number" class="form-control" id="chol" name="chol" 
+                                           min="100" max="600" required 
+                                           placeholder="mg/dl (100-600)">
+                                    <div class="form-text">
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        Serum cholesterol in mg/dl
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="fbs" class="form-label">
+                                        <i class="fas fa-syringe me-2"></i>Fasting Blood Sugar
+                                    </label>
+                                    <select class="form-select" id="fbs" name="fbs" required>
+                                        <option value="">Select option</option>
+                                        <option value="0">≤ 120 mg/dl</option>
+                                        <option value="1">> 120 mg/dl</option>
+                                    </select>
+                                    <div class="form-text">
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        Fasting blood sugar > 120 mg/dl
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="thalach" class="form-label">
+                                        <i class="fas fa-heartbeat me-2"></i>Maximum Heart Rate
+                                    </label>
+                                    <input type="number" class="form-control" id="thalach" name="thalach" 
+                                           min="60" max="220" required 
+                                           placeholder="bpm (60-220)">
+                                    <div class="form-text">
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        Maximum heart rate achieved during exercise
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Medical Test Results Section -->
+                        <div class="form-section mb-4">
+                            <h3 class="section-title">
+                                <i class="fas fa-file-medical text-info me-2"></i>
+                                Medical Test Results
+                            </h3>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="restecg" class="form-label">
+                                        <i class="fas fa-wave-square me-2"></i>Resting ECG Results
+                                    </label>
+                                    <select class="form-select" id="restecg" name="restecg" required>
+                                        <option value="">Select ECG result</option>
+                                        <option value="0">Normal</option>
+                                        <option value="1">ST-T wave abnormality</option>
+                                        <option value="2">Left ventricular hypertrophy</option>
+                                    </select>
+                                    <div class="form-text">
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        Resting electrocardiographic results
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="oldpeak" class="form-label">
+                                        <i class="fas fa-chart-line me-2"></i>ST Depression
+                                    </label>
+                                    <input type="number" class="form-control" id="oldpeak" name="oldpeak" 
+                                           min="0" max="10" step="0.1" required 
+                                           placeholder="0.0 - 10.0">
+                                    <div class="form-text">
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        ST depression induced by exercise relative to rest
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Additional Medical Parameters Section -->
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label for="slope" class="form-label">
+                                        <i class="fas fa-chart-area me-2"></i>ST Slope
+                                    </label>
+                                    <select class="form-select" id="slope" name="slope" required>
+                                        <option value="">Select ST slope</option>
+                                        <option value="0">Downsloping</option>
+                                        <option value="1">Flat</option>
+                                        <option value="2">Upsloping</option>
+                                    </select>
+                                    <div class="form-text">
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        Slope of peak exercise ST segment
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="ca" class="form-label">
+                                        <i class="fas fa-vessel me-2"></i>Major Vessels
+                                    </label>
+                                    <select class="form-select" id="ca" name="ca" required>
+                                        <option value="">Select number</option>
+                                        <option value="0">0 vessels</option>
+                                        <option value="1">1 vessel</option>
+                                        <option value="2">2 vessels</option>
+                                        <option value="3">3 vessels</option>
+                                        <option value="4">4 vessels</option>
+                                    </select>
+                                    <div class="form-text">
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        Number of major vessels colored by fluoroscopy
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="thal" class="form-label">
+                                        <i class="fas fa-dna me-2"></i>Thalassemia
+                                    </label>
+                                    <select class="form-select" id="thal" name="thal" required>
+                                        <option value="">Select type</option>
+                                        <option value="0">Normal</option>
+                                        <option value="1">Fixed defect</option>
+                                        <option value="2">Reversible defect</option>
+                                        <option value="3">Other</option>
+                                    </select>
+                                    <div class="form-text">
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        Thalassemia type
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="form-actions text-center">
+                            <button type="submit" class="btn-modern btn-primary me-3">
+                                <i class="fas fa-brain me-2"></i>Get AI Prediction
+                            </button>
+                            <a href="{% url 'home' %}" class="btn-modern btn-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Back to Home
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Detailed Input Descriptions -->
+            <div class="card-modern mt-4">
+                <div class="card-body">
+                    <h5 class="card-title text-center mb-4">
+                        <i class="fas fa-book-medical text-primary me-2"></i>
+                        Understanding Your Input Parameters
+                    </h5>
+                    
+                    <div class="row">
+                        <!-- Personal Information -->
+                        <div class="col-lg-6 mb-4">
+                            <div class="parameter-section">
+                                <h6 class="parameter-title">
+                                    <i class="fas fa-user text-primary me-2"></i>
+                                    Personal Information
+                                </h6>
+                                <div class="parameter-item">
+                                    <strong>Age:</strong> Your age in years. Risk increases with age, especially after 50.
+                                </div>
+                                <div class="parameter-item">
+                                    <strong>Gender:</strong> Biological sex. Males generally have higher heart disease risk.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cardiovascular Symptoms -->
+                        <div class="col-lg-6 mb-4">
+                            <div class="parameter-section">
+                                <h6 class="parameter-title">
+                                    <i class="fas fa-heart text-danger me-2"></i>
+                                    Cardiovascular Symptoms
+                                </h6>
+                                <div class="parameter-item">
+                                    <strong>Chest Pain Type:</strong>
+                                    <ul class="parameter-list">
+                                        <li><strong>Typical Angina:</strong> Chest pain caused by reduced blood flow to heart</li>
+                                        <li><strong>Atypical Angina:</strong> Chest pain with different characteristics</li>
+                                        <li><strong>Non-anginal Pain:</strong> Chest pain not related to heart</li>
+                                        <li><strong>Asymptomatic:</strong> No chest pain symptoms</li>
+                                    </ul>
+                                </div>
+                                <div class="parameter-item">
+                                    <strong>Exercise Angina:</strong> Chest pain that occurs during physical activity or stress.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Laboratory Values -->
+                        <div class="col-lg-6 mb-4">
+                            <div class="parameter-section">
+                                <h6 class="parameter-title">
+                                    <i class="fas fa-flask text-warning me-2"></i>
+                                    Laboratory Values
+                                </h6>
+                                <div class="parameter-item">
+                                    <strong>Resting Blood Pressure:</strong> Your blood pressure when at rest. Normal: <120/80 mmHg.
+                                </div>
+                                <div class="parameter-item">
+                                    <strong>Serum Cholesterol:</strong> Total cholesterol level. Normal: <200 mg/dl.
+                                </div>
+                                <div class="parameter-item">
+                                    <strong>Fasting Blood Sugar:</strong> Blood glucose after 8+ hours of fasting. Normal: <100 mg/dl.
+                                </div>
+                                <div class="parameter-item">
+                                    <strong>Maximum Heart Rate:</strong> Highest heart rate achieved during exercise stress test.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Medical Test Results -->
+                        <div class="col-lg-6 mb-4">
+                            <div class="parameter-section">
+                                <h6 class="parameter-title">
+                                    <i class="fas fa-file-medical text-info me-2"></i>
+                                    Medical Test Results
+                                </h6>
+                                <div class="parameter-item">
+                                    <strong>Resting ECG:</strong> Electrocardiogram results showing heart's electrical activity.
+                                </div>
+                                <div class="parameter-item">
+                                    <strong>ST Depression:</strong> ECG changes during exercise indicating potential heart issues.
+                                </div>
+                                <div class="parameter-item">
+                                    <strong>ST Slope:</strong> The direction of ST segment changes during peak exercise.
+                                </div>
+                                <div class="parameter-item">
+                                    <strong>Major Vessels:</strong> Number of major blood vessels with significant narrowing.
+                                </div>
+                                <div class="parameter-item">
+                                    <strong>Thalassemia:</strong> Blood disorder affecting hemoglobin production.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Risk Factors Information -->
+                    <div class="risk-factors-section mt-4">
+                        <h6 class="parameter-title text-center">
+                            <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                            Key Risk Factors
+                        </h6>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="risk-factor-item high-risk">
+                                    <i class="fas fa-arrow-up text-danger"></i>
+                                    <strong>High Risk:</strong> Age >60, Male, Typical angina, High BP/Cholesterol
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="risk-factor-item moderate-risk">
+                                    <i class="fas fa-minus text-warning"></i>
+                                    <strong>Moderate Risk:</strong> Age 50-60, Atypical symptoms, Borderline values
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="risk-factor-item low-risk">
+                                    <i class="fas fa-arrow-down text-success"></i>
+                                    <strong>Low Risk:</strong> Young age, Female, No symptoms, Normal values
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Privacy Notice -->
+                    <div class="alert alert-info mt-4">
+                        <i class="fas fa-shield-alt me-2"></i>
+                        <strong>Privacy & Security:</strong> Your health data is processed securely using advanced encryption and is not stored permanently. All predictions are for informational purposes only and should not replace professional medical advice.
+                    </div>
+                </div>
+            </div>
+
+            <!-- About This Prediction -->
+            <div class="card-modern mt-4">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-brain text-primary me-2"></i>
+                        About This AI Prediction System
+                    </h5>
+                    <p class="card-text">
+                        This advanced AI system uses machine learning algorithms trained on thousands of heart disease cases to analyze your health parameters. 
+                        The system considers 13 key medical factors to provide accurate risk assessments with confidence scores.
+                    </p>
+                    <div class="row">
+                        <div class="col-md-4 text-center">
+                            <i class="fas fa-chart-line fa-2x text-success mb-2"></i>
+                            <h6>High Accuracy</h6>
+                            <small>Proven accuracy rates exceeding 85%</small>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <i class="fas fa-clock fa-2x text-info mb-2"></i>
+                            <h6>Instant Results</h6>
+                            <small>Get predictions in seconds</small>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <i class="fas fa-user-md fa-2x text-warning mb-2"></i>
+                            <h6>Medical Grade</h6>
+                            <small>Based on clinical research</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Custom styles for parameter descriptions */
+.parameter-section {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-left: 4px solid var(--primary-color);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.parameter-section:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+}
+
+.parameter-title {
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid rgba(0, 123, 255, 0.2);
+}
+
+.parameter-item {
+    margin-bottom: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.parameter-item:last-child {
+    border-bottom: none;
+}
+
+.parameter-item strong {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.parameter-list {
+    margin: 8px 0 0 20px;
+    padding: 0;
+}
+
+.parameter-list li {
+    margin-bottom: 6px;
+    color: #555;
+    font-size: 0.9em;
+}
+
+.risk-factors-section {
+    background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+    border-radius: 15px;
+    padding: 20px;
+    border: 2px solid #ffc107;
+}
+
+.risk-factor-item {
+    background: white;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 10px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.risk-factor-item:hover {
+    transform: scale(1.02);
+}
+
+.risk-factor-item.high-risk {
+    border-left: 4px solid #dc3545;
+}
+
+.risk-factor-item.moderate-risk {
+    border-left: 4px solid #ffc107;
+}
+
+.risk-factor-item.low-risk {
+    border-left: 4px solid #28a745;
+}
+
+.risk-factor-item i {
+    font-size: 1.2em;
+    margin-right: 8px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .parameter-section {
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+    
+    .parameter-title {
+        font-size: 1rem;
+    }
+    
+    .risk-factor-item {
+        padding: 12px;
+        margin-bottom: 8px;
+    }
+}
+
+/* Animation for parameter sections */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.parameter-section {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.parameter-section:nth-child(1) { animation-delay: 0.1s; }
+.parameter-section:nth-child(2) { animation-delay: 0.2s; }
+.parameter-section:nth-child(3) { animation-delay: 0.3s; }
+.parameter-section:nth-child(4) { animation-delay: 0.4s; }
+</style>
+
+{% endblock %}

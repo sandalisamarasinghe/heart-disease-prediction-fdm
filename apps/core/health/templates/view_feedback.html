@@ -1,0 +1,121 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block body %}
+
+<div class="container-fluid admin-dashboard" style="width:90%;margin-top:8%">
+    <div class="container-fluid">
+        <h1 align="center" class="admin-title">View Feedbacks</h1>
+        <div class="admin-subtitle">Review patient feedback and suggestions</div>
+    </div>
+    <hr class="admin-divider">
+    
+    <div class="table-responsive">
+        <table id="example" class="display admin-table" style="width:100%">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Contact</th>
+                    <th>Messages</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in dis %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td class="feedback-name">{{i.user.first_name}} {{i.user.user.last_name}}</td>
+                    <td>{{i.user.email}}</td>
+                    <td>{{i.user.patient_set.all.0.contact}}</td>
+                    <td class="feedback-message">{{i.messages}}</td>
+                    <td style="width:150px">
+                        <a href="{% url 'delete_feedback' i.id %}">
+                            <button class="btn-modern btn-danger btn-sm" onclick="return confirm('Are you sure?')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+.admin-dashboard {
+    background: #f8f9fa;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.admin-title {
+    color: #2c3e50;
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-size: 2.5rem;
+}
+
+.admin-subtitle {
+    color: #7f8c8d;
+    text-align: center;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+}
+
+.admin-divider {
+    border: none;
+    height: 2px;
+    background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+    margin: 30px 0;
+}
+
+.admin-table {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.admin-table thead th {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+    font-weight: 600;
+    padding: 15px;
+    border: none;
+}
+
+.admin-table tbody td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+}
+
+.admin-table tbody tr:hover {
+    background: #f8f9fa;
+    transition: background 0.3s ease;
+}
+
+.feedback-name {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.feedback-message {
+    max-width: 300px;
+    word-wrap: break-word;
+    color: #555;
+    font-style: italic;
+}
+
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    border-radius: 6px;
+    margin: 2px;
+}
+</style>
+
+{% endblock %}
