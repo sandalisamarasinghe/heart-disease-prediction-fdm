@@ -1,0 +1,87 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block body %}
+
+<div class="container mt-5">
+	<div class="row justify-content-center">
+		<div class="col-md-6 col-lg-5">
+			<div class="card-modern fade-in">
+				<div class="card-header">
+					<div class="card-title">
+						<i class="fas fa-user-plus text-primary mb-3"></i>
+						Create Account
+					</div>
+					<div class="card-subtitle">Sign up to start using the system</div>
+				</div>
+
+				{% if messages %}
+					{% for message in messages %}
+						<div class="alert-modern {% if message.tags == 'success' %}alert-success{% else %}alert-danger{% endif %}">
+							<i class="fas {% if message.tags == 'success' %}fa-check-circle{% else %}fa-exclamation-triangle{% endif %}"></i>
+							{{ message }}
+						</div>
+					{% endfor %}
+				{% endif %}
+
+				<form class="form-modern" action="" method="post">
+					{% csrf_token %}
+
+					<div class="form-group">
+						<label class="form-label"><i class="fas fa-user text-primary"></i> First Name</label>
+						<input type="text" class="form-input" name="fname" placeholder="First name" required>
+					</div>
+
+					<div class="form-group">
+						<label class="form-label"><i class="fas fa-user text-primary"></i> Last Name</label>
+						<input type="text" class="form-input" name="lname" placeholder="Last name" required>
+					</div>
+
+					<div class="form-group">
+						<label class="form-label"><i class="fas fa-user-circle text-primary"></i> Username</label>
+						<input type="text" class="form-input" name="uname" placeholder="Choose a username" required>
+					</div>
+
+					<div class="form-group">
+						<label class="form-label"><i class="fas fa-envelope text-primary"></i> Email</label>
+						<input type="email" class="form-input" name="email" placeholder="name@example.com" required>
+					</div>
+
+					<div class="form-group">
+						<label class="form-label"><i class="fas fa-lock text-primary"></i> Password</label>
+						<input type="password" class="form-input" name="pwd" placeholder="Create a password" required>
+					</div>
+
+					<div class="form-group">
+						<label class="form-label"><i class="fas fa-phone text-primary"></i> Contact (optional)</label>
+						<input type="text" class="form-input" name="contact" placeholder="Phone number">
+					</div>
+
+					<div class="form-group">
+						<label class="form-label"><i class="fas fa-map-marker-alt text-primary"></i> Address (optional)</label>
+						<input type="text" class="form-input" name="add" placeholder="Address">
+					</div>
+
+					<div class="form-group">
+						<label class="form-label"><i class="fas fa-calendar text-primary"></i> Date of Birth (optional)</label>
+						<input type="date" class="form-input" name="dob">
+					</div>
+
+					<button type="submit" class="btn-modern btn-primary w-100">
+						<i class="fas fa-user-plus"></i> Sign Up
+					</button>
+				</form>
+
+				<div class="text-center mt-4">
+					<p class="text-secondary">Already have an account?
+						<a href="{% url 'login' %}" class="text-primary fw-bold">Sign in</a>
+					</p>
+					<p class="text-secondary">Admin?
+						<a href="{% url 'login_admin' %}" class="text-primary fw-bold">Go to Admin Login</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

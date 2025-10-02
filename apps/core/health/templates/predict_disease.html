@@ -1,0 +1,292 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block body %}
+
+<!-- Modern Prediction Results -->
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <div class="card-modern fade-in">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fas fa-heartbeat text-primary mb-3"></i>
+                        Heart Disease Prediction Results
+                    </div>
+                    <div class="card-subtitle">AI-powered medical assessment for your heart health</div>
+                </div>
+
+                <!-- Prediction Results -->
+                <div class="text-center mb-5">
+                    <div class="p-5 bg-light rounded">
+                        <h2 class="text-dark mb-4">
+                            <i class="fas fa-clipboard-check text-primary me-3"></i>
+                            Prediction Results
+                        </h2>
+                        <!-- Risk Badge -->
+                        <div class="mb-3">
+                            {% if pred == "0" %}
+                            <span class="badge bg-success" style="font-size:1rem; padding:.6rem 1rem; border-radius:9999px;">Low Risk</span>
+                            {% else %}
+                            <span class="badge bg-danger" style="font-size:1rem; padding:.6rem 1rem; border-radius:9999px;">High Risk</span>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Accuracy Display -->
+                        <div class="mb-4">
+                            <div class="d-inline-block p-3 bg-white rounded shadow-sm">
+                                <h4 class="text-primary mb-2">Prediction Accuracy</h4>
+                                <div class="progress mb-3" style="width: 200px; height: 20px;">
+                                    <div class="progress-bar bg-success" role="progressbar" 
+                                         style="width: {{ accuracy }}%" 
+                                         aria-valuenow="{{ accuracy }}" 
+                                         aria-valuemin="0" aria-valuemax="100">
+                                        {{ accuracy }}%
+                                    </div>
+                                </div>
+                                <p class="text-muted mb-0">Model Confidence Level</p>
+                            </div>
+                        </div>
+
+                        <!-- Chart Placeholder -->
+                        <div class="mb-4">
+                            <div class="card-modern" style="padding:1rem;">
+                                <h6 class="mb-3 text-secondary"><i class="fas fa-chart-pie me-2"></i>Probability Distribution</h6>
+                                <canvas id="probabilityChart" height="140" aria-label="Prediction probability chart" role="img"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Result Display -->
+                        <div class="mb-4">
+                            {% if pred == "0" %}
+                            <div class="p-4 bg-success bg-opacity-10 rounded border border-success">
+                                <i class="fas fa-check-circle text-success fa-3x mb-3"></i>
+                                <h3 class="text-success mb-2">Excellent News!</h3>
+                                <p class="text-success mb-0 fs-5">
+                                    <strong>You are healthy.</strong> Your heart health indicators are within normal ranges.
+                                </p>
+                            </div>
+                            {% else %}
+                            <div class="p-4 bg-danger bg-opacity-10 rounded border border-danger">
+                                <i class="fas fa-exclamation-triangle text-danger fa-3x mb-3"></i>
+                                <h3 class="text-danger mb-2">Risk Assessment</h3>
+                                <p class="text-danger mb-0 fs-5">
+                                    <strong>You may possess a risk of heart disease.</strong> Please consult with a healthcare professional.
+                                </p>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Health Recommendations -->
+                        <div class="mt-4">
+                            {% if pred == "0" %}
+                            <div class="p-3 bg-light rounded">
+                                <h6 class="text-success mb-2">
+                                    <i class="fas fa-thumbs-up me-2"></i>
+                                    Keep Up the Good Work!
+                                </h6>
+                                <p class="text-muted mb-0">
+                                    Continue maintaining your healthy lifestyle with regular exercise and balanced nutrition.
+                                </p>
+                            </div>
+                            {% else %}
+                            <div class="p-3 bg-light rounded">
+                                <h6 class="text-warning mb-2">
+                                    <i class="fas fa-lightbulb me-2"></i>
+                                    Next Steps
+                                </h6>
+                                <p class="text-muted mb-0">
+                                    Schedule an appointment with a cardiologist for a comprehensive evaluation.
+                                </p>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Doctor Recommendations (if risk detected) -->
+                {% if pred != "0" %}
+                <div class="mt-5">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="fas fa-user-md text-primary mb-3"></i>
+                            Recommended Healthcare Professionals
+                        </div>
+                        <div class="card-subtitle">Contact our experienced doctors for consultation</div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table-modern">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <i class="fas fa-hashtag text-white"></i> #
+                                    </th>
+                                    <th>
+                                        <i class="fas fa-image text-white"></i> Photo
+                                    </th>
+                                    <th>
+                                        <i class="fas fa-user text-white"></i> Doctor Name
+                                    </th>
+                                    <th>
+                                        <i class="fas fa-envelope text-white"></i> Email
+                                    </th>
+                                    <th>
+                                        <i class="fas fa-phone text-white"></i> Contact
+                                    </th>
+                                    <th>
+                                        <i class="fas fa-map-marker-alt text-white"></i> Location
+                                    </th>
+                                    <th>
+                                        <i class="fas fa-calendar-plus text-white"></i> Action
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in doctor %}
+                                <tr class="fade-in">
+                                    <td>
+                                        <span class="badge bg-primary rounded-pill">{{ forloop.counter }}</span>
+                                    </td>
+                                    <td>
+                                        <!-- HTML Generated Placeholder for Doctor Image -->
+                                        <div class="doctor-avatar-small" style="
+                                            width: 60px;
+                                            height: 60px;
+                                            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                                            border-radius: 50%;
+                                            display: flex;
+                                            align-items: center;
+                                            justify-content: center;
+                                            color: white;
+                                            font-size: 20px;
+                                            font-weight: bold;
+                                        ">
+                                            👨‍⚕️
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <i class="fas fa-user-md text-primary me-2"></i>
+                                            <span class="fw-bold">{{i.user.first_name}} {{i.user.last_name}}</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <i class="fas fa-envelope text-info me-2"></i>
+                                            <span>{{i.user.email}}</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <i class="fas fa-phone text-success me-2"></i>
+                                            <span>{{i.contact}}</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <i class="fas fa-map-marker-alt text-warning me-2"></i>
+                                            <span>{{i.address}}</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <button class="btn-modern btn-sm btn-outline-primary" 
+                                                    data-bs-toggle="tooltip" 
+                                                    title="Schedule appointment">
+                                                <i class="fas fa-calendar-plus"></i>
+                                            </button>
+                                            <button class="btn-modern btn-sm btn-outline-info" 
+                                                    data-bs-toggle="tooltip" 
+                                                    title="Send message">
+                                                <i class="fas fa-comment"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="7" class="text-center py-5">
+                                        <div class="text-muted">
+                                            <i class="fas fa-user-md fa-3x mb-3"></i>
+                                            <h5>No Doctors Available</h5>
+                                            <p>Please check back later or contact our support team.</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Important Notice -->
+                    <div class="mt-4 p-4 bg-warning bg-opacity-10 rounded border border-warning">
+                        <h6 class="text-warning mb-2">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            Important Notice
+                        </h6>
+                        <p class="text-muted mb-0">
+                            <strong>Disclaimer:</strong> This AI prediction is for screening purposes only and should not replace professional medical diagnosis. 
+                            Always consult with qualified healthcare professionals for medical decisions.
+                        </p>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Action Buttons -->
+                <div class="mt-5 text-center">
+                    <a href="/add_heartdetail/" class="btn-modern btn-primary me-3">
+                        <i class="fas fa-plus"></i> New Prediction
+                    </a>
+                    <a href="/add_heartdetail/" class="btn-modern btn-success me-3">
+                        <i class="fas fa-redo"></i> Try Again
+                    </a>
+                    <a href="/view_search_pat" class="btn-modern btn-secondary me-3">
+                        <i class="fas fa-history"></i> View History
+                    </a>
+                    <a href="/" class="btn-modern btn-outline-primary">
+                        <i class="fas fa-home"></i> Back to Home
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap Tooltip Initialization -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+
+    // Chart.js probability donut
+    try {
+        var ctx = document.getElementById('probabilityChart');
+        if (ctx && window.Chart) {
+            var acc = Number('{{ accuracy|default:0 }}');
+            var data = [Math.max(0, Math.min(100, acc)), Math.max(0, 100 - Math.max(0, Math.min(100, acc)) )];
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Predicted class confidence', 'Other'],
+                    datasets: [{
+                        data: data,
+                        backgroundColor: ['#5A9BC3', '#E8F2F7'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    plugins: { legend: { position: 'bottom' } },
+                    cutout: '65%'
+                }
+            });
+        }
+    } catch (e) { /* noop */ }
+});
+</script>
+
+<!-- Chart.js CDN (only if not already loaded) -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+{% endblock %}

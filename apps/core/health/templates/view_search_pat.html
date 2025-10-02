@@ -1,0 +1,903 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block body %}
+
+<!-- Simple Header Section -->
+<div class="container mt-4 mb-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="page-header text-center">
+                <h1 class="page-title mb-3">
+                    <i class="fas fa-history me-3"></i>
+                    Prediction History
+                </h1>
+                <p class="page-subtitle">View all your heart disease prediction records and results</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content Section -->
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <div class="card-modern">
+                <div class="card-header">
+                    <div class="text-center">
+                        <h2 class="card-title">
+                            <i class="fas fa-database me-3"></i>
+                            Prediction Records
+                        </h2>
+                        <p class="card-subtitle">Overview of your heart health predictions</p>
+                    </div>
+                </div>
+
+                <!-- Enhanced Statistics Cards -->
+                <div class="row mb-5">
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="stat-card fade-in">
+                            <div class="stat-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 class="stat-number">{{ data|length }}</h3>
+                                <p class="stat-label">Total Predictions</p>
+                                <div class="stat-trend">
+                                    <i class="fas fa-database text-primary"></i>
+                                    <span class="text-primary">All Records</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="stat-card fade-in">
+                            <div class="stat-icon">
+                                <i class="fas fa-heartbeat"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 class="stat-number">
+                                {% for i in data %}
+                                    {% if i.result == "0" %}
+                                        {% if forloop.first %}
+                                            {% with healthy_count=0 %}
+                                                {% for j in data %}
+                                                    {% if j.result == "0" %}
+                                                        {% with healthy_count=healthy_count|add:1 %}{% endwith %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                                {{ healthy_count }}
+                                            {% endwith %}
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                                </h3>
+                                <p class="stat-label">Healthy Results</p>
+                                <div class="stat-trend">
+                                    <i class="fas fa-shield-alt text-success"></i>
+                                    <span class="text-success">Good Health</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="stat-card fade-in">
+                            <div class="stat-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 class="stat-number">
+                                {% for i in data %}
+                                    {% if i.result == "1" %}
+                                        {% if forloop.first %}
+                                            {% with unhealthy_count=0 %}
+                                                {% for j in data %}
+                                                    {% if j.result == "1" %}
+                                                        {% with unhealthy_count=unhealthy_count|add:1 %}{% endwith %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                                {{ unhealthy_count }}
+                                            {% endwith %}
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                                </h3>
+                                <p class="stat-label">Risk Detected</p>
+                                <div class="stat-trend">
+                                    <i class="fas fa-user-md text-warning"></i>
+                                    <span class="text-warning">Monitor Closely</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="stat-card fade-in">
+                            <div class="stat-icon">
+                                <i class="fas fa-percentage"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 class="stat-number">
+                                {% if data %}
+                                    {% with total=data|length %}
+                                        {% for i in data %}
+                                            {% if forloop.first %}
+                                                {% with avg_accuracy=0 %}
+                                                    {% for j in data %}
+                                                        {% with avg_accuracy=avg_accuracy|add:j.prediction_accuracy %}{% endwith %}
+                                                    {% endfor %}
+                                                        {{ avg_accuracy|floatformat:1 }}%
+                                                {% endwith %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endwith %}
+                                {% else %}
+                                        0%
+                                {% endif %}
+                                </h3>
+                                <p class="stat-label">Avg. Accuracy</p>
+                                <div class="stat-trend">
+                                    <i class="fas fa-bullseye text-info"></i>
+                                    <span class="text-info">High Precision</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Simple Data Table -->
+                <div class="table-responsive">
+                    <table id="example" class="table-modern">
+                        <thead>
+                            <tr>
+                                <th class="text-center">
+                                    <i class="fas fa-hashtag me-2"></i>
+                                    <span>#</span>
+                                </th>
+                                {% if request.user.patient_set.all.0 %}
+                                <th>
+                                    <i class="fas fa-calendar me-2"></i>
+                                    <span>Date</span>
+                                </th>
+                                {% else %}
+                                <th>
+                                    <i class="fas fa-user me-2"></i>
+                                    <span>Patient Name</span>
+                                </th>
+                                {% endif %}
+                                <th class="text-center">
+                                    <i class="fas fa-percentage me-2"></i>
+                                    <span>Accuracy</span>
+                                </th>
+                                <th class="text-center">
+                                    <i class="fas fa-heart me-2"></i>
+                                    <span>Result</span>
+                                </th>
+                                <th>
+                                    <i class="fas fa-chart-bar me-2"></i>
+                                    <span>Heart Values</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in data %}
+                            <tr class="fade-in">
+                                <td class="text-center">
+                                    <span class="badge bg-primary rounded-pill">{{ forloop.counter }}</span>
+                                </td>
+                                {% if request.user.patient_set.all.0 %}
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-calendar-alt text-primary me-2"></i>
+                                        <span>{{ i.created|date:"M d, Y" }}</span>
+                                    </div>
+                                </td>
+                                {% else %}
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-user-circle text-primary me-2"></i>
+                                        <span>{{ i.patient.user.first_name }} {{ i.patient.user.last_name }}</span>
+                                    </div>
+                                </td>
+                                {% endif %}
+                                <td class="text-center">
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <div class="progress me-2" style="width: 60px; height: 8px;">
+                                            <div class="progress-bar bg-success" role="progressbar" 
+                                                 style="width: {{ i.prediction_accuracy }}%" 
+                                                 aria-valuenow="{{ i.prediction_accuracy }}" 
+                                                 aria-valuemin="0" aria-valuemax="100">
+                                            </div>
+                                        </div>
+                                        <span class="text-dark fw-bold">{{ i.prediction_accuracy }}%</span>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    {% if i.result == "0" %}
+                                    <span class="badge bg-success rounded-pill">
+                                        <i class="fas fa-check-circle me-1"></i> Healthy
+                                    </span>
+                                    {% else %}
+                                    <span class="badge bg-danger rounded-pill">
+                                        <i class="fas fa-exclamation-triangle me-1"></i> Risk Detected
+                                    </span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-chart-bar text-warning me-2"></i>
+                                        <span class="text-truncate" style="max-width: 150px;" title="{{ i.values_list }}">
+                                            {{ i.values_list }}
+                                        </span>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center py-5">
+                                    <div class="empty-state">
+                                        <i class="fas fa-inbox fa-3x mb-3"></i>
+                                        <h5>No Prediction Records Found</h5>
+                                        <p>Start by making your first heart disease prediction!</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="mt-4 p-3 bg-light rounded">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <h6 class="mb-2">
+                                <i class="fas fa-lightbulb text-warning me-2"></i>
+                                Quick Actions
+                            </h6>
+                            <p class="text-muted mb-0">Export your data or make new predictions</p>
+                        </div>
+                        <div class="col-md-6 text-md-end">
+                            <a href="/add_heartdetail/" class="btn-modern btn-primary me-2">
+                                <i class="fas fa-plus"></i> New Prediction
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data Insights -->
+                <div class="mt-4 p-3 bg-light rounded">
+                    <h6 class="mb-3">
+                        <i class="fas fa-chart-pie text-primary me-2"></i>
+                        Data Insights
+                    </h6>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <small class="text-muted">
+                                <i class="fas fa-info-circle text-info me-1"></i>
+                                Your prediction history helps track your heart health over time.
+                            </small>
+                        </div>
+                        <div class="col-md-6 text-md-end">
+                            <small class="text-muted">
+                                <i class="fas fa-shield-alt text-success me-1"></i>
+                                All data is encrypted and secure for your privacy.
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap Tooltip Initialization -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+    
+    // Real-time updates functionality
+    let lastUpdateTime = new Date().toISOString();
+    let isUpdating = false;
+    
+    // Function to update statistics cards
+    function updateStatistics(stats) {
+        // Update total predictions with animation
+        const totalElement = document.querySelector('.stat-number');
+        if (totalElement) {
+            const oldValue = parseInt(totalElement.textContent) || 0;
+            const newValue = stats.total_predictions;
+            
+            if (newValue > oldValue) {
+                // Add highlight effect for increased count
+                totalElement.closest('.stat-card').classList.add('statistics-updated');
+                setTimeout(() => {
+                    totalElement.closest('.stat-card').classList.remove('statistics-updated');
+                }, 2000);
+            }
+            
+            totalElement.textContent = newValue;
+        }
+        
+        // Update healthy count
+        const healthyElement = document.querySelector('.col-lg-3:nth-child(2) .stat-number');
+        if (healthyElement) {
+            healthyElement.textContent = stats.healthy_count;
+        }
+        
+        // Update unhealthy count
+        const unhealthyElement = document.querySelector('.col-lg-3:nth-child(3) .stat-number');
+        if (unhealthyElement) {
+            unhealthyElement.textContent = stats.unhealthy_count;
+        }
+        
+        // Update average accuracy
+        const accuracyElement = document.querySelector('.col-lg-3:nth-child(4) .stat-number');
+        if (accuracyElement) {
+            accuracyElement.textContent = stats.avg_accuracy + '%';
+        }
+    }
+    
+    // Function to add new records to table
+    function addNewRecords(newData) {
+        const tbody = document.querySelector('#example tbody');
+        if (!tbody || !newData.length) return;
+        
+        newData.forEach((record, index) => {
+            // Check if record already exists
+            const existingRow = document.querySelector(`tr[data-record-id="${record.id}"]`);
+            if (existingRow) return;
+            
+            // Create new row
+            const newRow = document.createElement('tr');
+            newRow.setAttribute('data-record-id', record.id);
+            newRow.className = 'fade-in new-record';
+            
+            // Format date
+            const date = new Date(record.created);
+            const formattedDate = date.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric' 
+            });
+            
+            // Get current row count for numbering
+            const currentRows = tbody.querySelectorAll('tr').length;
+            
+            newRow.innerHTML = `
+                <td>
+                    <span class="badge bg-primary rounded-pill">${currentRows + index + 1}</span>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-calendar-alt text-primary me-2"></i>
+                        <span>${formattedDate}</span>
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <div class="progress me-2" style="width: 60px; height: 8px;">
+                            <div class="progress-bar bg-success" role="progressbar" 
+                                 style="width: ${record.prediction_accuracy}%" 
+                                 aria-valuenow="${record.prediction_accuracy}" 
+                                 aria-valuemin="0" aria-valuemax="100">
+                            </div>
+                        </div>
+                        <span class="text-dark fw-bold">${record.prediction_accuracy}%</span>
+                    </div>
+                </td>
+                <td>
+                    ${record.result == "0" ? 
+                        '<span class="badge bg-success rounded-pill"><i class="fas fa-check-circle me-1"></i> Healthy</span>' :
+                        '<span class="badge bg-danger rounded-pill"><i class="fas fa-exclamation-triangle me-1"></i> Risk Detected</span>'
+                    }
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-chart-bar text-warning me-2"></i>
+                        <span class="text-truncate" style="max-width: 150px;" title="${record.values_list}">
+                            ${record.values_list}
+                        </span>
+                    </div>
+                </td>
+            `;
+            
+            // Add to top of table
+            tbody.insertBefore(newRow, tbody.firstChild);
+            
+            // Add highlight effect
+            setTimeout(() => {
+                newRow.classList.add('table-success');
+                setTimeout(() => {
+                    newRow.classList.remove('table-success', 'new-record');
+                }, 3000);
+            }, 100);
+        });
+        
+        // Update row numbers for all rows
+        const allRows = tbody.querySelectorAll('tr');
+        allRows.forEach((row, index) => {
+            const badge = row.querySelector('.badge.bg-primary');
+            if (badge) {
+                badge.textContent = index + 1;
+            }
+        });
+    }
+    
+    // Function to fetch latest data
+    async function fetchLatestData() {
+        if (isUpdating) return;
+        isUpdating = true;
+        
+        try {
+            const response = await fetch(`/api/latest_predictions/?last_update=${encodeURIComponent(lastUpdateTime)}`);
+            const data = await response.json();
+            
+            if (data.data && data.data.length > 0) {
+                // Update statistics
+                updateStatistics(data.statistics);
+                
+                // Add new records
+                addNewRecords(data.data);
+                
+                // Show notification for new records
+                if (data.data.length > 0) {
+                    showNotification(`${data.data.length} new prediction${data.data.length > 1 ? 's' : ''} added!`);
+                }
+            }
+            
+            // Update last update time
+            lastUpdateTime = data.last_update;
+            
+        } catch (error) {
+            console.error('Error fetching latest data:', error);
+        } finally {
+            isUpdating = false;
+        }
+    }
+    
+    // Function to show notification
+    function showNotification(message) {
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.className = 'alert alert-success alert-dismissible fade show position-fixed';
+        notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+        notification.innerHTML = `
+            <i class="fas fa-bell me-2"></i>
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.remove();
+            }
+        }, 5000);
+    }
+    
+    // Start real-time updates
+    setInterval(fetchLatestData, 5000); // Check every 5 seconds
+});
+
+// Enhanced CSS matching the design system
+const style = document.createElement('style');
+style.textContent = `
+    /* Enhanced Page Header */
+    .page-header {
+        background: var(--gradient-primary);
+        border-radius: 20px;
+        padding: 3rem 2rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--shadow-medium);
+        border: 1px solid var(--border-light);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .page-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="rgba(90,155,195,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23dots)"/></svg>');
+        opacity: 0.5;
+    }
+    
+    .page-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 1rem;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .page-subtitle {
+        color: var(--text-secondary);
+        font-size: 1.2rem;
+        font-weight: 400;
+        position: relative;
+        z-index: 2;
+    }
+    
+    /* Enhanced Card Styling */
+    .card-modern {
+        background: var(--bg-card);
+        border-radius: 20px;
+        box-shadow: var(--shadow-medium);
+        border: 1px solid var(--border-light);
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+    
+    .card-modern:hover {
+        box-shadow: var(--shadow-dark);
+        transform: translateY(-2px);
+    }
+    
+    .card-header {
+        background: var(--gradient-secondary);
+        border-bottom: 1px solid var(--border-light);
+        padding: 2rem;
+    }
+    
+    .card-title {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+    }
+    
+    .card-subtitle {
+        color: var(--text-secondary);
+        font-size: 1rem;
+        margin: 0;
+    }
+    
+    /* Enhanced Statistics Cards */
+    .stat-card {
+        background: var(--bg-card);
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: var(--shadow-light);
+        border: 1px solid var(--border-light);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        height: 100%;
+    }
+    
+    .stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: var(--gradient-primary);
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-medium);
+    }
+    
+    .stat-icon {
+        width: 70px;
+        height: 70px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+        font-size: 1.8rem;
+        color: white;
+        background: var(--gradient-primary);
+        box-shadow: var(--shadow-light);
+    }
+    
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+        line-height: 1;
+    }
+    
+    .stat-label {
+        color: var(--text-secondary);
+        font-size: 1rem;
+        font-weight: 500;
+        margin-bottom: 1rem;
+    }
+    
+    .stat-trend {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+    
+    /* Enhanced Table Styling */
+    .table-modern {
+        background: var(--bg-card);
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: var(--shadow-light);
+        border: 1px solid var(--border-light);
+    }
+    
+    .table-modern thead {
+        background: var(--gradient-primary);
+        color: white;
+    }
+    
+    .table-modern thead th {
+        border: none;
+        padding: 1.5rem 1rem;
+        font-weight: 600;
+        font-size: 0.95rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: white;
+        text-align: center;
+        vertical-align: middle;
+    }
+    
+    .table-modern thead th i {
+        color: white;
+        margin-right: 0.5rem;
+    }
+    
+    .table-modern thead th span {
+        color: white;
+    }
+    
+    .table-modern tbody tr {
+        transition: all 0.3s ease;
+        border-bottom: 1px solid var(--border-light);
+    }
+    
+    .table-modern tbody tr:hover {
+        background: var(--bg-tertiary);
+        transform: scale(1.01);
+    }
+    
+    .table-modern tbody td {
+        padding: 1.25rem 1rem;
+        vertical-align: middle;
+        border: none;
+    }
+    
+    /* Enhanced Badge Styling */
+    .badge {
+        font-weight: 500;
+        padding: 0.5rem 1rem;
+        border-radius: 25px;
+        font-size: 0.85rem;
+    }
+    
+    .badge.bg-primary {
+        background: var(--gradient-primary) !important;
+        color: white;
+    }
+    
+    .badge.bg-success {
+        background: linear-gradient(135deg, #28a745, #20c997) !important;
+        color: white;
+    }
+    
+    .badge.bg-danger {
+        background: linear-gradient(135deg, #dc3545, #c82333) !important;
+        color: white;
+    }
+    
+    /* Enhanced Progress Bar */
+    .progress {
+        height: 8px;
+        border-radius: 10px;
+        background: var(--bg-tertiary);
+        overflow: hidden;
+    }
+    
+    .progress-bar {
+        background: var(--gradient-primary);
+        border-radius: 10px;
+        transition: width 0.6s ease;
+    }
+    
+    /* Enhanced Empty State */
+    .empty-state {
+        background: var(--bg-tertiary);
+        border-radius: 15px;
+        padding: 3rem 2rem;
+        text-align: center;
+        border: 2px dashed var(--border-color);
+    }
+    
+    .empty-state i {
+        color: var(--text-muted);
+        margin-bottom: 1rem;
+    }
+    
+    .empty-state h5 {
+        color: var(--text-primary);
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+    
+    .empty-state p {
+        color: var(--text-secondary);
+        margin-bottom: 1.5rem;
+    }
+    
+    /* Enhanced Button Styling */
+    .btn-modern {
+        background: var(--gradient-primary);
+        border: none;
+        border-radius: 25px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        color: white;
+        transition: all 0.3s ease;
+        box-shadow: var(--shadow-light);
+    }
+    
+    .btn-modern:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-medium);
+        color: white;
+    }
+    
+    .btn-modern.btn-primary {
+        background: var(--gradient-primary);
+    }
+    
+    .btn-modern.btn-primary:hover {
+        background: var(--primary-hover);
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .page-header {
+            padding: 2rem 1rem;
+        }
+        
+        .page-title {
+            font-size: 2rem;
+        }
+        
+        .page-subtitle {
+            font-size: 1rem;
+        }
+        
+        .card-header {
+            padding: 1.5rem;
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+        }
+        
+        .stat-card {
+            padding: 1.5rem;
+        }
+        
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            font-size: 1.5rem;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+        }
+        
+        .table-modern thead th {
+            padding: 1rem 0.5rem;
+            font-size: 0.85rem;
+        }
+        
+        .table-modern tbody td {
+            padding: 1rem 0.5rem;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .page-header {
+            padding: 1.5rem 1rem;
+        }
+        
+        .page-title {
+            font-size: 1.8rem;
+        }
+        
+        .stat-card {
+            padding: 1rem;
+        }
+        
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            font-size: 1.2rem;
+        }
+        
+        .stat-number {
+            font-size: 1.8rem;
+        }
+        
+        .table-modern thead th {
+            padding: 0.75rem 0.25rem;
+            font-size: 0.8rem;
+        }
+        
+        .table-modern tbody td {
+            padding: 0.75rem 0.25rem;
+        }
+    }
+    
+    /* Animation Enhancements */
+    .fade-in {
+        animation: fadeInUp 0.6s ease-out;
+    }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    /* Smooth Transitions */
+    * {
+        transition: all 0.3s ease;
+    }
+    
+    /* Real-time Update Animations */
+    .new-record {
+        animation: slideInFromTop 0.5s ease-out;
+    }
+    
+    @keyframes slideInFromTop {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .table-success {
+        background-color: rgba(25, 135, 84, 0.1) !important;
+        transition: background-color 0.3s ease;
+    }
+    
+    .statistics-updated {
+        background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%) !important;
+        border: 2px solid #28a745 !important;
+        animation: pulse 1s ease-in-out;
+    }
+    
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+`;
+document.head.appendChild(style);
+</script>
+
+{% endblock %}

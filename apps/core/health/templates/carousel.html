@@ -1,0 +1,95 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block body %}
+<!-- Hero Carousel Section -->
+<section class="hero-carousel">
+    <div class="container-fluid p-0">
+        <div class="carousel-item active">
+            <!-- HTML Generated Placeholder for Heart Image -->
+            <div class="placeholder-hero" style="
+                width: 100%;
+                height: 550px;
+                background: var(--gradient-primary);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                text-align: center;
+                position: relative;
+                overflow: hidden;
+            ">
+                <!-- Animated Background Elements -->
+                <div style="
+                    position: absolute;
+                    top: 20%;
+                    left: 10%;
+                    width: 100px;
+                    height: 100px;
+                    background: rgba(255,255,255,0.1);
+                    border-radius: 50%;
+                    animation: float 3s ease-in-out infinite;
+                "></div>
+                <div style="
+                    position: absolute;
+                    top: 60%;
+                    right: 15%;
+                    width: 80px;
+                    height: 80px;
+                    background: rgba(255,255,255,0.1);
+                    border-radius: 50%;
+                    animation: float 3s ease-in-out infinite 1s;
+                "></div>
+                
+                <div class="hero-content">
+                    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 20px;">
+                        <h1 style="font-size: 48px; font-weight: 800; color: #ffffff; text-shadow: 0 2px 12px rgba(0,0,0,.25); margin: 0 0 20px 0;">
+                            Heart Disease Prediction
+                        </h1>
+                        <img src="{% static 'images/heart-favicon.svg' %}" alt="Heart Logo" style="width:84px;height:84px;display:inline-block;border-radius:14px;box-shadow:0 8px 22px rgba(0,0,0,.18)">
+                    </div>
+                    <center><p style="font-size: 22px; margin-bottom: 30px; color: #f2f6fb; text-shadow: 0 1px 8px rgba(0,0,0,.2);">
+                        Advanced Machine Learning for Heart Health
+                    </p></center>
+                    <div class="hero-buttons">
+                        <a href="{% url 'add_heartdetail' %}" class="btn-modern btn-primary me-3">
+                            <i class="fas fa-heartbeat"></i> Get Prediction
+                        </a>
+                        <a href="{% url 'about' %}" class="btn-modern btn-secondary">
+                            <i class="fas fa-info-circle"></i> Learn More
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+}
+
+.hero-carousel {
+    margin-bottom: 50px;
+}
+
+.hero-content {
+    z-index: 2;
+    position: relative;
+}
+
+.hero-buttons .btn {
+    padding: 12px 30px;
+    font-weight: 600;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+}
+
+.hero-buttons .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+</style>
+{% endblock %}

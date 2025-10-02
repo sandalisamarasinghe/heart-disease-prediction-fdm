@@ -1,0 +1,1 @@
+# No longer needed since Doctor model is removed

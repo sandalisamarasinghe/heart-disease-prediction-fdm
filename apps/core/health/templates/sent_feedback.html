@@ -1,0 +1,185 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block body %}
+{% if terror == "create" %}
+<script>
+    alert('Send Feedback Successfully');
+    window.location="{% url 'sent_feedback' %}";
+</script>
+{% endif %}
+
+<div class="feedback-hero">
+    <div class="container">
+        <div class="feedback-header text-center">
+            <div class="feedback-icon">
+                <i class="fas fa-comments"></i>
+            </div>
+            <h1 class="feedback-title">Share Your Experience</h1>
+            <p class="feedback-subtitle">Help us improve our Heart Disease Prediction System with your valuable feedback</p>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="feedback-card">
+                <div class="feedback-card-header">
+                    <h3><i class="fas fa-edit"></i> Send Feedback</h3>
+                    <p>Your opinion matters to us. Please share your thoughts about our system.</p>
+                </div>
+                
+                <form action="" method="post" enctype="multipart/form-data" class="feedback-form">
+                    {% csrf_token %}
+                    
+                    <!-- User Information -->
+                    <div class="form-section">
+                        <h4><i class="fas fa-user"></i> User Information</h4>
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" class="form-control feedback-input" id="username" name="uname" value="{{request.user.username}}" required readonly>
+                        </div>
+                    </div>
+                    
+                    <!-- Feedback Type -->
+                    <div class="form-section">
+                        <h4><i class="fas fa-tags"></i> Feedback Category</h4>
+                        <div class="feedback-options">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="feedback_type" id="general" value="general" checked>
+                                <label class="form-check-label" for="general">
+                                    <i class="fas fa-info-circle"></i> General Feedback
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="feedback_type" id="bug" value="bug">
+                                <label class="form-check-label" for="bug">
+                                    <i class="fas fa-bug"></i> Bug Report
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="feedback_type" id="feature" value="feature">
+                                <label class="form-check-label" for="feature">
+                                    <i class="fas fa-lightbulb"></i> Feature Request
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="feedback_type" id="improvement" value="improvement">
+                                <label class="form-check-label" for="improvement">
+                                    <i class="fas fa-chart-line"></i> Improvement Suggestion
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Rating System -->
+                    <div class="form-section">
+                        <h4><i class="fas fa-star"></i> Overall Rating</h4>
+                        <div class="rating-container">
+                            <div class="stars">
+                                <input type="radio" name="rating" value="5" id="star5">
+                                <label for="star5"><i class="fas fa-star"></i></label>
+                                <input type="radio" name="rating" value="4" id="star4">
+                                <label for="star4"><i class="fas fa-star"></i></label>
+                                <input type="radio" name="rating" value="3" id="star3">
+                                <label for="star3"><i class="fas fa-star"></i></label>
+                                <input type="radio" name="rating" value="2" id="star2">
+                                <label for="star2"><i class="fas fa-star"></i></label>
+                                <input type="radio" name="rating" value="1" id="star1">
+                                <label for="star1"><i class="fas fa-star"></i></label>
+                            </div>
+                            <p class="rating-text">Click to rate your experience</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Specific Areas -->
+                    <div class="form-section">
+                        <h4><i class="fas fa-check-square"></i> Rate Specific Areas</h4>
+                        <div class="rating-areas">
+                            <div class="rating-area">
+                                <label>User Interface</label>
+                                <div class="mini-stars">
+                                    <input type="radio" name="ui_rating" value="5" id="ui5">
+                                    <label for="ui5"><i class="fas fa-star"></i></label>
+                                    <input type="radio" name="ui_rating" value="4" id="ui4">
+                                    <label for="ui4"><i class="fas fa-star"></i></label>
+                                    <input type="radio" name="ui_rating" value="3" id="ui3">
+                                    <label for="ui3"><i class="fas fa-star"></i></label>
+                                    <input type="radio" name="ui_rating" value="2" id="ui2">
+                                    <label for="ui2"><i class="fas fa-star"></i></label>
+                                    <input type="radio" name="ui_rating" value="1" id="ui1">
+                                    <label for="ui1"><i class="fas fa-star"></i></label>
+                                </div>
+                            </div>
+                            
+                            <div class="rating-area">
+                                <label>Prediction Accuracy</label>
+                                <div class="mini-stars">
+                                    <input type="radio" name="accuracy_rating" value="5" id="acc5">
+                                    <label for="acc5"><i class="fas fa-star"></i></label>
+                                    <input type="radio" name="accuracy_rating" value="4" id="acc4">
+                                    <label for="acc4"><i class="fas fa-star"></i></label>
+                                    <input type="radio" name="accuracy_rating" value="3" id="acc3">
+                                    <label for="acc3"><i class="fas fa-star"></i></label>
+                                    <input type="radio" name="accuracy_rating" value="2" id="acc2">
+                                    <label for="acc2"><i class="fas fa-star"></i></label>
+                                    <input type="radio" name="accuracy_rating" value="1" id="acc1">
+                                    <label for="acc1"><i class="fas fa-star"></i></label>
+                                </div>
+                            </div>
+                            
+                            <div class="rating-area">
+                                <label>Ease of Use</label>
+                                <div class="mini-stars">
+                                    <input type="radio" name="ease_rating" value="5" id="ease5">
+                                    <label for="ease5"><i class="fas fa-star"></i></label>
+                                    <input type="radio" name="ease_rating" value="4" id="ease4">
+                                    <label for="ease4"><i class="fas fa-star"></i></label>
+                                    <input type="radio" name="ease_rating" value="3" id="ease3">
+                                    <label for="ease3"><i class="fas fa-star"></i></label>
+                                    <input type="radio" name="ease_rating" value="2" id="ease2">
+                                    <label for="ease2"><i class="fas fa-star"></i></label>
+                                    <input type="radio" name="ease_rating" value="1" id="ease1">
+                                    <label for="ease1"><i class="fas fa-star"></i></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Message -->
+                    <div class="form-section">
+                        <h4><i class="fas fa-comment"></i> Your Message</h4>
+                        <div class="form-group">
+                            <label for="message">Detailed Feedback</label>
+                            <textarea class="form-control feedback-textarea" id="message" name="msg" placeholder="Please share your detailed feedback, suggestions, or report any issues you've encountered..." required rows="5"></textarea>
+                            <small class="form-text">Be as detailed as possible to help us improve our system.</small>
+                        </div>
+                    </div>
+                    
+                    <!-- Contact Preference -->
+                    <div class="form-section">
+                        <h4><i class="fas fa-envelope"></i> Contact Preferences</h4>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="contact_me" name="contact_me">
+                            <label class="form-check-label" for="contact_me">
+                                I would like to be contacted for follow-up questions about my feedback
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Submit Button -->
+                    <div class="form-actions">
+                        <button type="submit" class="btn-modern btn-primary">
+                            <i class="fas fa-paper-plane"></i> Send Feedback
+                        </button>
+                        <a href="{% url 'patient_home' %}" class="btn-modern btn-secondary">
+                            <i class="fas fa-times"></i> Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

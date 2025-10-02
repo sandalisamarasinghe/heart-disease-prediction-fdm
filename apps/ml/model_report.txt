@@ -1,0 +1,168 @@
+================================================================================
+ENHANCED HEART DISEASE PREDICTION MODEL REPORT
+================================================================================
+
+Training Date: 2025-10-02 06:23:26
+Total Training Time: 1214.78 seconds
+Best Model: logistic_regression
+Best Accuracy: 0.5127 (51.27%)
+
+MODEL PERFORMANCE SUMMARY
+----------------------------------------
+1. EXTRA_TREES
+   Test Accuracy: 0.5140 (51.40%)
+   CV Score: 0.5081
+   Precision: 0.5140
+   Recall: 0.5140
+   F1-Score: 0.5159
+   ROC AUC: 0.5214
+
+2. RANDOM_FOREST
+   Test Accuracy: 0.5130 (51.30%)
+   CV Score: 0.5115
+   Precision: 0.5130
+   Recall: 0.5130
+   F1-Score: 0.5096
+   ROC AUC: 0.5151
+
+3. GRADIENT_BOOSTING
+   Test Accuracy: 0.5080 (50.80%)
+   CV Score: 0.5055
+   Precision: 0.5080
+   Recall: 0.5080
+   F1-Score: 0.5090
+   ROC AUC: 0.5044
+
+4. KNN
+   Test Accuracy: 0.5045 (50.45%)
+   CV Score: 0.5086
+   Precision: 0.5045
+   Recall: 0.5045
+   F1-Score: 0.5057
+   ROC AUC: 0.5041
+
+5. NEURAL_NETWORK
+   Test Accuracy: 0.5030 (50.30%)
+   CV Score: 0.5104
+   Precision: 0.5069
+   Recall: 0.5030
+   F1-Score: 0.6294
+   ROC AUC: 0.4949
+
+6. LIGHTGBM
+   Test Accuracy: 0.5025 (50.25%)
+   CV Score: 0.5075
+   Precision: 0.5025
+   Recall: 0.5025
+   F1-Score: 0.5027
+   ROC AUC: 0.5057
+
+7. LOGISTIC_REGRESSION
+   Test Accuracy: 0.4955 (49.55%)
+   CV Score: 0.5127
+   Precision: 0.4955
+   Recall: 0.4955
+   F1-Score: 0.5085
+   ROC AUC: 0.4981
+
+8. XGBOOST
+   Test Accuracy: 0.4920 (49.20%)
+   CV Score: 0.5105
+   Precision: 0.4920
+   Recall: 0.4920
+   F1-Score: 0.5049
+   ROC AUC: 0.4939
+
+9. SVM
+   Test Accuracy: 0.4905 (49.05%)
+   CV Score: 0.5110
+   Precision: 0.4902
+   Recall: 0.4905
+   F1-Score: 0.5441
+   ROC AUC: 0.5007
+
+DETAILED EVALUATION METRICS
+----------------------------------------
+
+RANDOM_FOREST:
+  accuracy: 0.513
+  f1_score: 0.5095669687814703
+  precision: 0.5129915587844649
+  recall: 0.513
+  roc_auc: 0.5150520602082409
+  cv_score: 0.5115
+
+GRADIENT_BOOSTING:
+  accuracy: 0.508
+  f1_score: 0.5089820359281437
+  precision: 0.5080083843018349
+  recall: 0.508
+  roc_auc: 0.5043620174480699
+  cv_score: 0.5055
+
+LOGISTIC_REGRESSION:
+  accuracy: 0.4955
+  f1_score: 0.5085241110569898
+  precision: 0.49554302264349653
+  recall: 0.4955
+  roc_auc: 0.49808199232796935
+  cv_score: 0.5127499999999999
+
+SVM:
+  accuracy: 0.4905
+  f1_score: 0.5440715883668904
+  precision: 0.49018309104066304
+  recall: 0.4905
+  roc_auc: 0.5007205028820115
+  cv_score: 0.511
+
+NEURAL_NETWORK:
+  accuracy: 0.503
+  f1_score: 0.6293810589112603
+  precision: 0.5069344087314712
+  recall: 0.503
+  roc_auc: 0.4949479797919192
+  cv_score: 0.510375
+
+EXTRA_TREES:
+  accuracy: 0.514
+  f1_score: 0.5159362549800797
+  precision: 0.5140136813681367
+  recall: 0.514
+  roc_auc: 0.521377085508342
+  cv_score: 0.5081249999999999
+
+KNN:
+  accuracy: 0.5045
+  f1_score: 0.5057356608478804
+  precision: 0.5045092839549138
+  recall: 0.5045
+  roc_auc: 0.504058516234065
+  cv_score: 0.508625
+
+XGBOOST:
+  accuracy: 0.492
+  f1_score: 0.5048732943469786
+  precision: 0.4920319010233842
+  recall: 0.492
+  roc_auc: 0.493935975743903
+  cv_score: 0.5105000000000001
+
+LIGHTGBM:
+  accuracy: 0.5025
+  f1_score: 0.5027486256871564
+  precision: 0.5025050375453379
+  recall: 0.5025
+  roc_auc: 0.5056590226360905
+  cv_score: 0.5075000000000001
+
+FEATURE INFORMATION
+----------------------------------------
+Total Features: 16
+Features: age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal, bmi, smoking_status, alcohol_use
+
+MODEL RECOMMENDATIONS
+----------------------------------------
+⚠ Poor model performance (<80% accuracy)
+  Recommend data quality review and feature engineering
+✓ Good generalization (CV and Test scores aligned)
