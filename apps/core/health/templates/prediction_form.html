@@ -34,12 +34,20 @@
                             <form method="POST" novalidate>
                                 {% csrf_token %}
                                 
+                                <!-- SECTION 1: BASIC INFORMATION -->
+                                <div class="section-header">
+                                    <h4 class="section-title">
+                                        <i class="fas fa-user text-primary me-2"></i>
+                                        Basic Information
+                                    </h4>
+                                    <p class="section-description">Personal details and lifestyle factors</p>
+                                </div>
+                                
                                 <div class="row">
                                     <!-- Age -->
                                     <div class="col-md-6 mb-3">
                                         <label for="age" class="form-label">Age *</label>
-                                        <input type="number" class="form-control" id="age" name="age" required min="18" max="100" placeholder="18 - 100" data-bs-toggle="tooltip" title="Age of the patient in years">
-                                        <div class="invalid-feedback">Please enter a valid age between 18-100.</div>
+                                        <input type="number" class="form-control {% if missing_fields and 'age' in missing_fields %}is-invalid{% endif %}" id="age" name="age" required min="18" max="100" placeholder="18 - 100" data-bs-toggle="tooltip" title="Age of the patient in years" value="{{ form_data.age|default:'' }}">
                                         <div class="input-description">
                                             <i class="fas fa-info-circle text-info me-1"></i>
                                             <strong>What is this?</strong> Your age in years. Heart disease risk increases with age, especially after 50 years old.
@@ -49,12 +57,11 @@
                                     <!-- Gender -->
                                     <div class="col-md-6 mb-3">
                                         <label for="sex" class="form-label">Gender *</label>
-                                        <select class="form-select" id="sex" name="sex" required data-bs-toggle="tooltip" title="Select your biological sex">
+                                        <select class="form-select {% if missing_fields and 'sex' in missing_fields %}is-invalid{% endif %}" id="sex" name="sex" required data-bs-toggle="tooltip" title="Select your biological sex">
                                             <option value="">Select Gender</option>
-                                            <option value="Male">Male</option>
-                                            <option value="Female">Female</option>
+                                            <option value="Male" {% if form_data.sex == 'Male' %}selected{% endif %}>Male</option>
+                                            <option value="Female" {% if form_data.sex == 'Female' %}selected{% endif %}>Female</option>
                                         </select>
-                                        <div class="invalid-feedback">Please select your gender.</div>
                                         <div class="input-description">
                                             <i class="fas fa-info-circle text-info me-1"></i>
                                             <strong>What is this?</strong> Your biological sex. Males generally have higher risk of heart disease than females.
@@ -63,17 +70,73 @@
                                 </div>
 
                                 <div class="row">
+                                    <!-- BMI -->
+                                    <div class="col-md-6 mb-3">
+                                        <label for="bmi" class="form-label">BMI (Body Mass Index) *</label>
+                                        <input type="number" class="form-control {% if missing_fields and 'bmi' in missing_fields %}is-invalid{% endif %}" id="bmi" name="bmi" required step="0.1" min="15" max="50" placeholder="18.5 - 40.0" data-bs-toggle="tooltip" title="Body Mass Index" value="{{ form_data.bmi|default:'' }}">
+                                        <div class="input-description">
+                                            <i class="fas fa-info-circle text-info me-1"></i>
+                                            <strong>What is this?</strong> BMI = weight(kg) / height(m)². 
+                                            Normal: 18.5-24.9, Overweight: 25-29.9, Obese: ≥30
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Smoking Status -->
+                                    <div class="col-md-6 mb-3">
+                                        <label for="smoking_status" class="form-label">Smoking Status *</label>
+                                        <select class="form-select {% if missing_fields and 'smoking_status' in missing_fields %}is-invalid{% endif %}" id="smoking_status" name="smoking_status" required data-bs-toggle="tooltip" title="Your smoking history">
+                                            <option value="">Select Status</option>
+                                            <option value="0" {% if form_data.smoking_status == '0' %}selected{% endif %}>Non-smoker</option>
+                                            <option value="1" {% if form_data.smoking_status == '1' %}selected{% endif %}>Former smoker</option>
+                                            <option value="2" {% if form_data.smoking_status == '2' %}selected{% endif %}>Current smoker</option>
+                                        </select>
+                                        <div class="input-description">
+                                            <i class="fas fa-info-circle text-info me-1"></i>
+                                            <strong>What is this?</strong> Smoking is a major risk factor for heart disease. 
+                                            Current smokers have the highest risk.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <!-- Alcohol Use -->
+                                    <div class="col-md-6 mb-3">
+                                        <label for="alcohol_use" class="form-label">Alcohol Use *</label>
+                                        <select class="form-select {% if missing_fields and 'alcohol_use' in missing_fields %}is-invalid{% endif %}" id="alcohol_use" name="alcohol_use" required data-bs-toggle="tooltip" title="Your alcohol consumption pattern">
+                                            <option value="">Select Usage</option>
+                                            <option value="0" {% if form_data.alcohol_use == '0' %}selected{% endif %}>None</option>
+                                            <option value="1" {% if form_data.alcohol_use == '1' %}selected{% endif %}>Light (1-7 drinks/week)</option>
+                                            <option value="2" {% if form_data.alcohol_use == '2' %}selected{% endif %}>Moderate (8-14 drinks/week)</option>
+                                            <option value="3" {% if form_data.alcohol_use == '3' %}selected{% endif %}>Heavy (15+ drinks/week)</option>
+                                        </select>
+                                        <div class="input-description">
+                                            <i class="fas fa-info-circle text-info me-1"></i>
+                                            <strong>What is this?</strong> Alcohol consumption pattern affects heart health. 
+                                            Heavy drinking increases heart disease risk, while light consumption may have protective effects.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- SECTION 2: SYMPTOMS & PAIN -->
+                                <div class="section-header mt-4">
+                                    <h4 class="section-title">
+                                        <i class="fas fa-heartbeat text-danger me-2"></i>
+                                        Symptoms & Pain Assessment
+                                    </h4>
+                                    <p class="section-description">Chest pain and exercise-related symptoms</p>
+                                </div>
+
+                                <div class="row">
                                     <!-- Chest Pain Type -->
                                     <div class="col-md-6 mb-3">
                                         <label for="cp" class="form-label">Chest Pain Type *</label>
-                                        <select class="form-select" id="cp" name="cp" required data-bs-toggle="tooltip" title="Type of chest pain experienced">
+                                        <select class="form-select {% if missing_fields and 'cp' in missing_fields %}is-invalid{% endif %}" id="cp" name="cp" required data-bs-toggle="tooltip" title="Type of chest pain experienced">
                                             <option value="">Select Type</option>
-                                            <option value="0">Typical Angina</option>
-                                            <option value="1">Atypical Angina</option>
-                                            <option value="2">Non-anginal Pain</option>
-                                            <option value="3">Asymptomatic</option>
+                                            <option value="0" {% if form_data.cp == '0' %}selected{% endif %}>Typical Angina</option>
+                                            <option value="1" {% if form_data.cp == '1' %}selected{% endif %}>Atypical Angina</option>
+                                            <option value="2" {% if form_data.cp == '2' %}selected{% endif %}>Non-anginal Pain</option>
+                                            <option value="3" {% if form_data.cp == '3' %}selected{% endif %}>Asymptomatic</option>
                                         </select>
-                                        <div class="invalid-feedback">Please select chest pain type.</div>
                                         <div class="input-description">
                                             <i class="fas fa-info-circle text-info me-1"></i>
                                             <strong>What is this?</strong> Type of chest pain you experience:
@@ -86,25 +149,69 @@
                                         </div>
                                     </div>
                                     
+                                    <!-- Exercise Angina -->
+                                    <div class="col-md-6 mb-3">
+                                        <label for="exang" class="form-label">Exercise Angina *</label>
+                                        <select class="form-select {% if missing_fields and 'exang' in missing_fields %}is-invalid{% endif %}" id="exang" name="exang" required data-bs-toggle="tooltip" title="Exercise induced angina">
+                                            <option value="">Select Status</option>
+                                            <option value="No" {% if form_data.exang == 'No' %}selected{% endif %}>No</option>
+                                            <option value="Yes" {% if form_data.exang == 'Yes' %}selected{% endif %}>Yes</option>
+                                        </select>
+                                        <div class="input-description">
+                                            <i class="fas fa-info-circle text-info me-1"></i>
+                                            <strong>What is this?</strong> Do you experience chest pain, pressure, or discomfort during physical activity or exercise? 
+                                            This is a warning sign that your heart may not be getting enough blood flow during exertion.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- SECTION 3: VITAL SIGNS & MEASUREMENTS -->
+                                <div class="section-header mt-4">
+                                    <h4 class="section-title">
+                                        <i class="fas fa-stethoscope text-success me-2"></i>
+                                        Vital Signs & Measurements
+                                    </h4>
+                                    <p class="section-description">Blood pressure, heart rate, and physical measurements</p>
+                                </div>
+
+                                <div class="row">
                                     <!-- Resting Blood Pressure -->
                                     <div class="col-md-6 mb-3">
                                         <label for="trestbps" class="form-label">Resting BP (mmHg) *</label>
-                                        <input type="number" class="form-control" id="trestbps" name="trestbps" required min="90" max="200" placeholder="90 - 200" data-bs-toggle="tooltip" title="Resting blood pressure in mmHg">
-                                        <div class="invalid-feedback">Please enter valid blood pressure (90-200 mmHg).</div>
+                                        <input type="number" class="form-control {% if missing_fields and 'trestbps' in missing_fields %}is-invalid{% endif %}" id="trestbps" name="trestbps" required min="90" max="200" placeholder="90 - 200" data-bs-toggle="tooltip" title="Resting blood pressure in mmHg" value="{{ form_data.trestbps|default:'' }}">
                                         <div class="input-description">
                                             <i class="fas fa-info-circle text-info me-1"></i>
                                             <strong>What is this?</strong> Your blood pressure when you are at rest (not exercising). 
                                             Normal: <120 mmHg, High: >140 mmHg. This measures the force of blood against artery walls.
                                         </div>
                                     </div>
+                                    
+                                    <!-- Max Heart Rate -->
+                                    <div class="col-md-6 mb-3">
+                                        <label for="thalach" class="form-label">Max Heart Rate *</label>
+                                        <input type="number" class="form-control {% if missing_fields and 'thalach' in missing_fields %}is-invalid{% endif %}" id="thalach" name="thalach" required min="60" max="202" placeholder="60 - 202" data-bs-toggle="tooltip" title="Maximum heart rate achieved during exercise" value="{{ form_data.thalach|default:'' }}">
+                                        <div class="input-description">
+                                            <i class="fas fa-info-circle text-info me-1"></i>
+                                            <strong>What is this?</strong> The highest number of heartbeats per minute you reached during a stress test or exercise. 
+                                            Normal range: 100-180 bpm depending on age and fitness level.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- SECTION 4: BLOOD TESTS & LAB RESULTS -->
+                                <div class="section-header mt-4">
+                                    <h4 class="section-title">
+                                        <i class="fas fa-vial text-warning me-2"></i>
+                                        Blood Tests & Lab Results
+                                    </h4>
+                                    <p class="section-description">Cholesterol, blood sugar, and blood vessel conditions</p>
                                 </div>
 
                                 <div class="row">
                                     <!-- Cholesterol -->
                                     <div class="col-md-6 mb-3">
                                         <label for="chol" class="form-label">Cholesterol (mg/dl) *</label>
-                                        <input type="number" class="form-control" id="chol" name="chol" required min="100" max="600" placeholder="100 - 600" data-bs-toggle="tooltip" title="Serum cholesterol in mg/dl">
-                                        <div class="invalid-feedback">Please enter valid cholesterol level (100-600 mg/dl).</div>
+                                        <input type="number" class="form-control {% if missing_fields and 'chol' in missing_fields %}is-invalid{% endif %}" id="chol" name="chol" required min="100" max="600" placeholder="100 - 600" data-bs-toggle="tooltip" title="Serum cholesterol in mg/dl" value="{{ form_data.chol|default:'' }}">
                                         <div class="input-description">
                                             <i class="fas fa-info-circle text-info me-1"></i>
                                             <strong>What is this?</strong> Total cholesterol level in your blood. 
@@ -115,12 +222,11 @@
                                     <!-- Fasting Blood Sugar -->
                                     <div class="col-md-6 mb-3">
                                         <label for="fbs" class="form-label">Fasting Blood Sugar *</label>
-                                        <select class="form-select" id="fbs" name="fbs" required data-bs-toggle="tooltip" title=">= 120 mg/dl considered high">
+                                        <select class="form-select {% if missing_fields and 'fbs' in missing_fields %}is-invalid{% endif %}" id="fbs" name="fbs" required data-bs-toggle="tooltip" title=">= 120 mg/dl considered high">
                                             <option value="">Select Status</option>
                                             <option value="No">Normal (< 120 mg/dl)</option>
                                             <option value="Yes">High (≥ 120 mg/dl)</option>
                                         </select>
-                                        <div class="invalid-feedback">Please select blood sugar status.</div>
                                         <div class="input-description">
                                             <i class="fas fa-info-circle text-info me-1"></i>
                                             <strong>What is this?</strong> Your blood sugar level after 8+ hours of fasting (not eating). 
@@ -130,16 +236,64 @@
                                 </div>
 
                                 <div class="row">
+                                    <!-- Major Vessels -->
+                                    <div class="col-md-6 mb-3">
+                                        <label for="ca" class="form-label">Major Vessels *</label>
+                                        <select class="form-select {% if missing_fields and 'ca' in missing_fields %}is-invalid{% endif %}" id="ca" name="ca" required data-bs-toggle="tooltip" title="Number of major vessels colored by fluoroscopy">
+                                            <option value="">Select Count</option>
+                                            <option value="0">0</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                        </select>
+                                        <div class="input-description">
+                                            <i class="fas fa-info-circle text-info me-1"></i>
+                                            <strong>What is this?</strong> Number of major blood vessels (arteries) that have significant narrowing or blockage. 
+                                            This is determined by a special X-ray test called fluoroscopy. More blocked vessels = higher heart disease risk.
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Thalassemia -->
+                                    <div class="col-md-6 mb-3">
+                                        <label for="thal" class="form-label">Thalassemia *</label>
+                                        <select class="form-select {% if missing_fields and 'thal' in missing_fields %}is-invalid{% endif %}" id="thal" name="thal" required data-bs-toggle="tooltip" title="Type of thalassemia (genetic blood disorder)">
+                                            <option value="">Select Type</option>
+                                            <option value="0">Normal</option>
+                                            <option value="1">Fixed Defect</option>
+                                            <option value="2">Reversible Defect</option>
+                                        </select>
+                                        <div class="input-description">
+                                            <i class="fas fa-info-circle text-info me-1"></i>
+                                            <strong>What is this?</strong> Thalassemia is a genetic blood disorder that affects hemoglobin production:
+                                            <ul class="description-list">
+                                                <li><strong>Normal:</strong> No thalassemia present</li>
+                                                <li><strong>Fixed Defect:</strong> Permanent blood flow problem in heart muscle</li>
+                                                <li><strong>Reversible Defect:</strong> Temporary blood flow problem that can improve</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- SECTION 5: ECG & STRESS TEST RESULTS -->
+                                <div class="section-header mt-4">
+                                    <h4 class="section-title">
+                                        <i class="fas fa-chart-line text-info me-2"></i>
+                                        ECG & Stress Test Results
+                                    </h4>
+                                    <p class="section-description">Heart electrical activity and exercise test measurements</p>
+                                </div>
+
+                                <div class="row">
                                     <!-- ECG Results -->
                                     <div class="col-md-6 mb-3">
                                         <label for="restecg" class="form-label">ECG Results *</label>
-                                        <select class="form-select" id="restecg" name="restecg" required data-bs-toggle="tooltip" title="Resting electrocardiographic results">
+                                        <select class="form-select {% if missing_fields and 'restecg' in missing_fields %}is-invalid{% endif %}" id="restecg" name="restecg" required data-bs-toggle="tooltip" title="Resting electrocardiographic results">
                                             <option value="">Select Result</option>
                                             <option value="0">Normal</option>
                                             <option value="1">ST-T Wave Abnormality</option>
                                             <option value="2">Left Ventricular Hypertrophy</option>
                                         </select>
-                                        <div class="invalid-feedback">Please select ECG result.</div>
                                         <div class="input-description">
                                             <i class="fas fa-info-circle text-info me-1"></i>
                                             <strong>What is this?</strong> ECG (Electrocardiogram) shows your heart's electrical activity:
@@ -151,41 +305,10 @@
                                         </div>
                                     </div>
                                     
-                                    <!-- Max Heart Rate -->
-                                    <div class="col-md-6 mb-3">
-                                        <label for="thalach" class="form-label">Max Heart Rate *</label>
-                                        <input type="number" class="form-control" id="thalach" name="thalach" required min="60" max="202" placeholder="60 - 202" data-bs-toggle="tooltip" title="Maximum heart rate achieved during exercise">
-                                        <div class="invalid-feedback">Please enter valid heart rate (60-202 bpm).</div>
-                                        <div class="input-description">
-                                            <i class="fas fa-info-circle text-info me-1"></i>
-                                            <strong>What is this?</strong> The highest number of heartbeats per minute you reached during a stress test or exercise. 
-                                            Normal range: 100-180 bpm depending on age and fitness level.
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <!-- Exercise Angina -->
-                                    <div class="col-md-6 mb-3">
-                                        <label for="exang" class="form-label">Exercise Angina *</label>
-                                        <select class="form-select" id="exang" name="exang" required data-bs-toggle="tooltip" title="Exercise induced angina">
-                                            <option value="">Select Status</option>
-                                            <option value="No">No</option>
-                                            <option value="Yes">Yes</option>
-                                        </select>
-                                        <div class="invalid-feedback">Please select exercise angina status.</div>
-                                        <div class="input-description">
-                                            <i class="fas fa-info-circle text-info me-1"></i>
-                                            <strong>What is this?</strong> Do you experience chest pain, pressure, or discomfort during physical activity or exercise? 
-                                            This is a warning sign that your heart may not be getting enough blood flow during exertion.
-                                        </div>
-                                    </div>
-                                    
                                     <!-- ST Depression -->
                                     <div class="col-md-6 mb-3">
                                         <label for="oldpeak" class="form-label">ST Depression *</label>
-                                        <input type="number" class="form-control" id="oldpeak" name="oldpeak" required step="0.1" min="-2.6" max="6.2" placeholder="-2.6 to 6.2" data-bs-toggle="tooltip" title="ST depression induced by exercise relative to rest">
-                                        <div class="invalid-feedback">Please enter valid ST depression (-2.6 to 6.2).</div>
+                                        <input type="number" class="form-control {% if missing_fields and 'oldpeak' in missing_fields %}is-invalid{% endif %}" id="oldpeak" name="oldpeak" required step="0.1" min="-2.6" max="6.2" placeholder="-2.6 to 6.2" data-bs-toggle="tooltip" title="ST depression induced by exercise relative to rest" value="{{ form_data.oldpeak|default:'' }}">
                                         <div class="input-description">
                                             <i class="fas fa-info-circle text-info me-1"></i>
                                             <strong>What is this?</strong> A measurement from your ECG during exercise. It shows how much the heart's electrical pattern changes during physical activity compared to rest. 
@@ -198,13 +321,12 @@
                                     <!-- ST Slope -->
                                     <div class="col-md-6 mb-3">
                                         <label for="slope" class="form-label">ST Slope *</label>
-                                        <select class="form-select" id="slope" name="slope" required data-bs-toggle="tooltip" title="Slope of the peak exercise ST segment">
+                                        <select class="form-select {% if missing_fields and 'slope' in missing_fields %}is-invalid{% endif %}" id="slope" name="slope" required data-bs-toggle="tooltip" title="Slope of the peak exercise ST segment">
                                             <option value="">Select Slope</option>
                                             <option value="0">Upsloping</option>
                                             <option value="1">Flat</option>
                                             <option value="2">Downsloping</option>
                                         </select>
-                                        <div class="invalid-feedback">Please select ST slope.</div>
                                         <div class="input-description">
                                             <i class="fas fa-info-circle text-info me-1"></i>
                                             <strong>What is this?</strong> The direction of the ST segment on your ECG during peak exercise:
@@ -212,48 +334,6 @@
                                                 <li><strong>Upsloping:</strong> ST segment goes upward (usually normal)</li>
                                                 <li><strong>Flat:</strong> ST segment is horizontal (may indicate problems)</li>
                                                 <li><strong>Downsloping:</strong> ST segment goes downward (may indicate heart disease)</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Major Vessels -->
-                                    <div class="col-md-6 mb-3">
-                                        <label for="ca" class="form-label">Major Vessels *</label>
-                                        <select class="form-select" id="ca" name="ca" required data-bs-toggle="tooltip" title="Number of major vessels colored by fluoroscopy">
-                                            <option value="">Select Count</option>
-                                            <option value="0">0</option>
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                        </select>
-                                        <div class="invalid-feedback">Please select major vessel count.</div>
-                                        <div class="input-description">
-                                            <i class="fas fa-info-circle text-info me-1"></i>
-                                            <strong>What is this?</strong> Number of major blood vessels (arteries) that have significant narrowing or blockage. 
-                                            This is determined by a special X-ray test called fluoroscopy. More blocked vessels = higher heart disease risk.
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <!-- Thalassemia -->
-                                    <div class="col-md-6 mb-3">
-                                        <label for="thal" class="form-label">Thalassemia *</label>
-                                        <select class="form-select" id="thal" name="thal" required data-bs-toggle="tooltip" title="Type of thalassemia (genetic blood disorder)">
-                                            <option value="">Select Type</option>
-                                            <option value="0">Normal</option>
-                                            <option value="1">Fixed Defect</option>
-                                            <option value="2">Reversible Defect</option>
-                                        </select>
-                                        <div class="invalid-feedback">Please select thalassemia type.</div>
-                                        <div class="input-description">
-                                            <i class="fas fa-info-circle text-info me-1"></i>
-                                            <strong>What is this?</strong> Thalassemia is a genetic blood disorder that affects hemoglobin production:
-                                            <ul class="description-list">
-                                                <li><strong>Normal:</strong> No thalassemia present</li>
-                                                <li><strong>Fixed Defect:</strong> Permanent blood flow problem in heart muscle</li>
-                                                <li><strong>Reversible Defect:</strong> Temporary blood flow problem that can improve</li>
                                             </ul>
                                         </div>
                                     </div>
@@ -273,10 +353,51 @@
     </main>
 
     <script>
-    // Form validation
+    // Form validation and error handling
     (function() {
         'use strict';
         window.addEventListener('load', function() {
+            // Apply form data preservation for all fields
+            {% if form_data %}
+                // Preserve all input field values
+                const formData = {{ form_data|safe }};
+                
+                // Handle text/number inputs
+                document.querySelectorAll('input[type="text"], input[type="number"]').forEach(function(input) {
+                    if (formData[input.name]) {
+                        input.value = formData[input.name];
+                    }
+                });
+                
+                // Handle select dropdowns
+                document.querySelectorAll('select').forEach(function(select) {
+                    if (formData[select.name]) {
+                        const option = select.querySelector(`option[value="${formData[select.name]}"]`);
+                        if (option) {
+                            option.selected = true;
+                        }
+                    }
+                });
+            {% endif %}
+            
+            // Apply missing field highlighting only after form submission
+            {% if missing_fields %}
+                const missingFields = {{ missing_fields|safe }};
+                // Only apply if this is after a form submission (missing_fields exists)
+                missingFields.forEach(function(fieldName) {
+                    const field = document.querySelector(`[name="${fieldName}"]`);
+                    if (field) {
+                        field.classList.add('is-invalid');
+                        // Scroll to first missing field
+                        if (fieldName === missingFields[0]) {
+                            field.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            field.focus();
+                        }
+                    }
+                });
+            {% endif %}
+            
+            // Standard form validation
             var forms = document.getElementsByClassName('needs-validation');
             var validation = Array.prototype.filter.call(forms, function(form) {
                 form.addEventListener('submit', function(event) {
@@ -518,6 +639,32 @@
         box-shadow: 0 0 0 0.2rem rgba(25, 118, 210, 0.25);
     }
 
+    /* Section Headers */
+    .section-header {
+        margin-bottom: 2rem;
+        padding: 1.5rem;
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 15px;
+        border-left: 5px solid #1976d2;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .section-title {
+        margin: 0;
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #2c3e50;
+        display: flex;
+        align-items: center;
+    }
+
+    .section-description {
+        margin: 0.5rem 0 0 0;
+        color: #6c757d;
+        font-size: 1rem;
+        font-style: italic;
+    }
+
     /* Enhanced form styling */
     .form-label {
         font-weight: 600;
@@ -535,6 +682,49 @@
     .form-control:focus, .form-select:focus {
         border-color: #1976d2;
         box-shadow: 0 0 0 0.2rem rgba(25, 118, 210, 0.25);
+    }
+
+    /* Enhanced error states */
+    .form-control.is-invalid, .form-select.is-invalid {
+        border-color: #dc3545;
+        background-color: #fff5f5;
+        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+        animation: shake 0.5s ease-in-out;
+    }
+
+    .form-control.is-invalid:focus, .form-select.is-invalid:focus {
+        border-color: #dc3545;
+        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+    }
+
+
+    /* Shake animation for missing fields */
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+        20%, 40%, 60%, 80% { transform: translateX(5px); }
+    }
+
+    /* Error message styling */
+    .alert-danger {
+        background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+        border: 1px solid #f5c6cb;
+        border-radius: 10px;
+        color: #721c24;
+        font-weight: 500;
+        margin-bottom: 1.5rem;
+        animation: slideDown 0.3s ease-out;
+    }
+
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     /* Card enhancements */
