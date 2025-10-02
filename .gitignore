@@ -146,4 +146,6 @@ cookies.txt
 
 # Temporary files
 *.tmp
-*.temp
+*.temp# Large model files
+apps/ml/models/enhanced_mlops/*.pkl
+*.pkl
