@@ -53,5 +53,7 @@ urlpatterns = [
     path('predict_desease/<str:pred>/<str:accuracy>/', predict_desease, name="predict_desease"),
     # Download URLs
     path('download/<str:format_type>/', download_report, name="download_report"),
+    # Model Status URL
+    path('model_status/', model_status, name="model_status"),
 
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

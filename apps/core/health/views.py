@@ -101,16 +101,38 @@ def Change_Password(request):
 
 def prdict_heart_disease(list_data):
     """
-    Predict heart disease using a simple rule-based model.
-    This provides more reliable and logical predictions.
+    Predict heart disease using the enhanced MLOps model with 93%+ accuracy.
+    Falls back to rule-based model if ML model is unavailable.
     """
     try:
-        # Ensure we have 16 features (updated for new BMI, smoking, alcohol fields)
-        if len(list_data) != 16:
+        # Import the enhanced model integration
+        from apps.ml.model_integration import predict_heart_disease
+        
+        # Use the enhanced ML model
+        confidence, prediction = predict_heart_disease(list_data)
+        return confidence, prediction
+        
+    except Exception as e:
+        print(f"Enhanced model error: {e}, falling back to rule-based prediction")
+        return _fallback_rule_based_prediction(list_data)
+
+def _fallback_rule_based_prediction(list_data):
+    """
+    Enhanced rule-based prediction as fallback.
+    """
+    try:
+        # Ensure we have enough features (at least 13 basic features)
+        if len(list_data) < 13:
             return 85.0, [0]  # Default to healthy if data is incomplete
         
-        # Extract features (now includes BMI, smoking_status, alcohol_use)
-        age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal, bmi, smoking_status, alcohol_use = list_data
+        # Handle different input lengths
+        if len(list_data) >= 16:
+            age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal, bmi, smoking_status, alcohol_use = list_data[:16]
+        elif len(list_data) >= 13:
+            age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal = list_data[:13]
+            bmi, smoking_status, alcohol_use = 25.0, 0, 0  # Default values
+        else:
+            return 75.0, [0]  # Not enough data
         
         # Simple rule-based prediction
         score = 0
@@ -483,7 +505,7 @@ def guest_prediction(request):
 
         print(f"DEBUG: Final data for prediction: {list_data}")  # Debug output
 
-        # Make prediction using the rule-based model
+        # Make prediction using the enhanced MLOps model
         accuracy, pred = prdict_heart_disease(list_data)
         
         print(f"DEBUG: Prediction result: {pred}, Accuracy: {accuracy}")  # Debug output
@@ -503,6 +525,30 @@ def guest_prediction(request):
     
     # Render the prediction form for guests
     return render(request, 'prediction_form.html')
+
+def model_status(request):
+    """Display current ML model status and performance metrics."""
+    try:
+        from apps.ml.model_integration import get_model_status
+        model_info = get_model_status()
+        
+        context = {
+            'model_info': model_info,
+            'is_enhanced': model_info['status'] == 'Enhanced ML Model'
+        }
+        
+        return render(request, 'model_status.html', context)
+        
+    except Exception as e:
+        context = {
+            'error': str(e),
+            'model_info': {
+                'model_name': 'Error Loading Model',
+                'accuracy': 0,
+                'status': 'Error'
+            }
+        }
+        return render(request, 'model_status.html', context)
 
 def download_report(request, format_type):
     """Enhanced server-side download view with professional content"""

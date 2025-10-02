@@ -1,0 +1,201 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block body %}
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <!-- Hero Section -->
+                    <div class="hero-section text-center mb-5">
+                        <h1 class="hero-title">
+                            <i class="fas fa-cogs text-primary me-3"></i>
+                            ML Model Status
+                        </h1>
+                        <p class="hero-subtitle">
+                            Current machine learning model performance and status
+                        </p>
+                    </div>
+
+                    <!-- Model Status Card -->
+                    <div class="card-modern">
+                        <div class="card-header text-center">
+                            <h2 class="card-title">
+                                <i class="fas fa-robot me-2"></i>Model Information
+                            </h2>
+                        </div>
+                        
+                        <div class="card-body">
+                            {% if error %}
+                                <div class="alert alert-danger">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    <strong>Error:</strong> {{ error }}
+                                </div>
+                            {% endif %}
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    <div class="info-card">
+                                        <div class="info-icon">
+                                            <i class="fas fa-brain text-primary"></i>
+                                        </div>
+                                        <div class="info-content">
+                                            <h5>Model Type</h5>
+                                            <p class="mb-0">{{ model_info.model_name }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6 mb-4">
+                                    <div class="info-card">
+                                        <div class="info-icon">
+                                            <i class="fas fa-chart-line text-success"></i>
+                                        </div>
+                                        <div class="info-content">
+                                            <h5>Accuracy</h5>
+                                            <p class="mb-0">
+                                                {% if model_info.accuracy > 0.8 %}
+                                                    <span class="text-success">{{ model_info.accuracy|floatformat:2 }}% (Excellent)</span>
+                                                {% elif model_info.accuracy > 0.7 %}
+                                                    <span class="text-warning">{{ model_info.accuracy|floatformat:2 }}% (Good)</span>
+                                                {% else %}
+                                                    <span class="text-danger">{{ model_info.accuracy|floatformat:2 }}% (Needs Improvement)</span>
+                                                {% endif %}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6 mb-4">
+                                    <div class="info-card">
+                                        <div class="info-icon">
+                                            <i class="fas fa-calendar text-info"></i>
+                                        </div>
+                                        <div class="info-content">
+                                            <h5>Training Date</h5>
+                                            <p class="mb-0">{{ model_info.training_date|default:"N/A" }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6 mb-4">
+                                    <div class="info-card">
+                                        <div class="info-icon">
+                                            <i class="fas fa-list text-warning"></i>
+                                        </div>
+                                        <div class="info-content">
+                                            <h5>Features</h5>
+                                            <p class="mb-0">{{ model_info.features_count }} features</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Status Badge -->
+                            <div class="text-center mt-4">
+                                {% if is_enhanced %}
+                                    <span class="badge badge-success badge-lg">
+                                        <i class="fas fa-check-circle me-2"></i>
+                                        Enhanced ML Model Active
+                                    </span>
+                                {% else %}
+                                    <span class="badge badge-warning badge-lg">
+                                        <i class="fas fa-exclamation-circle me-2"></i>
+                                        Fallback Model Active
+                                    </span>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Performance Indicators -->
+                            {% if is_enhanced %}
+                                <div class="mt-4">
+                                    <h5 class="text-center mb-3">Performance Features</h5>
+                                    <div class="row">
+                                        <div class="col-md-4 text-center">
+                                            <div class="feature-badge">
+                                                <i class="fas fa-balance-scale text-primary"></i>
+                                                <p class="mb-0 mt-2">SMOTE Balancing</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 text-center">
+                                            <div class="feature-badge">
+                                                <i class="fas fa-filter text-success"></i>
+                                                <p class="mb-0 mt-2">Feature Selection</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 text-center">
+                                            <div class="feature-badge">
+                                                <i class="fas fa-cog text-info"></i>
+                                                <p class="mb-0 mt-2">Hyperparameter Tuning</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <style>
+        .info-card {
+            display: flex;
+            align-items: center;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+            border-left: 4px solid #007bff;
+            height: 100%;
+        }
+        
+        .info-icon {
+            font-size: 2rem;
+            margin-right: 1rem;
+            min-width: 50px;
+        }
+        
+        .info-content h5 {
+            margin-bottom: 0.5rem;
+            color: #495057;
+            font-weight: 600;
+        }
+        
+        .info-content p {
+            color: #6c757d;
+            font-size: 1.1rem;
+        }
+        
+        .badge-lg {
+            font-size: 1.1rem;
+            padding: 0.75rem 1.5rem;
+        }
+        
+        .badge-success {
+            background-color: #28a745;
+        }
+        
+        .badge-warning {
+            background-color: #ffc107;
+            color: #212529;
+        }
+        
+        .feature-badge {
+            padding: 1rem;
+            background: rgba(0, 123, 255, 0.1);
+            border-radius: 10px;
+            margin: 0.5rem;
+        }
+        
+        .feature-badge i {
+            font-size: 2rem;
+        }
+        
+        .feature-badge p {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #495057;
+        }
+    </style>
+{% endblock %}
