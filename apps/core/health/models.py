@@ -9,6 +9,7 @@ class Admin_Helath_CSV(models.Model):
         return self.name
 
 class Search_Data(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='predictions')
     prediction_accuracy = models.CharField(max_length=100,null=True,blank=True)
     result = models.CharField(max_length=100,null=True,blank=True)
     values_list = models.CharField(max_length=100,null=True,blank=True)

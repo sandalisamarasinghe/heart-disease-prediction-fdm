@@ -26,7 +26,13 @@ def Admin_Home(request):
 
 @login_required(login_url="login")
 def User_Home(request):
-    return render(request,'add_heartdetail.html')
+    pred_count = 0
+    if request.user.is_authenticated:
+        try:
+            pred_count = Search_Data.objects.filter(user=request.user).count()
+        except Exception:
+            pred_count = 0
+    return render(request,'add_heartdetail.html', {'pred_count': pred_count})
 
 @login_required(login_url="login")
 def About(request):
@@ -510,7 +516,7 @@ def guest_prediction(request):
         
         print(f"DEBUG: Prediction result: {pred}, Accuracy: {accuracy}")  # Debug output
         
-        # For guest users, we don't save to database, just show results
+        # For guest users, we don't associate a user; for logged-in users, attach user
         if pred[0] == 0:
             pred_result = "<span style='color:green'>You are healthy</span>"
         else:
@@ -518,6 +524,7 @@ def guest_prediction(request):
         
         # Save prediction to database for tracking
         Search_Data.objects.create(
+            user=request.user if request.user.is_authenticated else None,
             prediction_accuracy=str(accuracy),
             result=str(pred[0]),
             values_list=str(list_data)
