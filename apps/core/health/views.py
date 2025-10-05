@@ -258,7 +258,11 @@ def predict_desease(request, pred, accuracy):
 
 @login_required(login_url="login")
 def view_search_pat(request):
-    data = Search_Data.objects.all().order_by('-id')
+    # For admins show all, for regular users show only their own
+    if request.user.is_authenticated and request.user.is_staff:
+        data = Search_Data.objects.all().order_by('-id')
+    else:
+        data = Search_Data.objects.filter(user=request.user).order_by('-id')
 
     # Robust counting to handle legacy/text values
     healthy_aliases = {"0", "healthy", "Healthy", "HEALTHY", "You are healthy"}
