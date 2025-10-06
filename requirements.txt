@@ -2,7 +2,7 @@
 # Fundamentals of Data Mining Mini Project 2025
 
 # Core Django Framework
-Django>=3.2.0,<4.0.0
+Django>=3.2.25,<4.0.0
 djangorestframework>=3.12.0
 
 # Machine Learning and Data Science
